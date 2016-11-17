@@ -26,6 +26,8 @@ import java.text.SimpleDateFormat;
 @RestController
 public class CliqueUpController {
 
+    public static final String REDIRECTURL = "http://127.0.0.1:8080/";
+
     @Autowired
     UserRepo users;
 
@@ -46,6 +48,9 @@ public class CliqueUpController {
 
     @Autowired
     ChatMessageRepo cms;
+
+    @Autowired
+    TokenRepo tokens;
 
     Server h2;
 
@@ -267,7 +272,68 @@ public class CliqueUpController {
             return new ResponseEntity<Venue>(venue, HttpStatus.OK);
     }
 
+    @RequestMapping(path = "/redirect", method = RequestMethod.GET)
+    public ResponseEntity<String> getRedirecturl(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            return new ResponseEntity<String>(REDIRECTURL, HttpStatus.OK);
+        }
+    }
 
+    @RequestMapping(path = "/token", method = RequestMethod.POST)
+    public ResponseEntity<Token> postToken(HttpSession session, @RequestBody Token token) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity<Token>(HttpStatus.FORBIDDEN);
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            return new ResponseEntity<Token>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            tokens.save(new Token(token.getKey(), token.getSecret(), REDIRECTURL, userFromDb));
+            Token tokenFromDb = tokens.findByUser(userFromDb);
+            return new ResponseEntity<Token>(tokenFromDb, HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(path = "/token", method = RequestMethod.GET)
+    public ResponseEntity<Token> getToken(HttpSession session, @RequestBody User user) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity<Token>(HttpStatus.FORBIDDEN);
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            return new ResponseEntity<Token>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            Token tokenFromDb = tokens.findByUser(userFromDb);
+            return new ResponseEntity<Token>(tokenFromDb, HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(path = "/logout", method = RequestMethod.POST)
+    public void logout(HttpSession session) throws Exception {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            throw new Exception("Not logged in!");
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            throw new Exception("User does not exist!");
+        }
+        Token tokenToDelete = tokens.findByUser(userFromDb);
+        tokens.delete(tokenToDelete.getId());
+        session.invalidate();
+    }
 
 
 
