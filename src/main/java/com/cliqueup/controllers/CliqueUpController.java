@@ -1,7 +1,7 @@
 package com.cliqueup.controllers;
 
-import com.cliqueup.entities.User;
-import com.cliqueup.services.UserRepo;
+import com.cliqueup.entities.*;
+import com.cliqueup.services.*;
 import com.cliqueup.utlities.PasswordStorage;
 import org.h2.tools.Server;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,10 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by michaelplott on 11/16/16.
@@ -25,11 +29,83 @@ public class CliqueUpController {
     @Autowired
     UserRepo users;
 
+    @Autowired
+    VenueRepo venues;
+
+    @Autowired
+    MeetUpRepo meetups;
+
+    @Autowired
+    GroupRepo groups;
+
+    @Autowired
+    EventRepo events;
+
+    @Autowired
+    DirectMessageRepo dms;
+
+    @Autowired
+    ChatMessageRepo cms;
+
     Server h2;
 
     @PostConstruct
-    public void init() throws SQLException {
+    public void init() throws SQLException, ParseException, PasswordStorage.CannotPerformOperationException {
         h2.createWebServer().start();
+
+        if (users.count() == 0) {
+            users.save(new User("http://statici.behindthevoiceactors.com/behindthevoiceactors/_img/chars/mikey-blumberg-disneys-recess-9.77.jpg",
+                    "mike",
+                    PasswordStorage.createHash("123")));
+            users.save(new User("sam", PasswordStorage.createHash("123")));
+            users.save(new User("rob", PasswordStorage.createHash("123")));
+            users.save(new User("Henry", PasswordStorage.createHash("123")));
+        }
+
+        if (venues.count() == 0) {
+            venues.save(new Venue("Closed For Business",
+                    "https://limelightcustomsigns.files.wordpress.com/2009/12/l_1600_1200_4c7d886b-f5cf-490b-ae98-8450332c4c71.jpeg",
+                    "453 King Street"));
+        }
+
+        if (groups.count() == 0) {
+            User user = users.findByUsername("Henry");
+            groups.save(new Group("Beer-Enthusiasts", "Beer-Enthusiasts Group", user));
+        }
+
+        if (meetups.count() == 0) {
+            User user = users.findByUsername("Henry");
+            Group group = groups.findOne(1);
+            meetups.save(new MeetUp("Beer-Enthusiasts", MeetUp.Category.BEER, 0, 0, "Meet up for beer lovers!", user, group));
+        }
+
+        if (events.count() == 0) {
+            User user = users.findByUsername("Henry");
+            MeetUp meetUp = meetups.findOne(1);
+            Venue venue = venues.findOne(1);
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date date = dateFormat.parse("11/16/2016");
+            long time = date.getTime();
+            events.save(new Event("Beer-Fest", new Timestamp(time), "453 King Street", venue, user, meetUp));
+        }
+
+        if (dms.count() == 0) {
+            User user = users.findByUsername("mike");
+            User recipient = users.findByUsername("Henry");
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date date = dateFormat.parse("11/16/2016");
+            long time = date.getTime();
+            dms.save(new DirectMessage("Hey what time is the event again?", new Timestamp(time), recipient.getId(), user));
+        }
+
+        if (cms.count() == 0) {
+            User user = users.findByUsername("mike");
+            Group group = groups.findOne(1);
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date date = dateFormat.parse("11/16/2016");
+            long time = date.getTime();
+            cms.save(new ChatMessage("Hey what time is the meetup? I can't get ahold of Henry", new Timestamp(time), group, user));
+        }
     }
 
     @PreDestroy

@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "meetups")
 public class MeetUp {
     public enum Category {
-
+        BEER;
     }
     @Id
     @GeneratedValue
