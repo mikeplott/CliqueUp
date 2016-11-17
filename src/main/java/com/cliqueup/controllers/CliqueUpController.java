@@ -140,4 +140,19 @@ public class CliqueUpController {
         session.setAttribute("username", userForDb.getUsername());
         return new ResponseEntity<User>(userForDb, HttpStatus.OK);
     }
+
+    @RequestMapping(path = "/direct-messages", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<DirectMessage>> getDirectMessages(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity<Iterable<DirectMessage>>(HttpStatus.FORBIDDEN);
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            return new ResponseEntity<Iterable<DirectMessage>>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            return new ResponseEntity<Iterable<DirectMessage>>(dms.findByUser(userFromDb), HttpStatus.OK);
+        }
+    }
 }
