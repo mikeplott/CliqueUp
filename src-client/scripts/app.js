@@ -16,8 +16,8 @@ const AppRouter = Backbone.Router.extend({
   },
 
   showHomePage: function(){
-    console.log('tickle me now')
-    ReactDOM.render(<View currentView="title"/>, document.querySelector("#ui"))
+
+    ReactDOM.render(<View currentView="home"/>, document.querySelector("#ui"))
   },
 
   initialize: function(){
