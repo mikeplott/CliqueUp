@@ -24,6 +24,11 @@ public class Venue {
     public Venue() {
     }
 
+    public Venue(String name, String address) {
+        this.name = name;
+        this.address = address;
+    }
+
     public Venue(String name, String image, String address) {
         this.name = name;
         this.image = image;

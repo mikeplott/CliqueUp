@@ -141,8 +141,8 @@ public class CliqueUpController {
         return new ResponseEntity<User>(userForDb, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/direct-messages", method = RequestMethod.GET)
-    public ResponseEntity<Iterable<DirectMessage>> getDirectMessages(HttpSession session) {
+    @RequestMapping(path = "/all-direct-messages", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<DirectMessage>> getAllDirectMessages(HttpSession session) {
         String username = (String) session.getAttribute("username");
         if (username == null) {
             return new ResponseEntity<Iterable<DirectMessage>>(HttpStatus.FORBIDDEN);
@@ -155,4 +155,103 @@ public class CliqueUpController {
             return new ResponseEntity<Iterable<DirectMessage>>(dms.findByUser(userFromDb), HttpStatus.OK);
         }
     }
+
+    @RequestMapping(path = "/user-recipient-messages", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<DirectMessage>> getSomeDirectMessages(HttpSession session, @RequestBody User recipient) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity<Iterable<DirectMessage>>(HttpStatus.FORBIDDEN);
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            return new ResponseEntity<Iterable<DirectMessage>>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            Iterable<DirectMessage> directMessages = dms.findByRecipientIdAndUser(recipient.getId(), userFromDb);
+            return new ResponseEntity<Iterable<DirectMessage>>(directMessages, HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(path = "direct-messages", method = RequestMethod.POST)
+    public ResponseEntity<DirectMessage> postDirectMessage(HttpSession session, @RequestBody DirectMessage dm) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity<DirectMessage>(HttpStatus.FORBIDDEN);
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            return new ResponseEntity<DirectMessage>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            dms.save(new DirectMessage(dm.getMessage(), dm.getTime(), dm.getRecipientId(), userFromDb));
+            return new ResponseEntity<DirectMessage>(dm, HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(path = "chat-messages", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<ChatMessage>> getChatMessages(HttpSession session, @RequestBody Group group) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity<Iterable<ChatMessage>>(HttpStatus.FORBIDDEN);
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            return new ResponseEntity<Iterable<ChatMessage>>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            return new ResponseEntity<Iterable<ChatMessage>>(cms.findByGroup(group), HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(path = "chat-messages", method = RequestMethod.POST)
+    public ResponseEntity<Iterable<ChatMessage>> postChatMessages(HttpSession session, @RequestBody ChatMessage chatMessage) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity<Iterable<ChatMessage>>(HttpStatus.FORBIDDEN);
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            return new ResponseEntity<Iterable<ChatMessage>>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            cms.save(new ChatMessage(chatMessage.getMessage(), chatMessage.getTime(), chatMessage.getGroup(), chatMessage.getUser()));
+            return new ResponseEntity<Iterable<ChatMessage>>(cms.findByGroup(chatMessage.getGroup()), HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(path = "venue", method = RequestMethod.POST)
+    public ResponseEntity<Venue> postVenue(HttpSession session, @RequestBody Venue venue) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity<Venue>(HttpStatus.FORBIDDEN);
+        }
+        User user = users.findByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<Venue>(HttpStatus.NOT_FOUND);
+        }
+        if (venue.getImage() == null) {
+            venues.save(new Venue(venue.getName(), venue.getAddress()));
+            return new ResponseEntity<Venue>(venue, HttpStatus.OK);
+        }
+            venues.save(new Venue(venue.getName(), venue.getImage(), venue.getAddress()));
+            return new ResponseEntity<Venue>(venue, HttpStatus.OK);
+    }
+
+
+
+
+
+    public ResponseEntity userValidation(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
+
+
