@@ -33,11 +33,11 @@ public class CliqueUpController {
 
     public static final String AUTH = "https://secure.meetup.com/oauth2/authorize?client_id=dlevog3jrgb2rn4rr30hv6rs5b&response_type=code&redirect_uri=" + REDIRECTURL;
 
-    public static String secret;
+    public static final String SECRET = "g3dd8kblqshkq7jrplj79et6ko";
     public static String code;
 
-    public static final String ACCESS = "https://secure.meetup.com/oauth2/access?client_id=dlevog3jrgb2rn4rr30hv6rs5b&client_secret=" + secret +
-            "grant_type=authorization_code&redirect_uri=" + REDIRECTURL + "&code=" + code;
+    public static final String ACCESS = "https://secure.meetup.com/oauth2/access?client_id=dlevog3jrgb2rn4rr30hv6rs5b&client_secret=" + SECRET +
+            "&grant_type=authorization_code&redirect_uri=" + REDIRECTURL + "/access" + "&code=" + code;
 
     @Autowired
     UserRepo users;
@@ -366,12 +366,10 @@ public class CliqueUpController {
 
     @RequestMapping(path = "/access", method = RequestMethod.POST)
     public void getAccess(HttpServletResponse response, @RequestBody Map<String, String> json) throws IOException {
-        secret = json.get("client_secret");
         code = json.get("code");
-        //return AUTH;
+        //return ACCESS;
         response.sendRedirect(ACCESS);
     }
-
 
     public ResponseEntity userValidation(HttpSession session) {
         String username = (String) session.getAttribute("username");
