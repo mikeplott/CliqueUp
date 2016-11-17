@@ -1,1 +1,1 @@
-*{box-sizing:border-box}body{font-family:Helvetica, Arial, sans-serif}h1{font-size:300px;text-align:center;color:fuchsia}
+body{font-family:Helvetica, Arial, sans-serif}#app-container{height:100%}#map{height:100%;width:100%;z-index:1}html,body{height:100%;width:100%;margin:0;padding:0;background-color:#000}#ui .titleScreenHolder{position:absolute;top:-5%;left:22%;z-index:1000;background:radial-gradient(rgba(150,150,150,0.5), transparent 50%)}#ui .titleScreenImg{width:70%;margin-left:17%}#ui .titleScreenBtn{background:#faa938;border-color:#f99406;margin-left:47%}
