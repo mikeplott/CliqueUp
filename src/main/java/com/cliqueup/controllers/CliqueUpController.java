@@ -219,6 +219,36 @@ public class CliqueUpController {
         }
     }
 
+    @RequestMapping(path = "venues", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<Venue>> getVenues(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity<Iterable<Venue>>(HttpStatus.FORBIDDEN);
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            return new ResponseEntity<Iterable<Venue>>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            return new ResponseEntity<Iterable<Venue>>(venues.findAll(), HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(path = "venue", method = RequestMethod.GET)
+    public ResponseEntity<Venue> getVenue(HttpSession session, @RequestBody Venue venue) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity<Venue>(HttpStatus.FORBIDDEN);
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            return new ResponseEntity<Venue>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            return new ResponseEntity<Venue>(venues.findOne(venue.getId()), HttpStatus.OK);
+        }
+    }
+
     @RequestMapping(path = "venue", method = RequestMethod.POST)
     public ResponseEntity<Venue> postVenue(HttpSession session, @RequestBody Venue venue) {
         String username = (String) session.getAttribute("username");
