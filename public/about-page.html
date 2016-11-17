@@ -2,19 +2,17 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Simple Server</title>
-	<link rel="icon" href="./images/favicon.ico">
-
-	<link rel="stylesheet" type="text/css" href="./css/style.css">
+	<title>CliqueUp</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/lumen/bootstrap.min.css" rel="stylesheet" integrity="sha384-gv0oNvwnqzF6ULI9TVsSmnULNb3zasNysvWwfT/s4l8k5I+g6oFz9dye0wg3rQ2Q" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="./css/style.css">
 </head>
 <body>
-	<div class="container">
-		<h2 style="background: chartreuse">This Page is Powered by: BABY SHAMPOO</h2>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias voluptate, natus porro perspiciatis magnam illo, cum consequatur excepturi ex illum! Similique modi excepturi adipisci minus, expedita! Eius, quidem impedit nostrum?
-		</p>
+	<div id="app-container">
+		<div id="ui"></div>
+		<div id="map"></div>
 	</div>
-
+	<script type="text/javascript" src="./js/app.js"></script>
+	<script type="text/javascript" src="./js/map-styles2.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAH9HwNj5DurMSH6WKhugy8ARQ8eijzkc4&callback=initMap" async defer></script>
 </body>
 </html>
