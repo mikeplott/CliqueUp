@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 /**
  * Created by michaelplott on 11/16/16.
@@ -27,6 +30,14 @@ import java.text.SimpleDateFormat;
 public class CliqueUpController {
 
     public static final String REDIRECTURL = "http://127.0.0.1:8080/";
+
+    public static final String AUTH = "https://secure.meetup.com/oauth2/authorize?client_id=dlevog3jrgb2rn4rr30hv6rs5b&response_type=code&redirect_uri=" + REDIRECTURL;
+
+    public static String secret;
+    public static String code;
+
+    public static final String ACCESS = "https://secure.meetup.com/oauth2/access?client_id=dlevog3jrgb2rn4rr30hv6rs5b&client_secret=" + secret +
+            "grant_type=authorization_code&redirect_uri=" + REDIRECTURL + "&code=" + code;
 
     @Autowired
     UserRepo users;
@@ -335,6 +346,31 @@ public class CliqueUpController {
         session.invalidate();
     }
 
+//    @RequestMapping(path = "/auth", method = RequestMethod.GET)
+//    public String getAuth(HttpServletResponse response) throws IOException {
+//        return AUTH;
+//    }
+//
+//    @RequestMapping(path = "/access", method = RequestMethod.POST)
+//    public String getAccess(HttpServletResponse response, @RequestBody Map<String, String> json) throws IOException {
+//        secret = json.get("client_secret");
+//        code = json.get("code");
+//        return AUTH;
+//    }
+
+    @RequestMapping(path = "/auth", method = RequestMethod.GET)
+    public void getAuth(HttpServletResponse response) throws IOException {
+        //return AUTH;
+        response.sendRedirect(AUTH);
+    }
+
+    @RequestMapping(path = "/access", method = RequestMethod.POST)
+    public void getAccess(HttpServletResponse response, @RequestBody Map<String, String> json) throws IOException {
+        secret = json.get("client_secret");
+        code = json.get("code");
+        //return AUTH;
+        response.sendRedirect(ACCESS);
+    }
 
 
     public ResponseEntity userValidation(HttpSession session) {
