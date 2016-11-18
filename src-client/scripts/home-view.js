@@ -8,7 +8,12 @@ const HomeView = React.createClass({
   render: function(){
     return(
       <div className="homeScreenHolder">
-        <div></div>
+        <div className="nav nav-bar homeNav">
+          <span className="glyphicon glyphicon-option-vertical navMoreBtn"></span>
+          <img src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg" className="homeNavPic"/>
+        </div>
+        <div className="homeMeetupBox"></div>
+        <div className="homeChatBox"></div>
       </div>
     )
   }

@@ -1,11 +1,15 @@
 function initMap() {
 
+    navigator.geolocation.getCurrentPosition(function(position) {
+          var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+
+
+
         var map = new google.maps.Map(document.getElementById('map'), {
-          center: navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            },
+          center: pos,
           zoom: 12,
           disableDefaultUI: true,
           styles: [
@@ -288,4 +292,5 @@ function initMap() {
         // });
         map.setTilt(45);
 
-      }
+      });
+    }
