@@ -1,4 +1,5 @@
 const Backbone = require('backbone');
+const {eventsModel, eventsCollection} = require('./model-coll.js');
 const STORE = require('./store.js');
 
 
@@ -14,13 +15,17 @@ const ACTIONS = {
   },
 
   fetchUserEventColl: function(){
+    let events = new eventsCollection()
 
+    events.fetch().then(function(){
+      console.log(events)
+    })
   },
 
   createNewmsg: function(){
 
 
-   })
+   
 
  },
 
