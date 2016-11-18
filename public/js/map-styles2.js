@@ -1,7 +1,15 @@
 function initMap() {
 
+    navigator.geolocation.getCurrentPosition(function(position) {
+          var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+
+
+
         var map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 32.776475, lng: -79.931051},
+          center: pos,
           zoom: 12,
           disableDefaultUI: true,
           styles: [
@@ -274,14 +282,15 @@ function initMap() {
           }
           ]
         });
-        map.setOptions({
-           disableDoubleClickZoom: true,
-           navigationControl: false,
-           mapTypeControl: false,
-           scaleControl: false,
-           draggable: false,
-           scrollwheel: false
-        });
+        // map.setOptions({
+        //    disableDoubleClickZoom: true,
+        //    navigationControl: false,
+        //    mapTypeControl: false,
+        //    scaleControl: false,
+        //    draggable: false,
+        //    scrollwheel: false
+        // });
         map.setTilt(45);
 
-      }
+      });
+    }
