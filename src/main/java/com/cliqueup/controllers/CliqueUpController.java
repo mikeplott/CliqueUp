@@ -3,6 +3,7 @@ package com.cliqueup.controllers;
 import com.cliqueup.entities.*;
 import com.cliqueup.services.*;
 import com.cliqueup.utlities.PasswordStorage;
+import okhttp3.*;
 import org.h2.tools.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -357,16 +358,42 @@ public class CliqueUpController {
 //        return AUTH;
 //    }
 //
-    @RequestMapping(path = "/access", method = RequestMethod.POST)
-    public void getAccess(HttpServletResponse response, String code) throws IOException {
-        String urlCode = code;
-        response.sendRedirect(ACCESS);
+    @RequestMapping(path = "/access", method = RequestMethod.GET)
+    public void getAccess(String code) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        System.out.println(code);
+
+        okhttp3.RequestBody formBody = new FormBody.Builder()
+                .add("client_id", "dlevog3jrgb2rn4rr30hv6rs5b")
+                .add("client_secret", SECRET)
+                .add("grant_type", "authorization_code")
+                .add("redirect_uri", REDIRECTURL + "access")
+                .add("code", code)
+                .build();
+        System.out.println(formBody.toString());
+
+        Request request = new Request.Builder()
+                .url("https://secure.meetup.com/oauth2/access")
+                .post(formBody)
+                .build();
+        okhttp3.Response response = client.newCall(request).execute();
+        System.out.println(response.body().string());
+        if (!response.isSuccessful()) throw new IOException
+                ("GO FUCK YOURSELF " + response);
+        System.out.println(response.body().string());
+//        Request request = new Request.Builder()
+//                .url(url)
+//                .post()
+//                .build();
+//
+//        Response response = client.newCall(request).execute();
+
+//        String urlCode = code;
+//        response.sendRedirect(ACCESS);
     }
 
-
-
     @RequestMapping(path = "/auth", method = RequestMethod.GET)
-    public void getAuth(HttpServletResponse response) throws IOException {
+    public void getAuth(HttpSession session,HttpServletResponse response) throws IOException {
         //return AUTH;
         response.sendRedirect(AUTH);
     }
@@ -395,6 +422,12 @@ public class CliqueUpController {
         }
         return new ResponseEntity(HttpStatus.OK);
     }
+
+//    String post(String url, String json, ) throws IOException {
+//
+//    }
+
+
 }
 
 
