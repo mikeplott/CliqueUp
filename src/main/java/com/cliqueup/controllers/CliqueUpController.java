@@ -359,7 +359,7 @@ public class CliqueUpController {
 //    }
 //
     @RequestMapping(path = "/access", method = RequestMethod.GET)
-    public void getAccess(String code) throws IOException {
+    public void getAccess(String code, HttpServletResponse myResponse, HttpSession session) throws IOException {
         OkHttpClient client = new OkHttpClient();
         System.out.println(code);
 
@@ -370,17 +370,26 @@ public class CliqueUpController {
                 .add("redirect_uri", REDIRECTURL + "access")
                 .add("code", code)
                 .build();
-        System.out.println(formBody.toString());
 
         Request request = new Request.Builder()
                 .url("https://secure.meetup.com/oauth2/access")
                 .post(formBody)
                 .build();
+
         okhttp3.Response response = client.newCall(request).execute();
         System.out.println(response.body().string());
-        if (!response.isSuccessful()) throw new IOException
-                ("GO FUCK YOURSELF " + response);
-        System.out.println(response.body().string());
+
+        if (!response.isSuccessful())
+            throw new IOException("GO FUCK YOURSELF" + response);
+
+        session.setAttribute("token", response.body());
+        System.out.println(session.getAttribute("token").toString());
+        myResponse.sendRedirect("/");
+    }
+
+//        String token = (String) session.getAttribute("token");
+//        System.out.println(token);
+// System.out.println(response.body().string());
 //        Request request = new Request.Builder()
 //                .url(url)
 //                .post()
@@ -390,7 +399,6 @@ public class CliqueUpController {
 
 //        String urlCode = code;
 //        response.sendRedirect(ACCESS);
-    }
 
     @RequestMapping(path = "/auth", method = RequestMethod.GET)
     public void getAuth(HttpSession session,HttpServletResponse response) throws IOException {
@@ -422,12 +430,6 @@ public class CliqueUpController {
         }
         return new ResponseEntity(HttpStatus.OK);
     }
-
-//    String post(String url, String json, ) throws IOException {
-//
-//    }
-
-
 }
 
 
