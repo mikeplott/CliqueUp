@@ -1,7 +1,6 @@
 package com.cliqueup.controllers;
 
 import com.cliqueup.entities.*;
-import com.cliqueup.entities.Response;
 import com.cliqueup.services.*;
 import com.cliqueup.utlities.PasswordStorage;
 import okhttp3.*;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -24,7 +22,6 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Map;
 
 /**
  * Created by michaelplott on 11/16/16.
@@ -137,18 +134,18 @@ public class CliqueUpController {
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public ResponseEntity<User> userAuth(HttpSession session, @RequestBody User user) throws PasswordStorage.InvalidHashException, PasswordStorage.CannotPerformOperationException {
+    public void userAuth(HttpSession session, HttpServletResponse response, @RequestBody User user) throws Exception {
         User userFromDb = users.findByUsername(user.getUsername());
         if (userFromDb == null) {
-            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+            User userForDb = new User(user.getUsername(), user.getPassword());
+            users.save(userForDb);
         }
         else if (!PasswordStorage.verifyPassword(userFromDb.getPassword(), user.getPassword())) {
-            return new ResponseEntity<User>(HttpStatus.FORBIDDEN);
+            throw new Exception("Password invalid");
         }
-
         session.setAttribute("username", userFromDb.getUsername());
-        return new ResponseEntity<User>(userFromDb, HttpStatus.OK);
-        }
+        response.sendRedirect("/auth");
+    }
 
     @RequestMapping(path = "/signup", method = RequestMethod.POST)
     public ResponseEntity<User> userSignUp(HttpSession session, @RequestBody User user) throws PasswordStorage.CannotPerformOperationException {
@@ -310,38 +307,38 @@ public class CliqueUpController {
 //        }
     }
 
-    @RequestMapping(path = "/token", method = RequestMethod.POST)
-    public ResponseEntity<Token> postToken(HttpSession session, @RequestBody Token token) {
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
-            return new ResponseEntity<Token>(HttpStatus.FORBIDDEN);
-        }
-        User userFromDb = users.findByUsername(username);
-        if (userFromDb == null) {
-            return new ResponseEntity<Token>(HttpStatus.NOT_FOUND);
-        }
-        else {
-            //tokens.save(new Token(token.getKey(), token.getSecret(), REDIRECTURL, userFromDb));
-            Token tokenFromDb = tokens.findByUser(userFromDb);
-            return new ResponseEntity<Token>(tokenFromDb, HttpStatus.OK);
-        }
-    }
+//    @RequestMapping(path = "/token", method = RequestMethod.POST)
+//    public ResponseEntity<Token> postToken(HttpSession session, @RequestBody Token token) {
+//        String username = (String) session.getAttribute("username");
+//        if (username == null) {
+//            return new ResponseEntity<Token>(HttpStatus.FORBIDDEN);
+//        }
+//        User userFromDb = users.findByUsername(username);
+//        if (userFromDb == null) {
+//            return new ResponseEntity<Token>(HttpStatus.NOT_FOUND);
+//        }
+//        else {
+//            //tokens.save(new Token(token.getKey(), token.getSecret(), REDIRECTURL, userFromDb));
+//            Token tokenFromDb = tokens.findByUser(userFromDb);
+//            return new ResponseEntity<Token>(tokenFromDb, HttpStatus.OK);
+//        }
+//    }
 
-    @RequestMapping(path = "/token", method = RequestMethod.GET)
-    public ResponseEntity<Token> getToken(HttpSession session, @RequestBody User user) {
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
-            return new ResponseEntity<Token>(HttpStatus.FORBIDDEN);
-        }
-        User userFromDb = users.findByUsername(username);
-        if (userFromDb == null) {
-            return new ResponseEntity<Token>(HttpStatus.NOT_FOUND);
-        }
-        else {
-            Token tokenFromDb = tokens.findByUser(userFromDb);
-            return new ResponseEntity<Token>(tokenFromDb, HttpStatus.OK);
-        }
-    }
+//    @RequestMapping(path = "/token", method = RequestMethod.GET)
+//    public ResponseEntity<Token> getToken(HttpSession session, @RequestBody User user) {
+//        String username = (String) session.getAttribute("username");
+//        if (username == null) {
+//            return new ResponseEntity<Token>(HttpStatus.FORBIDDEN);
+//        }
+//        User userFromDb = users.findByUsername(username);
+//        if (userFromDb == null) {
+//            return new ResponseEntity<Token>(HttpStatus.NOT_FOUND);
+//        }
+//        else {
+////            Token tokenFromDb = tokens.findByUser(userFromDb);
+//            return new ResponseEntity<Token>(tokenFromDb, HttpStatus.OK);
+      //  }
+    //}
 
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
     public void logout(HttpSession session) throws Exception {
@@ -388,100 +385,14 @@ public class CliqueUpController {
 
         access_token = session.getAttribute("token");
         Token token = new Token();
-        //String[] json = access_token.toString().split(",");
+        String username = (String) session.getAttribute("username");
 
-//        for (int i = 0; i < json.length; i++) {
-//            //json[i].split(":");
-//            String stuff = json[i];
-//            System.out.println(stuff);
-//            String[] text = stuff.split(":");
-//            String theText = text[0];
-//            System.out.println(theText);
-//            if (i == 0) {
-//                token.setKey1(json[0]);
-//            }
-//            if (i == 1) {
-//                token.setAccess_token(json[1]);
-//            }
-//            if (i == 2) {
-//                token.setKey2(json[2]);
-//            }
-//            if (i == 3) {
-//                token.setToken_type(json[3]);
-//            }
-//            if (i == 4) {
-//                token.setKey3(json[4]);
-//            }
-//            if (i == 5) {
-//                token.setToken_type(json[5]);
-//            }
-//            if (i == 6) {
-//                token.setKey4(json[6]);
-//            }
-//            if (i == 7) {
-//                token.setExpires_in(json[7]);
-//            }
-//
-//        }
-//        System.out.println(json.toString());
-//        String[] theJson = new String[3];
-
-
-//        for (int i = 0; i < json.length; i++) {
-//            if (i == 0) {
-//                token.setKey1(json[0]);
-//            }
-//            if (i == 1) {
-//                token.setAccess_token(json[1]);
-//            }
-//            if (i == 2) {
-//                token.setKey2(json[2]);
-//            }
-//            if (i == 3) {
-//                token.setToken_type(json[3]);
-//            }
-//            if (i == 4) {
-//                token.setKey3(json[4]);
-//            }
-//            if (i == 5) {
-//                token.setToken_type(json[5]);
-//            }
-//            if (i == 6) {
-//                token.setKey4(json[6]);
-//            }
-//            if (i == 7) {
-//                token.setExpires_in(json[7]);
-//            }
-//        for (int i = 0; i < json.length; i++) {
-//            if (i == 0) {
-//                token.setAccess_token(json[0]);
-//            }
-//            if (i == 1) {
-//                token.setRefresh_token(json[1]);
-//            }
-//            if (i == 2) {
-//                token.setToken_type(json[2]);
-//            }
-//            if (i == 3) {
-//                token.setExpires_in(json[3]);
-//            }
-//        }
-
-        //            System.out.println(json[i]);
-//            token.setKey1(json[0]);
-//            token.setAccess_token(json[1]);
-//            token.setKey2(json[2]);
-//            token.setRefresh_token(json[3]);
-//            token.setKey3(json[4]);
-//            token.setToken_type(json[5]);
-//            token.setKey4(json[6]);
-//            token.setExpires_in(json[7]);
-
-        User user = users.findByUsername("mike");
+        User user = users.findByUsername(username);
         String accessToken = (String) session.getAttribute("token");
         token.setAccess_token(accessToken);
-        token.setUser(user);
+        user.setToken(token);
         tokens.save(token);
+        users.save(user);
         System.out.println(access_token);
 
         if (!response.isSuccessful())
@@ -491,9 +402,11 @@ public class CliqueUpController {
     }
 
     @RequestMapping(path = "/gettoken", method = RequestMethod.GET)
-    public Token getToken(HttpSession session, HttpServletResponse response) {
-        User user = users.findByUsername("mike");
-        return tokens.findByUser(user);
+    public User getToken(HttpSession session, HttpServletResponse response) throws IOException {
+        String username = (String) session.getAttribute("username");
+        User user = users.findByUsername(username);
+        response.sendRedirect("/#/homePage");
+        return user;
     }
 
        // System.out.println(response.body());
@@ -553,5 +466,93 @@ public class CliqueUpController {
         return new ResponseEntity(HttpStatus.OK);
     }
 }
+
+// trying to split the access token that meet up provides to get the value of each field but failed.
+
+//String[] json = access_token.toString().split(",");
+
+//        for (int i = 0; i < json.length; i++) {
+//            //json[i].split(":");
+//            String stuff = json[i];
+//            System.out.println(stuff);
+//            String[] text = stuff.split(":");
+//            String theText = text[0];
+//            System.out.println(theText);
+//            if (i == 0) {
+//                token.setKey1(json[0]);
+//            }
+//            if (i == 1) {
+//                token.setAccess_token(json[1]);
+//            }
+//            if (i == 2) {
+//                token.setKey2(json[2]);
+//            }
+//            if (i == 3) {
+//                token.setToken_type(json[3]);
+//            }
+//            if (i == 4) {
+//                token.setKey3(json[4]);
+//            }
+//            if (i == 5) {
+//                token.setToken_type(json[5]);
+//            }
+//            if (i == 6) {
+//                token.setKey4(json[6]);
+//            }
+//            if (i == 7) {
+//                token.setExpires_in(json[7]);
+//            }
+//
+//        }
+//        System.out.println(json.toString());
+//        String[] theJson = new String[3];
+//        for (int i = 0; i < json.length; i++) {
+//            if (i == 0) {
+//                token.setKey1(json[0]);
+//            }
+//            if (i == 1) {
+//                token.setAccess_token(json[1]);
+//            }
+//            if (i == 2) {
+//                token.setKey2(json[2]);
+//            }
+//            if (i == 3) {
+//                token.setToken_type(json[3]);
+//            }
+//            if (i == 4) {
+//                token.setKey3(json[4]);
+//            }
+//            if (i == 5) {
+//                token.setToken_type(json[5]);
+//            }
+//            if (i == 6) {
+//                token.setKey4(json[6]);
+//            }
+//            if (i == 7) {
+//                token.setExpires_in(json[7]);
+//            }
+//        for (int i = 0; i < json.length; i++) {
+//            if (i == 0) {
+//                token.setAccess_token(json[0]);
+//            }
+//            if (i == 1) {
+//                token.setRefresh_token(json[1]);
+//            }
+//            if (i == 2) {
+//                token.setToken_type(json[2]);
+//            }
+//            if (i == 3) {
+//                token.setExpires_in(json[3]);
+//            }
+//        }
+//            System.out.println(json[i]);
+//            token.setKey1(json[0]);
+//            token.setAccess_token(json[1]);
+//            token.setKey2(json[2]);
+//            token.setRefresh_token(json[3]);
+//            token.setKey3(json[4]);
+//            token.setToken_type(json[5]);
+//            token.setKey4(json[6]);
+//            token.setExpires_in(json[7]);
 
 
