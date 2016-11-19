@@ -1,8 +1,8 @@
 const Backbone = require('backbone')
 
-const loginModel = Backbone.Model.extend({
+const tokenModel = Backbone.Model.extend({
 
-   url: "/login",
+   url: "/gettoken",
 
 
    initialize: function(){
@@ -10,9 +10,9 @@ const loginModel = Backbone.Model.extend({
 })
 
 
-const loginCollection = Backbone.Collection.extend({
+const tokenCollection = Backbone.Collection.extend({
 
-   model: loginModel,
+   model: tokenModel,
 
    url: "",
 
@@ -26,4 +26,4 @@ const loginCollection = Backbone.Collection.extend({
 })
 
 
-module.exports = {loginModel, loginCollection}
+module.exports = {tokenModel, tokenCollection}
