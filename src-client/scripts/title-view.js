@@ -33,12 +33,12 @@ const TitleView = React.createClass({
           <input ref="password" type="text" placeholder="Password"/>
           <br/>
 
-          <a href="/login">
+          <a href="#auth">
             <button className="btn btn-warning titleScreenBtn" onClick={this._handleClick}>Login</button>
           </a>
         </form>
           <button className="btn btn-warning titleScreenBtn" onClick={this._handleClick}>Login no reroute</button>
-        <button className="btn btn-warning titleScreenBtn" onClick={this._testFunction}>Test Token 9</button>
+        <button className="btn btn-warning titleScreenBtn" onClick={this._testFunction}>Test Token 10</button>
       </div>
     )
   }

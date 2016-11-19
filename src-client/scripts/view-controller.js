@@ -1,6 +1,7 @@
 const React = require('react')
 const TitleView = require('./title-view.js')
 const HomeView = require('./home-view.js')
+const AuthView = require('./auth-view.js')
 
 
 const AppView = React.createClass({
@@ -11,6 +12,9 @@ const AppView = React.createClass({
         break;
       case "home":
         return <HomeView/>
+        break;
+      case "auth":
+        return <AuthView/>
         break;
       default:
 
