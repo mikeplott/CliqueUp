@@ -9,17 +9,36 @@ const TitleView = React.createClass({
     ACTIONS.fetchUserEventColl()
   },
 
+  _handleClick: function(){
+
+    let userLogin = {
+      username: this.refs.username.value,
+      password: this.refs.password.value
+    }
+    console.log(userLogin)
+
+     ACTIONS.handleUserLogin(userLogin)
+
+  },
+
 
   render: function(){
     return(
       <div className="titleScreenHolder">
         <img src="./images/CliqueUpLogo.png" className="titleScreenImg"/>
         <br/>
-        <a href="/#homePage">
-          <button className="btn btn-warning titleScreenBtn">Login</button>
+        <form>
+          <input ref="username" type="text" placeholder="E-mail"/>
+          <br/>
+          <input ref="password" type="text" placeholder="Password"/>
+          <br/>
 
-        </a>
-        <button className="btn btn-warning titleScreenBtn" onClick={this._testFunction}>Test Token 8</button>
+          <a href="">
+            <button className="btn btn-warning titleScreenBtn" onClick={this._handleClick}>Login</button>
+          </a>
+        </form>
+          <button className="btn btn-warning titleScreenBtn" onClick={this._handleClick}>Login</button>
+        <button className="btn btn-warning titleScreenBtn" onClick={this._testFunction}>Test Token 9</button>
       </div>
     )
   }

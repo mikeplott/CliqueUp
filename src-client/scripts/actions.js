@@ -1,5 +1,6 @@
 const Backbone = require('backbone');
 const {eventsModel, eventsCollection} = require('./model-coll.js');
+const {loginModel, loginCollection} = require('./model-login.js')
 const STORE = require('./store.js');
 
 
@@ -25,9 +26,29 @@ const ACTIONS = {
   createNewmsg: function(){
 
 
-   
+
 
  },
+
+
+   handleUserLogin: function(usrInfo){
+     let usrLogin = new loginModel()
+
+      usrLogin.set(usrInfo)
+
+
+      usrLogin.save().then(function(serverRes){
+
+
+         console.log( "tickle me" ,serverRes)
+
+         console.log(serverRes)
+         
+
+      })
+
+
+   },
 
 
    changeView: function(viewInput){
