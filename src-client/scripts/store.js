@@ -2,7 +2,7 @@ const Backbone = require('backbone');
 const ACTIONS = require('./actions.js');
 
 const STORE = {
-   _data:{
+   data:{
 
    },
 
@@ -15,7 +15,7 @@ const STORE = {
       return this.data
    },
 
-   onChange: function(){
+   onChange: function(someFunc){
       Backbone.Events.on('storeChange', someFunc)
    }
 

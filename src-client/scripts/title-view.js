@@ -15,11 +15,11 @@ const TitleView = React.createClass({
       <div className="titleScreenHolder">
         <img src="./images/CliqueUpLogo.png" className="titleScreenImg"/>
         <br/>
-        <a href="/auth">
+        <a href="/#homePage">
           <button className="btn btn-warning titleScreenBtn">Login</button>
 
         </a>
-        <button className="btn btn-warning titleScreenBtn" onClick={this._testFunction}>Test Token 7</button>
+        <button className="btn btn-warning titleScreenBtn" onClick={this._testFunction}>Test Token 8</button>
       </div>
     )
   }
