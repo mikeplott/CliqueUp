@@ -37,7 +37,7 @@ const TitleView = React.createClass({
             <button className="btn btn-warning titleScreenBtn" onClick={this._handleClick}>Login</button>
           </a>
         </form>
-          <button className="btn btn-warning titleScreenBtn" onClick={this._handleClick}>Login</button>
+          <button className="btn btn-warning titleScreenBtn" onClick={this._handleClick}>Login no reroute</button>
         <button className="btn btn-warning titleScreenBtn" onClick={this._testFunction}>Test Token 9</button>
       </div>
     )
