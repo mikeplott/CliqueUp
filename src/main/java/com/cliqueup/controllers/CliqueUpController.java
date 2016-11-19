@@ -137,13 +137,13 @@ public class CliqueUpController {
     public void userAuth(HttpSession session, HttpServletResponse response, @RequestBody User user) throws Exception {
         User userFromDb = users.findByUsername(user.getUsername());
         if (userFromDb == null) {
-            User userForDb = new User(user.getUsername(), user.getPassword());
-            users.save(userForDb);
+            user.setPassword(PasswordStorage.createHash(user.getPassword()));
+            users.save(user);
         }
         else if (!PasswordStorage.verifyPassword(userFromDb.getPassword(), user.getPassword())) {
             throw new Exception("Password invalid");
         }
-        session.setAttribute("username", userFromDb.getUsername());
+        session.setAttribute("username", user.getUsername());
         response.sendRedirect("/auth");
     }
 
