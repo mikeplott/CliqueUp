@@ -9,7 +9,8 @@ const TitleView = React.createClass({
     ACTIONS.fetchUserEventColl()
   },
 
-  _handleClick: function(){
+  _handleClick: function(evt){
+    evt.preventDefault()
 
     let userLogin = {
       username: this.refs.username.value,
@@ -18,6 +19,7 @@ const TitleView = React.createClass({
     console.log(userLogin)
 
      ACTIONS.handleUserLogin(userLogin)
+     window.location.hash = "auth"
 
   },
 
@@ -32,10 +34,8 @@ const TitleView = React.createClass({
           <br/>
           <input ref="password" type="text" placeholder="Password"/>
           <br/>
+          <button className="btn btn-warning titleScreenBtn" onClick={this._handleClick}>Login</button>
 
-          <a href="#auth">
-            <button className="btn btn-warning titleScreenBtn" onClick={this._handleClick}>Login</button>
-          </a>
         </form>
           <button className="btn btn-warning titleScreenBtn" onClick={this._handleClick}>Login no reroute</button>
         <button className="btn btn-warning titleScreenBtn" onClick={this._testFunction}>Test Token 10</button>
