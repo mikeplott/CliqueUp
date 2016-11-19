@@ -1,5 +1,7 @@
 package com.cliqueup.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 /**
@@ -18,8 +20,12 @@ public class User {
     @Column(nullable = false)
     String username;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     String password;
+
+    @ManyToOne
+    Token token;
 
     public User() {
     }
@@ -65,5 +71,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Token getToken() {
+        return token;
+    }
+
+    public void setToken(Token token) {
+        this.token = token;
     }
 }

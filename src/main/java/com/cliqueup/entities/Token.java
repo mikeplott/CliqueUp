@@ -12,14 +12,8 @@ public class Token {
     @GeneratedValue
     int id;
 
-    @Column(nullable = false)
-    String key;
-
-    @Column(nullable = false)
-    String secret;
-
-    @Column(nullable = false)
-    String redirectURL;
+    @Column()
+    String access_token;
 
     @ManyToOne
     User user;
@@ -27,10 +21,8 @@ public class Token {
     public Token() {
     }
 
-    public Token(String key, String secret, String redirectURL, User user) {
-        this.key = key;
-        this.secret = secret;
-        this.redirectURL = redirectURL;
+    public Token(String access_token, User user) {
+        this.access_token = access_token;
         this.user = user;
     }
 
@@ -42,28 +34,12 @@ public class Token {
         this.id = id;
     }
 
-    public String getKey() {
-        return key;
+    public String getAccess_token() {
+        return access_token;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getSecret() {
-        return secret;
-    }
-
-    public void setSecret(String secret) {
-        this.secret = secret;
-    }
-
-    public String getRedirectURL() {
-        return redirectURL;
-    }
-
-    public void setRedirectURL(String redirectURL) {
-        this.redirectURL = redirectURL;
+    public void setAccess_token(String access_token) {
+        this.access_token = access_token;
     }
 
     public User getUser() {

@@ -1,6 +1,7 @@
 package com.cliqueup.controllers;
 
 import com.cliqueup.entities.*;
+import com.cliqueup.entities.Response;
 import com.cliqueup.services.*;
 import com.cliqueup.utlities.PasswordStorage;
 import okhttp3.*;
@@ -65,7 +66,11 @@ public class CliqueUpController {
     @Autowired
     TokenRepo tokens;
 
+    @Autowired
+    ResponseRepo responses;
+
     Server h2;
+    private Object access_token;
 
     @PostConstruct
     public void init() throws SQLException, ParseException, PasswordStorage.CannotPerformOperationException {
@@ -316,7 +321,7 @@ public class CliqueUpController {
             return new ResponseEntity<Token>(HttpStatus.NOT_FOUND);
         }
         else {
-            tokens.save(new Token(token.getKey(), token.getSecret(), REDIRECTURL, userFromDb));
+            //tokens.save(new Token(token.getKey(), token.getSecret(), REDIRECTURL, userFromDb));
             Token tokenFromDb = tokens.findByUser(userFromDb);
             return new ResponseEntity<Token>(tokenFromDb, HttpStatus.OK);
         }
@@ -361,7 +366,6 @@ public class CliqueUpController {
     @RequestMapping(path = "/access", method = RequestMethod.GET)
     public void getAccess(String code, HttpServletResponse myResponse, HttpSession session) throws IOException {
         OkHttpClient client = new OkHttpClient();
-        System.out.println(code);
 
         okhttp3.RequestBody formBody = new FormBody.Builder()
                 .add("client_id", "dlevog3jrgb2rn4rr30hv6rs5b")
@@ -377,15 +381,132 @@ public class CliqueUpController {
                 .build();
 
         okhttp3.Response response = client.newCall(request).execute();
-        System.out.println(response.body().string());
+
+        session.setAttribute("token", response.body().string());
+
+        System.out.println(session.getAttribute("token").toString());
+
+        access_token = session.getAttribute("token");
+        Token token = new Token();
+        //String[] json = access_token.toString().split(",");
+
+//        for (int i = 0; i < json.length; i++) {
+//            //json[i].split(":");
+//            String stuff = json[i];
+//            System.out.println(stuff);
+//            String[] text = stuff.split(":");
+//            String theText = text[0];
+//            System.out.println(theText);
+//            if (i == 0) {
+//                token.setKey1(json[0]);
+//            }
+//            if (i == 1) {
+//                token.setAccess_token(json[1]);
+//            }
+//            if (i == 2) {
+//                token.setKey2(json[2]);
+//            }
+//            if (i == 3) {
+//                token.setToken_type(json[3]);
+//            }
+//            if (i == 4) {
+//                token.setKey3(json[4]);
+//            }
+//            if (i == 5) {
+//                token.setToken_type(json[5]);
+//            }
+//            if (i == 6) {
+//                token.setKey4(json[6]);
+//            }
+//            if (i == 7) {
+//                token.setExpires_in(json[7]);
+//            }
+//
+//        }
+//        System.out.println(json.toString());
+//        String[] theJson = new String[3];
+
+
+//        for (int i = 0; i < json.length; i++) {
+//            if (i == 0) {
+//                token.setKey1(json[0]);
+//            }
+//            if (i == 1) {
+//                token.setAccess_token(json[1]);
+//            }
+//            if (i == 2) {
+//                token.setKey2(json[2]);
+//            }
+//            if (i == 3) {
+//                token.setToken_type(json[3]);
+//            }
+//            if (i == 4) {
+//                token.setKey3(json[4]);
+//            }
+//            if (i == 5) {
+//                token.setToken_type(json[5]);
+//            }
+//            if (i == 6) {
+//                token.setKey4(json[6]);
+//            }
+//            if (i == 7) {
+//                token.setExpires_in(json[7]);
+//            }
+//        for (int i = 0; i < json.length; i++) {
+//            if (i == 0) {
+//                token.setAccess_token(json[0]);
+//            }
+//            if (i == 1) {
+//                token.setRefresh_token(json[1]);
+//            }
+//            if (i == 2) {
+//                token.setToken_type(json[2]);
+//            }
+//            if (i == 3) {
+//                token.setExpires_in(json[3]);
+//            }
+//        }
+
+        //            System.out.println(json[i]);
+//            token.setKey1(json[0]);
+//            token.setAccess_token(json[1]);
+//            token.setKey2(json[2]);
+//            token.setRefresh_token(json[3]);
+//            token.setKey3(json[4]);
+//            token.setToken_type(json[5]);
+//            token.setKey4(json[6]);
+//            token.setExpires_in(json[7]);
+
+        User user = users.findByUsername("mike");
+        String accessToken = (String) session.getAttribute("token");
+        token.setAccess_token(accessToken);
+        token.setUser(user);
+        tokens.save(token);
+        System.out.println(access_token);
 
         if (!response.isSuccessful())
             throw new IOException("GO FUCK YOURSELF" + response);
 
-        session.setAttribute("token", response.body());
-        System.out.println(session.getAttribute("token").toString());
-        myResponse.sendRedirect("/");
+        myResponse.sendRedirect("/gettoken");
     }
+
+    @RequestMapping(path = "/gettoken", method = RequestMethod.GET)
+    public Token getToken(HttpSession session, HttpServletResponse response) {
+        User user = users.findByUsername("mike");
+        return tokens.findByUser(user);
+    }
+
+       // System.out.println(response.body());
+
+        //System.out.println(access_token);
+
+       // tokens.save(new Token(response.header("access_token"), response.header("refresh_token"), response.header("token_type"), 3600, user));
+
+
+
+//        session.setAttribute("token", response.body());
+//        System.out.println(session.getAttribute("token").toString());
+
 
 //        String token = (String) session.getAttribute("token");
 //        System.out.println(token);
@@ -403,6 +524,7 @@ public class CliqueUpController {
     @RequestMapping(path = "/auth", method = RequestMethod.GET)
     public void getAuth(HttpSession session,HttpServletResponse response) throws IOException {
         //return AUTH;
+       // users.save(user);
         response.sendRedirect(AUTH);
     }
 
