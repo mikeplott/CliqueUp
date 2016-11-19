@@ -7,7 +7,8 @@ const View = require('./view-controller.js')
 const AppRouter = Backbone.Router.extend({
   routes: {
     "" : "showTitlePage",
-    "homePage" : "showHomePage"
+    "homePage" : "showHomePage",
+    "auth" : "showAuthPage"
   },
 
   showTitlePage: function(){
@@ -18,6 +19,10 @@ const AppRouter = Backbone.Router.extend({
   showHomePage: function(){
 
     ReactDOM.render(<View currentView="home"/>, document.querySelector("#ui"))
+  },
+
+  showAuthPage: function(){
+    ReactDOM.render(<View currentView="auth"/>, document.querySelector("#ui"))
   },
 
   initialize: function(){
