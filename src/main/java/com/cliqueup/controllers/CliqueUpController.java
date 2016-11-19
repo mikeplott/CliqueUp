@@ -134,7 +134,7 @@ public class CliqueUpController {
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public void userAuth(HttpSession session, HttpServletResponse response, @RequestBody User user) throws Exception {
+    public User userAuth(HttpSession session, HttpServletResponse response, @RequestBody User user) throws Exception {
         User userFromDb = users.findByUsername(user.getUsername());
         if (userFromDb == null) {
             user.setPassword(PasswordStorage.createHash(user.getPassword()));
@@ -144,7 +144,7 @@ public class CliqueUpController {
             throw new Exception("Password invalid");
         }
         session.setAttribute("username", user.getUsername());
-        response.sendRedirect("/auth");
+        return user;
     }
 
     @RequestMapping(path = "/signup", method = RequestMethod.POST)
