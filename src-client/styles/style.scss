@@ -77,6 +77,12 @@ html, body {
 	cursor: pointer;
 }
 
+.homeScreenBtn{
+	background: #faa938;
+	border-color: #f99406;
+	opacity: 0.1;
+}
+
 .homeMeetupBox{
 	position: absolute;
 	left: 0;
@@ -88,6 +94,11 @@ html, body {
 
 .homeMeetupBox:hover{
 	background: rgba(150,150,150,0.6);
+
+	.homeScreenBtn{
+		opacity: 1;
+	}
+
 }
 
 .homeChatBox{

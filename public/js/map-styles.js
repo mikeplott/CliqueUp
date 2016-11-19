@@ -1,7 +1,7 @@
 
 function initMap() {
 
-        var map = new google.maps.Map(document.getElementById('map'), {
+        var map1 = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 32.776475, lng: -79.931051},
           zoom: 12,
           disableDefaultUI: true,
@@ -275,7 +275,7 @@ function initMap() {
           }
           ]
         });
-        map.setOptions({
+        map1.setOptions({
            disableDoubleClickZoom: true,
            navigationControl: false,
            mapTypeControl: false,
@@ -283,5 +283,5 @@ function initMap() {
            draggable: false,
            scrollwheel: false
         });
-        map.setTilt(45);
+        map1.setTilt(45);
       }

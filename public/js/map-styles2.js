@@ -1,3 +1,7 @@
+
+var returnMap = ''
+
+
 function initMap() {
 
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -8,7 +12,7 @@ function initMap() {
 
 
 
-        var map = new google.maps.Map(document.getElementById('map'), {
+        var map2 = new google.maps.Map(document.getElementById('map-home'), {
           center: pos,
           zoom: 12,
           disableDefaultUI: true,
@@ -290,7 +294,7 @@ function initMap() {
         //    draggable: false,
         //    scrollwheel: false
         // });
-        map.setTilt(45);
+        map2.setTilt(45);
 
       });
     }
