@@ -1,7 +1,6 @@
 package com.cliqueup.controllers;
 
 import com.cliqueup.entities.*;
-import com.cliqueup.entities.Response;
 import com.cliqueup.services.*;
 import com.cliqueup.utlities.PasswordStorage;
 import okhttp3.*;
@@ -188,8 +187,6 @@ public class CliqueUpController {
         User user = users.findByUsername(username);
         Token token = user.getToken();
         return new ResponseEntity<Token>(token, HttpStatus.OK);
-        //response.sendRedirect("/#/homePage");
-        //return user;
     }
 
 
@@ -371,39 +368,6 @@ public class CliqueUpController {
         return new ResponseEntity<String>(REDIRECTURL, HttpStatus.OK);
 //        }
     }
-
-//    @RequestMapping(path = "/token", method = RequestMethod.POST)
-//    public ResponseEntity<Token> postToken(HttpSession session, @RequestBody Token token) {
-//        String username = (String) session.getAttribute("username");
-//        if (username == null) {
-//            return new ResponseEntity<Token>(HttpStatus.FORBIDDEN);
-//        }
-//        User userFromDb = users.findByUsername(username);
-//        if (userFromDb == null) {
-//            return new ResponseEntity<Token>(HttpStatus.NOT_FOUND);
-//        }
-//        else {
-//            //tokens.save(new Token(token.getKey(), token.getSecret(), REDIRECTURL, userFromDb));
-//            Token tokenFromDb = tokens.findByUser(userFromDb);
-//            return new ResponseEntity<Token>(tokenFromDb, HttpStatus.OK);
-//        }
-//    }
-
-//    @RequestMapping(path = "/token", method = RequestMethod.GET)
-//    public ResponseEntity<Token> getToken(HttpSession session, @RequestBody User user) {
-//        String username = (String) session.getAttribute("username");
-//        if (username == null) {
-//            return new ResponseEntity<Token>(HttpStatus.FORBIDDEN);
-//        }
-//        User userFromDb = users.findByUsername(username);
-//        if (userFromDb == null) {
-//            return new ResponseEntity<Token>(HttpStatus.NOT_FOUND);
-//        }
-//        else {
-////            Token tokenFromDb = tokens.findByUser(userFromDb);
-//            return new ResponseEntity<Token>(tokenFromDb, HttpStatus.OK);
-    //  }
-    //}
 
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
     public void logout(HttpSession session) throws Exception {
