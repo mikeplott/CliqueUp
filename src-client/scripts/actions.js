@@ -40,7 +40,7 @@ const ACTIONS = {
       let theUserModel = new userCollection(myToken)
       console.log('maybe??')
       theUserModel.fetch().then(function(){
-      STORE.setStore("userData", theUserModel)
+      STORE.setStore("userData", theUserModel.models[0].attributes)
     })
   },
 
