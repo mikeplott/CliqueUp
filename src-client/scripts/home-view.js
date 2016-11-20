@@ -316,7 +316,7 @@ const HomeView = React.createClass({
 
   componentDidMount: function(){
     initMap();
- 
+
   },
 
   _placeFirstMarker: function(){
@@ -349,9 +349,9 @@ const HomeView = React.createClass({
 })
 
 
-console.log(google);
-
-console.log('the googs', google)
+// console.log(google);
+//
+// console.log('the googs', google)
 
 
 

@@ -7,6 +7,7 @@ const TitleView = React.createClass({
 
   _testFunction: function(){
     ACTIONS.fetchUserEventColl()
+
   },
 
   _handleClick: function(evt){
@@ -27,18 +28,16 @@ const TitleView = React.createClass({
   render: function(){
     return(
       <div className="titleScreenHolder">
-        <img src="./images/CliqueUpLogo.png" className="titleScreenImg"/>
-        <br/>
+        <div className="titleLogoHolder">
+          <img src="./images/CliqueUpLogo.png" className="titleScreenImg"/>
+        </div>
         <form>
-          <input ref="username" type="text" placeholder="E-mail"/>
+          <input className="form-control titleScreenUser" ref="username" type="text" placeholder="E-mail"/>
           <br/>
-          <input ref="password" type="text" placeholder="Password"/>
+          <input className="form-control titleScreenPass" ref="password" type="text" placeholder="Password"/>
           <br/>
           <button className="btn btn-warning titleScreenBtn" onClick={this._handleClick}>Login</button>
-
         </form>
-          <button className="btn btn-warning titleScreenBtn" onClick={this._handleClick}>Login no reroute</button>
-        <button className="btn btn-warning titleScreenBtn" onClick={this._testFunction}>Test Token 10</button>
       </div>
     )
   }
