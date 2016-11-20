@@ -177,14 +177,14 @@ public class CliqueUpController {
         users.save(user);
         if (!response.isSuccessful())
             throw new IOException("CliqueUp server error: " + response);
-        myResponse.sendRedirect("/gettoken");
+        myResponse.sendRedirect("/#/homePage");
     }
 
     @RequestMapping(path = "/gettoken", method = RequestMethod.GET)
     public User getToken(HttpSession session, HttpServletResponse response) throws IOException {
         String username = (String) session.getAttribute("username");
         User user = users.findByUsername(username);
-        response.sendRedirect("/#/homePage");
+        //response.sendRedirect("/#/homePage");
         return user;
     }
 
