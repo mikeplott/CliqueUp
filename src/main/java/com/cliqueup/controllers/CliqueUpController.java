@@ -1,6 +1,7 @@
 package com.cliqueup.controllers;
 
 import com.cliqueup.entities.*;
+import com.cliqueup.entities.Response;
 import com.cliqueup.services.*;
 import com.cliqueup.utlities.PasswordStorage;
 import okhttp3.*;
@@ -155,7 +156,7 @@ public class CliqueUpController {
     }
 
     @RequestMapping(path = "/access", method = RequestMethod.GET)
-    public void getAccess(String code, String username , HttpServletResponse myResponse) throws IOException {
+    public void getAccess(String code, String username , HttpServletResponse myResponse, HttpSession session) throws IOException {
         User user = users.findByUsername(username);
         OkHttpClient client = new OkHttpClient();
         okhttp3.RequestBody formBody = new FormBody.Builder()
@@ -175,17 +176,18 @@ public class CliqueUpController {
         tokens.save(token);
         user.setToken(token);
         users.save(user);
+        session.setAttribute("username", user.getUsername());
         if (!response.isSuccessful())
             throw new IOException("CliqueUp server error: " + response);
         myResponse.sendRedirect("/#/homePage");
     }
 
     @RequestMapping(path = "/gettoken", method = RequestMethod.GET)
-    public Token getToken(HttpSession session, HttpServletResponse response) throws IOException {
+    public ResponseEntity<Token> getToken(HttpSession session, HttpServletResponse response) throws IOException {
         String username = (String) session.getAttribute("username");
         User user = users.findByUsername(username);
-        Token token = tokens.findByUser(user);
-        return token;
+        Token token = user.getToken();
+        return new ResponseEntity<Token>(token, HttpStatus.OK);
         //response.sendRedirect("/#/homePage");
         //return user;
     }
