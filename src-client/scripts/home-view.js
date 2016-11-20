@@ -325,7 +325,13 @@ const HomeView = React.createClass({
 
 
   _getToken: function(){
-    ACTIONS.fetchAuthToken()
+    let THEULTIMATEMOMEMENT = ACTIONS.fetchUserData()
+
+    console.log(THEULTIMATEMOMEMENT)
+
+
+
+
   },
 
   _placeFirstMarker: function(){
@@ -349,7 +355,7 @@ const HomeView = React.createClass({
         </div>
         <div className="homeMeetupBox" ref="homeMeetupBox">
           <button className="btn btn-warning homeScreenBtn" onClick={this._placeFirstMarker}>Place Marker</button>
-          <button className="btn btn-warning homeScreenBtn" onClick={this._getToken}>Test Token</button>
+          <button className="btn btn-warning homeScreenBtn" onClick={this._getToken}>Test Token2</button>
         </div>
         <div className="homeChatBox"></div>
       </div>

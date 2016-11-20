@@ -2,6 +2,7 @@ const Backbone = require('backbone');
 const {eventsModel, eventsCollection} = require('./model-coll.js');
 const {loginModel, loginCollection} = require('./model-login.js')
 const {tokenModel, tokenCollection} = require('./model-gettoken.js')
+const {userModel, userCollection} = require('./model-userInfo.js')
 const STORE = require('./store.js');
 
 
@@ -18,11 +19,35 @@ const ACTIONS = {
 
 
   fetchAuthToken: function(){
+
     let token = new tokenModel()
 
     token.fetch().then(function(){
-      console.log(token)
+      let wholeStrng = token.attributes.access_token
+      let strngArry = wholeStrng.split('"')
+      let theRealToken = strngArry[3].split('"')
+
+      STORE.setStore("token", theRealToken)
+
     })
+  },
+
+  fetchUserData: function(){
+    this.fetchAuthToken()
+
+    STORE.onChange(function(){
+      let theData = STORE.getStoreData()
+      let myToken = theData.token[0]
+
+      console.log(myToken)
+
+      let theUserModel = new userCollection(myToken)
+
+      theUserModel.fetch().then(function(){
+        return theUserModel
+      })
+    })
+
   },
 
   fetchUserEventColl: function(){
