@@ -18,10 +18,12 @@ const ACTIONS = {
 
 
   fetchAuthToken: function(){
+
     let token = new tokenModel()
 
     token.fetch().then(function(){
       console.log(token)
+      return token
     })
   },
 
