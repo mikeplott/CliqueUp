@@ -31,7 +31,12 @@ html, body {
          top: -5%;
          left: 22%;
          z-index: 1000;
-         background: radial-gradient(rgba(150,150,150, 0.5) , rgba(0,0,0,0)50%);
+        //  background: radial-gradient(rgba(250,150,150, 0.9) , rgba(0,0,0,0)50%);
+
+
+				 .titleLogoHolder{
+					 background: radial-gradient(rgba(150,150,150, 0.5) , rgba(0,0,0,0)50%);
+				 }
 
 
 				 .titleScreenImg{
@@ -44,9 +49,48 @@ html, body {
 	         border-color: #f99406;
 	 				margin-left: 47%;
 	       }
+
+				 .titleScreenUser{
+					 width: 40%;
+					 margin: auto;
+
+				 }
+
+				 .titleScreenPass{
+					 margin: auto;
+						width: 40%;
+						margin-bottom: 50px;
+				 }
+
+
+
+
       }
 
 
+}
+
+.authLogoHolder{
+	background: radial-gradient(rgba(150,150,150, 0.5) , rgba(0,0,0,0)50%);
+}
+
+.authScreenText{
+	color:white;
+	// font-size: 20px;
+	padding: 50px 50px;
+	padding-left: 20px;
+
+}
+
+.authScreenImg{
+	width: 70%;
+ 	margin-left: 12%;
+}
+
+
+.authScreenBtn{
+		margin-left: 40%;
+		color: white;
 }
 
 
