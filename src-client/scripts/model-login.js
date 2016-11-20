@@ -4,12 +4,7 @@ const loginModel = Backbone.Model.extend({
 
    url: "/login",
 
-   sync : function(method, collection, options) {
-
-     options.dataType = "jsonp";
-     return Backbone.sync(method, collection, options);
-   },
-   
+  
    initialize: function(){
    },
 })

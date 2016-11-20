@@ -325,7 +325,13 @@ const HomeView = React.createClass({
 
 
   _getToken: function(){
-    ACTIONS.fetchAuthToken()
+    let THEULTIMATEMOMEMENT = ACTIONS.fetchUserData()
+
+    console.log(THEULTIMATEMOMEMENT)
+
+
+
+
   },
 
   _placeFirstMarker: function(){
