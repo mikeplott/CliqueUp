@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -24,10 +23,6 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by michaelplott on 11/16/16.
@@ -69,11 +64,7 @@ public class CliqueUpController {
     @Autowired
     TokenRepo tokens;
 
-    @Autowired
-    ResponseRepo responses;
-
     Server h2;
-    private Object access_token;
 
     @PostConstruct
     public void init() throws SQLException, ParseException, PasswordStorage.CannotPerformOperationException {
@@ -149,7 +140,7 @@ public class CliqueUpController {
             session.setAttribute("username", userForDb.getUsername());
             return user;
         }
-        else if (!PasswordStorage.verifyPassword(userFromDb.getPassword(), user.getPassword())) {
+        else if (!PasswordStorage.verifyPassword(user.getPassword(), userFromDb.getPassword())) {
             throw new Exception("Password invalid");
         }
         session.setAttribute("username", user.getUsername());
