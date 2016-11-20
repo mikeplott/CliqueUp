@@ -3,7 +3,8 @@ const ACTIONS = require('./actions.js');
 
 const STORE = {
    data:{
-     token: ''
+     token: '',
+     userData: {}
    },
 
    setStore: function(storeProp, Payload){

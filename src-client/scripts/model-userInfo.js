@@ -19,7 +19,7 @@ const userCollection = Backbone.Collection.extend({
 
 
    initialize: function(theToken){
-     this.url = "https://api.meetup.com/2/member/self/?access_token={" + theToken + "}"
+     this.url = "https://api.meetup.com/2/member/self/?access_token=" + theToken + ""
    },
 
   sync : function(method, collection, options) {

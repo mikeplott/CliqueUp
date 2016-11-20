@@ -33,21 +33,15 @@ const ACTIONS = {
   },
 
   fetchUserData: function(){
-    this.fetchAuthToken()
 
-    STORE.onChange(function(){
       let theData = STORE.getStoreData()
       let myToken = theData.token[0]
-
-      console.log(myToken)
-
+      console.log('hopefully')
       let theUserModel = new userCollection(myToken)
-
+      console.log('maybe??')
       theUserModel.fetch().then(function(){
-        return theUserModel
-      })
+      STORE.setStore("userData", theUserModel)
     })
-
   },
 
   fetchUserEventColl: function(){
