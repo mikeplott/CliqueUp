@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -22,6 +24,10 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by michaelplott on 11/16/16.
@@ -29,15 +35,15 @@ import java.text.SimpleDateFormat;
 @RestController
 public class CliqueUpController {
 
-    public static final String REDIRECTURL = "http://127.0.0.1:8080/";
+    public static final String REDIRECTURL = "http://127.0.0.1:8080/access";
 
-    public static final String AUTH = "https://secure.meetup.com/oauth2/authorize?client_id=dlevog3jrgb2rn4rr30hv6rs5b&response_type=code&redirect_uri=" + REDIRECTURL + "access";
+    public static final String AUTHORIZE_URL = "https://secure.meetup.com/oauth2/authorize";
+
+    public static final String CLIENT_ID = "dlevog3jrgb2rn4rr30hv6rs5b";
 
     public static final String SECRET = "g3dd8kblqshkq7jrplj79et6ko";
-    public static String urlCode;
 
-    public static final String ACCESS = "https://secure.meetup.com/oauth2/access?client_id=dlevog3jrgb2rn4rr30hv6rs5b&client_secret=" + SECRET +
-            "&grant_type=authorization_code&redirect_uri=" + REDIRECTURL + "about-page.html#homePage" + "&code=" + urlCode;
+    public static final String AUTH = AUTHORIZE_URL+"?client_id="+CLIENT_ID+"&response_type=code&redirect_uri="+REDIRECTURL;
 
     @Autowired
     UserRepo users;
@@ -134,11 +140,14 @@ public class CliqueUpController {
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public User userAuth(HttpSession session, HttpServletResponse response, @RequestBody User user) throws Exception {
+    public User userAuth(HttpSession session, @RequestBody User user) throws Exception {
         User userFromDb = users.findByUsername(user.getUsername());
         if (userFromDb == null) {
             user.setPassword(PasswordStorage.createHash(user.getPassword()));
-            users.save(user);
+            User userForDb = new User(user.getUsername(), user.getPassword());
+            users.save(userForDb);
+            session.setAttribute("username", userForDb.getUsername());
+            return user;
         }
         else if (!PasswordStorage.verifyPassword(userFromDb.getPassword(), user.getPassword())) {
             throw new Exception("Password invalid");
@@ -146,6 +155,67 @@ public class CliqueUpController {
         session.setAttribute("username", user.getUsername());
         return user;
     }
+
+    @RequestMapping(path = "/auth", method = RequestMethod.GET)
+    public void getAuth(HttpSession session,HttpServletResponse response) throws IOException, ServletException {
+        String username = (String) session.getAttribute("username");
+        String url = AUTH + "?username=" + username;
+        response.sendRedirect(url);
+    }
+
+    @RequestMapping(path = "/access", method = RequestMethod.GET)
+    public void getAccess(String code, String username , HttpServletResponse myResponse) throws IOException {
+        User user = users.findByUsername(username);
+        OkHttpClient client = new OkHttpClient();
+        okhttp3.RequestBody formBody = new FormBody.Builder()
+                .add("client_id", CLIENT_ID)
+                .add("client_secret", SECRET)
+                .add("grant_type", "authorization_code")
+                .add("redirect_uri", REDIRECTURL + "?username=" + username)
+                .add("code", code)
+                .build();
+        Request myRequest = new Request.Builder()
+                .url("https://secure.meetup.com/oauth2/access")
+                .post(formBody)
+                .build();
+        okhttp3.Response response = client.newCall(myRequest).execute();
+        Token token = new Token();
+        token.setAccess_token(response.body().string());
+        tokens.save(token);
+        user.setToken(token);
+        users.save(user);
+        if (!response.isSuccessful())
+            throw new IOException("CliqueUp server error: " + response);
+        myResponse.sendRedirect("/gettoken");
+    }
+
+    @RequestMapping(path = "/gettoken", method = RequestMethod.GET)
+    public User getToken(HttpSession session, HttpServletResponse response) throws IOException {
+        String username = (String) session.getAttribute("username");
+        User user = users.findByUsername(username);
+        response.sendRedirect("/#/homePage");
+        return user;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @RequestMapping(path = "/signup", method = RequestMethod.POST)
     public ResponseEntity<User> userSignUp(HttpSession session, @RequestBody User user) throws PasswordStorage.CannotPerformOperationException {
@@ -172,9 +242,9 @@ public class CliqueUpController {
 //            return new ResponseEntity<Iterable<DirectMessage>>(HttpStatus.NOT_FOUND);
 //        }
 //        else {
-            User userFromDb = users.findByUsername("mike");
-            return new ResponseEntity<Iterable<DirectMessage>>(dms.findByUser(userFromDb), HttpStatus.OK);
-        }
+        User userFromDb = users.findByUsername("mike");
+        return new ResponseEntity<Iterable<DirectMessage>>(dms.findByUser(userFromDb), HttpStatus.OK);
+    }
     //}
 
     @RequestMapping(path = "/user-recipient-messages", method = RequestMethod.GET)
@@ -188,10 +258,10 @@ public class CliqueUpController {
 //            return new ResponseEntity<Iterable<DirectMessage>>(HttpStatus.NOT_FOUND);
 //        }
 //        else {
-            User userFromDb = users.findByUsername("mike");
-            //Iterable<DirectMessage> directMessages = dms.findByRecipientIdAndUser(recipient.getId(), userFromDb);
-            Iterable<DirectMessage> directMessages = dms.findByRecipientIdAndUser(1, userFromDb);
-            return new ResponseEntity<Iterable<DirectMessage>>(directMessages, HttpStatus.OK);
+        User userFromDb = users.findByUsername("mike");
+        //Iterable<DirectMessage> directMessages = dms.findByRecipientIdAndUser(recipient.getId(), userFromDb);
+        Iterable<DirectMessage> directMessages = dms.findByRecipientIdAndUser(1, userFromDb);
+        return new ResponseEntity<Iterable<DirectMessage>>(directMessages, HttpStatus.OK);
         //}
     }
 
@@ -207,9 +277,9 @@ public class CliqueUpController {
 //        }
 //        else {
 //            dms.save(new DirectMessage(dm.getMessage(), dm.getTime(), dm.getRecipientId(), userFromDb));
-            User user = users.findByUsername("mike");
-            dms.save(new DirectMessage(dm.getMessage(), dm.getTime(), dm.getRecipientId(), user));
-            return new ResponseEntity<DirectMessage>(dm, HttpStatus.OK);
+        User user = users.findByUsername("mike");
+        dms.save(new DirectMessage(dm.getMessage(), dm.getTime(), dm.getRecipientId(), user));
+        return new ResponseEntity<DirectMessage>(dm, HttpStatus.OK);
 //        }
     }
 
@@ -224,7 +294,7 @@ public class CliqueUpController {
 //            return new ResponseEntity<Iterable<ChatMessage>>(HttpStatus.NOT_FOUND);
 //        }
 //        else {
-            return new ResponseEntity<Iterable<ChatMessage>>(cms.findByGroup(group), HttpStatus.OK);
+        return new ResponseEntity<Iterable<ChatMessage>>(cms.findByGroup(group), HttpStatus.OK);
 //        }
     }
 
@@ -255,7 +325,7 @@ public class CliqueUpController {
 //            return new ResponseEntity<Iterable<Venue>>(HttpStatus.NOT_FOUND);
 //        }
 //        else {
-            return new ResponseEntity<Iterable<Venue>>(venues.findAll(), HttpStatus.OK);
+        return new ResponseEntity<Iterable<Venue>>(venues.findAll(), HttpStatus.OK);
 //        }
     }
 
@@ -270,7 +340,7 @@ public class CliqueUpController {
 //            return new ResponseEntity<Venue>(HttpStatus.NOT_FOUND);
 //        }
 //        else {
-            return new ResponseEntity<Venue>(venues.findOne(venue.getId()), HttpStatus.OK);
+        return new ResponseEntity<Venue>(venues.findOne(venue.getId()), HttpStatus.OK);
 //        }
     }
 
@@ -288,8 +358,8 @@ public class CliqueUpController {
             venues.save(new Venue(venue.getName(), venue.getAddress()));
             return new ResponseEntity<Venue>(venue, HttpStatus.OK);
         }
-            venues.save(new Venue(venue.getName(), venue.getImage(), venue.getAddress()));
-            return new ResponseEntity<Venue>(venue, HttpStatus.OK);
+        venues.save(new Venue(venue.getName(), venue.getImage(), venue.getAddress()));
+        return new ResponseEntity<Venue>(venue, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/redirect", method = RequestMethod.GET)
@@ -303,7 +373,7 @@ public class CliqueUpController {
 //            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 //        }
 //        else {
-            return new ResponseEntity<String>(REDIRECTURL, HttpStatus.OK);
+        return new ResponseEntity<String>(REDIRECTURL, HttpStatus.OK);
 //        }
     }
 
@@ -337,7 +407,7 @@ public class CliqueUpController {
 //        else {
 ////            Token tokenFromDb = tokens.findByUser(userFromDb);
 //            return new ResponseEntity<Token>(tokenFromDb, HttpStatus.OK);
-      //  }
+    //  }
     //}
 
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
@@ -355,65 +425,49 @@ public class CliqueUpController {
         session.invalidate();
     }
 
+    public ResponseEntity userValidation(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
+}
+
+
+
+
+
+
+
+
+//   String username = myResponse.getHeader("username");
+//System.out.println(username);
+
+//session.setAttribute("token", response.body().string());
+
+//System.out.println(session.getAttribute("token").toString());
+
+// access_token = session.getAttribute("token");
+
+
 //    @RequestMapping(path = "/auth", method = RequestMethod.GET)
 //    public String getAuth(HttpServletResponse response) throws IOException {
 //        return AUTH;
 //    }
 //
-    @RequestMapping(path = "/access", method = RequestMethod.GET)
-    public void getAccess(String code, HttpServletResponse myResponse, HttpSession session) throws IOException {
-        OkHttpClient client = new OkHttpClient();
 
-        okhttp3.RequestBody formBody = new FormBody.Builder()
-                .add("client_id", "dlevog3jrgb2rn4rr30hv6rs5b")
-                .add("client_secret", SECRET)
-                .add("grant_type", "authorization_code")
-                .add("redirect_uri", REDIRECTURL + "access")
-                .add("code", code)
-                .build();
 
-        Request request = new Request.Builder()
-                .url("https://secure.meetup.com/oauth2/access")
-                .post(formBody)
-                .build();
 
-        okhttp3.Response response = client.newCall(request).execute();
+// System.out.println(response.body());
 
-        session.setAttribute("token", response.body().string());
+//System.out.println(access_token);
 
-        System.out.println(session.getAttribute("token").toString());
-
-        access_token = session.getAttribute("token");
-        Token token = new Token();
-        String username = (String) session.getAttribute("username");
-
-        User user = users.findByUsername(username);
-        String accessToken = (String) session.getAttribute("token");
-        token.setAccess_token(accessToken);
-        user.setToken(token);
-        tokens.save(token);
-        users.save(user);
-        System.out.println(access_token);
-
-        if (!response.isSuccessful())
-            throw new IOException("GO FUCK YOURSELF" + response);
-
-        myResponse.sendRedirect("/gettoken");
-    }
-
-    @RequestMapping(path = "/gettoken", method = RequestMethod.GET)
-    public User getToken(HttpSession session, HttpServletResponse response) throws IOException {
-        String username = (String) session.getAttribute("username");
-        User user = users.findByUsername(username);
-        response.sendRedirect("/#/homePage");
-        return user;
-    }
-
-       // System.out.println(response.body());
-
-        //System.out.println(access_token);
-
-       // tokens.save(new Token(response.header("access_token"), response.header("refresh_token"), response.header("token_type"), 3600, user));
+// tokens.save(new Token(response.header("access_token"), response.header("refresh_token"), response.header("token_type"), 3600, user));
 
 
 
@@ -434,38 +488,24 @@ public class CliqueUpController {
 //        String urlCode = code;
 //        response.sendRedirect(ACCESS);
 
-    @RequestMapping(path = "/auth", method = RequestMethod.GET)
-    public void getAuth(HttpSession session,HttpServletResponse response) throws IOException {
-        //return AUTH;
-       // users.save(user);
-        response.sendRedirect(AUTH);
-    }
+
+
 
 //    @RequestMapping(path = "/access", method = RequestMethod.POST)
 //    public void getAccess(HttpServletRequest request) throws IOException {
-        //code = json.get("code");
-        //return ACCESS;
-        //response.sendRedirect(ACCESS);
+//code = json.get("code");
+//return ACCESS;
+//response.sendRedirect(ACCESS);
 
-    //}
+//}
 
 //    @RequestMapping(path = "/access", method = RequestMethod.POST)
 //    public void getAccess(HttpServletResponse response) throws IOException {
 //        response.sendRedirect(REDIRECTURL + "access");
 //    }
 
-    public ResponseEntity userValidation(HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        }
-        User userFromDb = users.findByUsername(username);
-        if (userFromDb == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity(HttpStatus.OK);
-    }
-}
+
+// var stuff = token.split(,).split("").split(:)
 
 // trying to split the access token that meet up provides to get the value of each field but failed.
 
