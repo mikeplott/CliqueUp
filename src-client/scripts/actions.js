@@ -19,7 +19,8 @@ const ACTIONS = {
     let events = new eventsCollection()
 
     events.fetch().then(function(){
-      console.log(events)
+      console.log(events.models[0].attributes)
+      return events.models[0].attributes
     })
   },
 
@@ -43,7 +44,7 @@ const ACTIONS = {
          console.log( "tickle me" ,serverRes)
 
          console.log(serverRes)
-         
+
 
       })
 
