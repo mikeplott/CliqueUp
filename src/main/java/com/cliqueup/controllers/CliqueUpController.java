@@ -181,11 +181,13 @@ public class CliqueUpController {
     }
 
     @RequestMapping(path = "/gettoken", method = RequestMethod.GET)
-    public User getToken(HttpSession session, HttpServletResponse response) throws IOException {
+    public Token getToken(HttpSession session, HttpServletResponse response) throws IOException {
         String username = (String) session.getAttribute("username");
         User user = users.findByUsername(username);
+        Token token = tokens.findByUser(user);
+        return token;
         //response.sendRedirect("/#/homePage");
-        return user;
+        //return user;
     }
 
 
