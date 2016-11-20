@@ -318,6 +318,10 @@ function initMap() {
 const HomeView = React.createClass({
 
   componentDidMount: function(){
+    ACTIONS.fetchAuthToken()
+    setTimeout(function(){
+      ACTIONS.fetchUserData()
+    },500)
 
     initMap();
 
@@ -325,11 +329,10 @@ const HomeView = React.createClass({
 
 
   _getToken: function(){
-    let THEULTIMATEMOMEMENT = ACTIONS.fetchUserData()
 
-    console.log(THEULTIMATEMOMEMENT)
+    let theSUPERDATA = STORE.getStoreData()
 
-
+    console.log(theSUPERDATA)
 
 
   },
