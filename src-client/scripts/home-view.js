@@ -1,7 +1,10 @@
 const React = require('react')
 const ReactDOM = require('react-dom')
 const Backbone = require('backbone')
+const STORE = require('./store.js')
+const ACTIONS = require('./actions.js')
 const map = document.querySelector("#map")
+
 
 console.log(map)
 var map2;
@@ -315,8 +318,14 @@ function initMap() {
 const HomeView = React.createClass({
 
   componentDidMount: function(){
+
     initMap();
 
+  },
+
+
+  _getToken: function(){
+    ACTIONS.fetchAuthToken()
   },
 
   _placeFirstMarker: function(){
@@ -340,6 +349,7 @@ const HomeView = React.createClass({
         </div>
         <div className="homeMeetupBox" ref="homeMeetupBox">
           <button className="btn btn-warning homeScreenBtn" onClick={this._placeFirstMarker}>Place Marker</button>
+          <button className="btn btn-warning homeScreenBtn" onClick={this._getToken}>Test Token</button>
         </div>
         <div className="homeChatBox"></div>
       </div>
