@@ -1,6 +1,7 @@
 const Backbone = require('backbone');
 const {eventsModel, eventsCollection} = require('./model-coll.js');
 const {loginModel, loginCollection} = require('./model-login.js')
+const {tokenModel, tokenCollection} = require('./model-gettoken.js')
 const STORE = require('./store.js');
 
 
@@ -13,6 +14,15 @@ const ACTIONS = {
         userMod.save().then(function(serverRes){
           location.hash="loginHome"
         })
+  },
+
+
+  fetchAuthToken: function(){
+    let token = new tokenModel()
+
+    token.fetch().then(function(){
+      console.log(token)
+    })
   },
 
   fetchUserEventColl: function(){
@@ -41,9 +51,9 @@ const ACTIONS = {
       usrLogin.save().then(function(serverRes){
 
 
-         console.log( "tickle me" ,serverRes)
+        //  console.log( "tickle me" ,serverRes)
 
-         console.log(serverRes)
+        //  console.log(serverRes)
 
 
       })
