@@ -6,11 +6,11 @@ const ACTIONS = require('./actions.js')
 const map = document.querySelector("#map")
 
 
-console.log(map)
+
 var map2;
 var marker;
 
-var crntLat = new google.maps.LatLng(32.776, -79.931);
+
 
 function initMap() {
 
@@ -296,18 +296,16 @@ function initMap() {
           }
           ]
         });
-        // map.setOptions({
-        //    disableDoubleClickZoom: true,
-        //    navigationControl: false,
-        //    mapTypeControl: false,
-        //    scaleControl: false,
-        //    draggable: false,
-        //    scrollwheel: false
-        // });
+      
         map2.setTilt(45);
         marker = new google.maps.Marker({
           animation: google.maps.Animation.DROP,
           position: {lat: 32.776475, lng: -79.931051}
+        });
+
+        google.maps.event.addListenerOnce(map2, 'idle', function(){
+          let theLoader = document.querySelector('.loader')
+          theLoader.style.display = "none";
         });
       });
     }
@@ -396,6 +394,7 @@ const HomeView = React.createClass({
           <ul className="nav nav-tabs homeChatNav">
             <li><a data-toggle="tab">Global</a></li>
             <li><a data-toggle="tab">+</a></li>
+            <li><a data-toggle="tab">V</a></li>
             </ul>
             <div id="myTabContent" className="tab-content">
 
