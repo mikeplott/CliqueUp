@@ -131,8 +131,9 @@ html, body {
 .homeMeetupBox{
 	position: absolute;
 	left: 0;
-	width: 20%;
-	height: 55%;
+	max-width: 20%;
+	max-height: 55%;
+	height: 50%;
 	background: rgba(150,150,150,0.1);
 	z-index: 1000;
 }
@@ -151,16 +152,72 @@ html, body {
 	bottom: 0;
 	right: 0;
 	width: 45%;
-	height: 20%;
-	background: rgba(150,150,150,0.1);
+	max-width: 45%;
+	max-height: 40%;
+	// height: 40%;
+	// background: white;
 	z-index: 1000;
+
+
+	li{
+		max-height: 40px;
+
+		a{
+			background: rgba(150,150,150,0.6);
+			border-color: rgba(150,150,150,0.6);
+		}
+
+	}
 
 }
 
 .homeChatBox:hover{
-	height: 40%;
-	background: rgba(150,150,150,0.6);
+	// height: 40%;
+	// background: rgba(150,150,150,0.6);
 }
+
+
+
+
+.homeNavLastTabs{
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	max-width: 25%;
+	width: 25%;
+	background: #faa938;
+	border-color: #f99406;
+}
+
+.homeNavTabs{
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	width: 25%;
+	max-width: 25%;
+	background: #faa938;
+	border-color: #f99406;
+}
+
+
+.homeMeetupNav{
+	border-right: 0;
+	border-left: 0;
+	margin: 0;
+	padding: 0;
+	min-height: 40px;
+	background: #fde3a7;
+	border-color: #e0d4b8;
+}
+
+
+
+
+.homeChatNav{
+	border-bottom: rgba(150,150,150,0.6);
+}
+
 
 
 
