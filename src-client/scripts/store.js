@@ -6,7 +6,8 @@ const STORE = {
      token: '',
      userData: {},
      homeMenuDisplay: false,
-     userEvents: {}
+     userEvents: {},
+     socket: ''
    },
 
    setStore: function(storeProp, Payload){
