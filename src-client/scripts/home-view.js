@@ -322,6 +322,7 @@ const HomeView = React.createClass({
     setTimeout(function(){
       ACTIONS.fetchUserData()
       ACTIONS.fetchUserEventColl()
+      ACTIONS.connectToSocket()
     },500)
 
     initMap();
@@ -353,6 +354,11 @@ const HomeView = React.createClass({
     marker.setMap(map2);
     map2.setZoom(15);
     map2.panTo(marker.getPosition());
+  },
+
+
+  _sendChatMessage: function(){
+    ACTIONS.sendMessage(this.refs.chatMessage.value)
   },
 
 
@@ -411,7 +417,11 @@ const HomeView = React.createClass({
             <li><a data-toggle="tab">V</a></li>
             </ul>
             <div id="myTabContent" className="tab-content">
-
+              <div></div>
+              <form>
+                <input type="text" className="form-group" ref="chatMessage"/>
+              </form>
+              <button className="btn btn-warning" onClick={this._sendChatMessage}>Send</button>
             </div>
           </div>
         </div>

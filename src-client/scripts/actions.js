@@ -57,15 +57,67 @@ const ACTIONS = {
     })
   },
 
-  createNewmsg: function(){
+  connectToSocket: function(){
+
+    let ws = new SockJS("/socket")
+    STORE.setStore('socket', Stomp.over(ws))
+    let socket = STORE.getStoreData()
+    socket = socket.socket
+
+    socket.connect({}, this.onSocketConnect)
+
+    },
+
+  onSocketConnect: function(){
+    console.log('hey i got here so now what??')
+    let socket = STORE.getStoreData()
+    socket = socket.socket
+
+    socket.subscribe("/global", this.onChatConnect)
+
+
+   },
+
+
+   onChatConnect: function(message){
+     console.log("hey idk if this will even display cause it didnt last time")
+   },
+
+   onReceivedMessage: function(message){
+     let data = JSON.parse(message.body)
+
+     let textBlock = (
+        <div>
+          <div>
+            <img src="profile Pic"/>
+          </div>
+          <div>
+            <h4>text message sent</h4>
+          </div>
+          <p>time stamp</p>
+        </div>
+     )
+   },
+
+   sendMessage: function(chtMess){
+     let socket = STORE.getStoreData()
+     socket = socket.socket
+
+     let theMess = {
+       message: chtMess
+     }
+
+     socket.send('/global', {} ,theMess)
+
+     console.log(chtMess)
 
 
 
 
- },
+   },
 
 
-   handleUserLogin: function(usrInfo){
+  handleUserLogin: function(usrInfo){
      let usrLogin = new loginModel()
 
       usrLogin.set(usrInfo)
@@ -85,7 +137,7 @@ const ACTIONS = {
    },
 
 
-   changeView: function(viewInput){
+  changeView: function(viewInput){
       STORE.setStore('currentView', viewInput)
    }
 }
