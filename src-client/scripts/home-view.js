@@ -296,7 +296,7 @@ function initMap() {
           }
           ]
         });
-      
+
         map2.setTilt(45);
         marker = new google.maps.Marker({
           animation: google.maps.Animation.DROP,
@@ -315,10 +315,13 @@ function initMap() {
 
 const HomeView = React.createClass({
 
+
+
   componentDidMount: function(){
     ACTIONS.fetchAuthToken()
     setTimeout(function(){
       ACTIONS.fetchUserData()
+      ACTIONS.fetchUserEventColl()
     },500)
 
     initMap();
@@ -333,6 +336,17 @@ const HomeView = React.createClass({
     console.log(theSUPERDATA)
 
 
+  },
+
+
+  _toggleMenuDisplay: function(){
+    let menuState = STORE.getStoreData()
+    console.log(menuState.homeMenuDisplay)
+    if(menuState.homeMenuDisplay === false){
+      STORE.setStore('homeMenuDisplay', true )
+    } else {
+        STORE.setStore('homeMenuDisplay', false )
+    }
   },
 
   _placeFirstMarker: function(){
@@ -376,7 +390,7 @@ const HomeView = React.createClass({
     return(
       <div className="homeScreenHolder">
         <div className="nav nav-bar homeNav">
-          <span className="glyphicon glyphicon-option-vertical navMoreBtn"></span>
+          <span className="glyphicon glyphicon-option-vertical navMoreBtn" onClick={this._getToken}></span>
           <img src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg" className="homeNavPic"/>
         </div>
         <div className="homeMeetupBox" ref="homeMeetupBox">

@@ -4,7 +4,9 @@ const ACTIONS = require('./actions.js');
 const STORE = {
    data:{
      token: '',
-     userData: {}
+     userData: {},
+     homeMenuDisplay: false,
+     userEvents: {}
    },
 
    setStore: function(storeProp, Payload){
