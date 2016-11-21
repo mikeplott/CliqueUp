@@ -121,7 +121,7 @@ public class CliqueUpController {
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             java.util.Date date = dateFormat.parse("11/16/2016");
             long time = date.getTime();
-            cms.save(new ChatMessage("Hey what time is the meetup? I can't get ahold of Henry", new Timestamp(time), group, user));
+            cms.save(new ChatMessage("Hey what time is the meetup? I can't get ahold of Henry", group, user));
         }
     }
 
@@ -301,7 +301,7 @@ public class CliqueUpController {
             return new ResponseEntity<Iterable<ChatMessage>>(HttpStatus.NOT_FOUND);
         }
         else {
-            cms.save(new ChatMessage(chatMessage.getMessage(), chatMessage.getTime(), chatMessage.getGroup(), chatMessage.getUser()));
+            cms.save(new ChatMessage(chatMessage.getMessage(), chatMessage.getGroup(), chatMessage.getUser()));
             return new ResponseEntity<Iterable<ChatMessage>>(cms.findByGroup(chatMessage.getGroup()), HttpStatus.OK);
         }
     }

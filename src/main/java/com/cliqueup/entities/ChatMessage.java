@@ -16,9 +16,6 @@ public class ChatMessage {
     @Column(nullable = false)
     String message;
 
-    @Column(nullable = false)
-    Timestamp time;
-
     @ManyToOne
     Group group;
 
@@ -28,9 +25,13 @@ public class ChatMessage {
     public ChatMessage() {
     }
 
-    public ChatMessage(String message, Timestamp time, Group group, User user) {
+    public ChatMessage(String message, User user) {
         this.message = message;
-        this.time = time;
+        this.user = user;
+    }
+
+    public ChatMessage(String message, Group group, User user) {
+        this.message = message;
         this.group = group;
         this.user = user;
     }
@@ -49,14 +50,6 @@ public class ChatMessage {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public Timestamp getTime() {
-        return time;
-    }
-
-    public void setTime(Timestamp time) {
-        this.time = time;
     }
 
     public Group getGroup() {
