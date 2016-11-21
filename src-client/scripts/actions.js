@@ -101,15 +101,17 @@ const ACTIONS = {
 
    sendMessage: function(chtMess){
      let socket = STORE.getStoreData()
+     let user = socket.loginData.username
      socket = socket.socket
 
      let theMess = {
-       message: chtMess
+       message: chtMess,
+       username: user
      }
 
      socket.send('/global', {} ,theMess)
 
-     console.log(chtMess)
+     console.log(theMess)
 
 
 
@@ -118,6 +120,7 @@ const ACTIONS = {
 
 
   handleUserLogin: function(usrInfo){
+     STORE.setStore('loginData', usrInfo)
      let usrLogin = new loginModel()
 
       usrLogin.set(usrInfo)

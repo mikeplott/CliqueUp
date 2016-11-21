@@ -316,7 +316,6 @@ function initMap() {
 const HomeView = React.createClass({
 
 
-
   componentDidMount: function(){
     ACTIONS.fetchAuthToken()
     setTimeout(function(){
@@ -359,6 +358,7 @@ const HomeView = React.createClass({
 
   _sendChatMessage: function(){
     ACTIONS.sendMessage(this.refs.chatMessage.value)
+    this.refs.chatMessage.value = ''
   },
 
 
@@ -418,10 +418,10 @@ const HomeView = React.createClass({
             </ul>
             <div id="myTabContent" className="tab-content">
               <div></div>
-              <form>
-                <input type="text" className="form-group" ref="chatMessage"/>
-              </form>
-              <button className="btn btn-warning" onClick={this._sendChatMessage}>Send</button>
+              <div className="input-group chatInputBox">
+                <input type="text" className="chatInput form-control" ref="chatMessage"/>
+                <button className="btn btn-warning input-group-addon chatSend" onClick={this._sendChatMessage}>Send</button>
+              </div>
             </div>
           </div>
         </div>

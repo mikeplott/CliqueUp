@@ -7,7 +7,8 @@ const STORE = {
      userData: {},
      homeMenuDisplay: false,
      userEvents: {},
-     socket: ''
+     socket: '',
+     loginData: {}
    },
 
    setStore: function(storeProp, Payload){
