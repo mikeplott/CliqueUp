@@ -3,6 +3,7 @@ const {eventsModel, eventsCollection} = require('./model-coll.js');
 const {loginModel, loginCollection} = require('./model-login.js')
 const {tokenModel, tokenCollection} = require('./model-gettoken.js')
 const {userModel, userCollection} = require('./model-userInfo.js')
+const {eventModel, eventCollection} = require('./model-events.js')
 const STORE = require('./store.js');
 
 
@@ -32,6 +33,8 @@ const ACTIONS = {
     })
   },
 
+
+
   fetchUserData: function(){
 
       let theData = STORE.getStoreData()
@@ -45,11 +48,12 @@ const ACTIONS = {
   },
 
   fetchUserEventColl: function(){
-    let events = new eventsCollection()
+    let theData = STORE.getStoreData()
+    let myToken = theData.token[0]
+    let events = new eventCollection(myToken)
 
     events.fetch().then(function(){
-      console.log(events.models[0].attributes)
-      return events.models[0].attributes
+      STORE.setStore('userEvents', events.models[0].attributes)
     })
   },
 
