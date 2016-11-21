@@ -14,6 +14,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
@@ -57,11 +58,15 @@ public class WebSocketController {
 
         if (new String((byte[]) message.getPayload()).length() > 0) {
 
-
-            LinkedHashMap mapper = new LinkedHashMap();
+            HashMap mapper = new HashMap();
+            //            LinkedHashMap mapper = new LinkedHashMap();
             JacksonJsonParser parser = new JacksonJsonParser();
-            mapper = (LinkedHashMap) parser.parseMap(new String((byte[]) message.getPayload()));
-            User user = users.findByUsername((String) mapper.get("username"));
+            Object test = message.getPayload();
+            String payload = new String((byte[]) message.getPayload());
+            mapper = (HashMap) parser.parseMap(payload);
+            //mapper = (LinkedHashMap) parser.parseMap(new String((byte[]) message.getPayload()));
+            //User user = users.findByUsername((String) mapper.get("username"));
+            User user = users.findByUsername("mike");
             String text = (String) mapper.get("message");
             ChatMessage chatMessage = new ChatMessage(text, user);
             cms.save(chatMessage);
