@@ -348,7 +348,32 @@ const HomeView = React.createClass({
 
     map.innerHTML = ''
 
+    // <div className="tab-pane fade active in" id="home">
+    //   <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+    // </div>
+    // <div className="tab-pane fade" id="profile">
+    //   <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
+    // </div>
+    // <div className="tab-pane fade" id="dropdown1">
+    //   <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
+    // </div>
+    // <div className="tab-pane fade" id="dropdown2">
+    //   <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater.</p>
+    // </div>
 
+    // <ul className="nav nav-tabs nav-justified">
+    //   <li role="presentation" className="active">Global</li>
+    //   <li role="presentation">More</li>
+    //   <li role="presentation">More</li>
+    // </ul>
+    // <div className="tab-content"></div>
+    // <form>
+    //   <input className="form-group" type="text"/>
+    //   <input type="submit"/>
+    // </form>
+
+    // <button className="btn btn-warning homeScreenBtn" onClick={this._placeFirstMarker}>Place Marker</button>
+    // <button className="btn btn-warning homeScreenBtn" onClick={this._getToken}>Test Token2</button>
 
     return(
       <div className="homeScreenHolder">
@@ -357,10 +382,26 @@ const HomeView = React.createClass({
           <img src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg" className="homeNavPic"/>
         </div>
         <div className="homeMeetupBox" ref="homeMeetupBox">
-          <button className="btn btn-warning homeScreenBtn" onClick={this._placeFirstMarker}>Place Marker</button>
-          <button className="btn btn-warning homeScreenBtn" onClick={this._getToken}>Test Token2</button>
+          <nav className="navbar navbar-inverse homeMeetupNav">
+            <div className="">
+              <button className="btn btn-warning homeNavTabs">Find</button>
+              <button className="btn btn-warning homeNavTabs">Find</button>
+              <button className="btn btn-warning homeNavTabs">Find</button>
+              <button className="btn btn-warning homeNavLastTabs">Find</button>
+            </div>
+          </nav>
         </div>
-        <div className="homeChatBox"></div>
+        <div className="homeChatBox">
+          <div>
+          <ul className="nav nav-tabs homeChatNav">
+            <li><a data-toggle="tab">Global</a></li>
+            <li><a data-toggle="tab">+</a></li>
+            </ul>
+            <div id="myTabContent" className="tab-content">
+
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
