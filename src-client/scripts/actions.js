@@ -72,7 +72,8 @@ const ACTIONS = {
     let socket = STORE.getStoreData()
     socket = socket.socket
 
-    socket.connect({}, this.onSocketConnect)
+    socket.connect({}, ACTIONS.onSocketConnect)
+
 
     },
 
@@ -81,14 +82,17 @@ const ACTIONS = {
     let socket = STORE.getStoreData()
     socket = socket.socket
 
-    socket.subscribe("/global", this.onChatConnect)
+    socket.subscribe("/global", ACTIONS.onChatConnect   )
+
 
 
    },
 
 
    onChatConnect: function(message){
-     console.log("hey idk if this will even display cause it didnt last time")
+    //  console.log("hey idk if this will even display cause it didnt last time")
+     console.log(message, message.body)
+    //  console.log(JSON.parse(message.body))
    },
 
    onReceivedMessage: function(message){
