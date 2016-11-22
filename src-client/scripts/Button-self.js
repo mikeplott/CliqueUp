@@ -13,6 +13,7 @@ class SelfView extends React.Component{
 
 
    render(){
+
       console.log(STORE.getStoreData())
       let nestingBastards = STORE.getStoreData().userEvents.data
       console.log(nestingBastards)
@@ -34,6 +35,7 @@ class SelfView extends React.Component{
 
 
       })
+
 
       return (
 
