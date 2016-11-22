@@ -2,6 +2,7 @@ const React = require('react')
 const ReactDOM = require('react-dom')
 const Backbone = require('backbone')
 const ACTIONS = require('./actions.js');
+const STORE = require('./store.js');
 
 const TitleView = React.createClass({
 
@@ -13,11 +14,12 @@ const TitleView = React.createClass({
   _handleClick: function(evt){
     evt.preventDefault()
 
-    let userLogin = {
+    var userLogin = {
       username: this.refs.username.value,
       password: this.refs.password.value
     }
-    console.log(userLogin)
+  
+
 
      ACTIONS.handleUserLogin(userLogin)
      window.location.hash = "auth"
