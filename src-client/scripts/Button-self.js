@@ -11,13 +11,9 @@ class SelfView extends React.Component{
 
    }
 
-   _testingwithMike(){
-      ACTIONS.fetchUserData()
-   }
-
 
    render(){
-      console.log(STORE.getStoreData())
+
       return (
          <div className="self-eventsList">
             <h1>hey maybe this will work</h1>
