@@ -34272,7 +34272,7 @@ var ACTIONS = {
     var socket = STORE.getStoreData();
     socket = socket.socket;
 
-    socket.connect({}, this.onSocketConnect);
+    socket.connect({}, ACTIONS.onSocketConnect);
   },
 
   onSocketConnect: function onSocketConnect() {
@@ -34280,11 +34280,13 @@ var ACTIONS = {
     var socket = STORE.getStoreData();
     socket = socket.socket;
 
-    socket.subscribe("/global", this.onChatConnect);
+    socket.subscribe("/global", ACTIONS.onChatConnect);
   },
 
   onChatConnect: function onChatConnect(message) {
-    console.log("hey idk if this will even display cause it didnt last time");
+    //  console.log("hey idk if this will even display cause it didnt last time")
+    console.log(message, message.body);
+    //  console.log(JSON.parse(message.body))
   },
 
   onReceivedMessage: function onReceivedMessage(message) {
