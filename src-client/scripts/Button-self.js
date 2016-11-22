@@ -11,17 +11,35 @@ class SelfView extends React.Component{
 
    }
 
-   _testingwithMike(){
-      ACTIONS.fetchUserData()
-   }
-
 
    render(){
       console.log(STORE.getStoreData())
+      let nestingBastards = STORE.getStoreData().userEvents.data
+      console.log(nestingBastards)
+
+      let UsefulStuff = nestingBastards.map(function(element){
+         console.log(element.group.name)
+
+         return(
+            <li>
+               <div>
+                  <h2>{element.name}</h2>
+                  <p>{element.group.name}</p>
+               </div>
+               <div>
+                  <h1>{element.yes_rsvp_count}</h1>
+               </div>
+            </li>
+         )
+
+
+      })
+
       return (
-         <div className="self-eventsList">
-            <h1>hey maybe this will work</h1>
-         </div>
+
+         <ul className="self-eventsList">
+            {UsefulStuff}
+         </ul>
       )
 
    }
