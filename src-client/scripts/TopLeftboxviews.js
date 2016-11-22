@@ -4,7 +4,7 @@ const STORE = require('./store.js')
 
 
 
-console.log("page wired")
+
 
 class TLBoxViews extends React.Component{
 
@@ -45,7 +45,7 @@ class TLBoxViews extends React.Component{
          default:
             return (
                <div>
-                  
+
                </div>
             )
       }
