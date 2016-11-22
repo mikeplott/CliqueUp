@@ -4,7 +4,11 @@ const {loginModel, loginCollection} = require('./model-login.js')
 const {tokenModel, tokenCollection} = require('./model-gettoken.js')
 const {userModel, userCollection} = require('./model-userInfo.js')
 const {eventModel, eventCollection} = require('./model-events.js')
+const $ = require('jquery')
 const STORE = require('./store.js');
+
+
+var theCrntUser;
 
 
 const ACTIONS = {
@@ -29,6 +33,14 @@ const ACTIONS = {
       let theRealToken = strngArry[3].split('"')
 
       STORE.setStore("token", theRealToken)
+
+      let usr = document.cookie;
+      // let usr = window.localStorage.getItem('username')
+      console.log(usr)
+      STORE.setStore('loginData', usr)
+
+      
+
 
     })
   },
@@ -101,7 +113,8 @@ const ACTIONS = {
 
    sendMessage: function(chtMess){
      let socket = STORE.getStoreData()
-     let user = socket.loginData.username
+     console.log(socket)
+     let user = socket.loginData
      socket = socket.socket
 
      let theMess = {
@@ -111,7 +124,6 @@ const ACTIONS = {
 
      socket.send('/global', {} ,theMess)
 
-     console.log(theMess)
 
 
 
@@ -120,10 +132,12 @@ const ACTIONS = {
 
 
   handleUserLogin: function(usrInfo){
-     STORE.setStore('loginData', usrInfo)
+    theCrntUser = usrInfo
+
      let usrLogin = new loginModel()
 
       usrLogin.set(usrInfo)
+
 
 
       usrLogin.save().then(function(serverRes){
