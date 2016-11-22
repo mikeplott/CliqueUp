@@ -34,13 +34,9 @@ const ACTIONS = {
 
       STORE.setStore("token", theRealToken)
 
-      let usr = document.cookie;
-      // let usr = window.localStorage.getItem('username')
-      console.log(usr)
-      STORE.setStore('loginData', usr)
-
-      
-
+      $.getJSON('/user', function(daData){
+          STORE.setStore("loginData", daData.username)
+      })
 
     })
   },
@@ -122,7 +118,7 @@ const ACTIONS = {
        username: user
      }
 
-     socket.send('/global', {} ,theMess)
+     socket.send('/global', {} ,JSON.stringify(theMess))
 
 
 
