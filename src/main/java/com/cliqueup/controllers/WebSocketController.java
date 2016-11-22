@@ -37,49 +37,6 @@ public class WebSocketController {
     @Autowired
     GroupRepo groups;
 
-//    @MessageMapping("/global")
-//    @SendTo("/global")
-//    public Message message(Message message, HttpSession session) {
-//        String username = (String) session.getAttribute("username");
-//        User user = users.findByUsername(username);
-//        String text = (String)message.getPayload();
-//        ChatMessage chatMessage = new ChatMessage(text, user);
-//        cms.save(chatMessage);
-//        return message;
-//    }
-
-//    public String room(ArrayList<Group> groups) {
-//        for (Group group : groups) {
-//            String theRoom = group.getName();
-//        }
-//    }
-
-//    @MessageMapping("/global")
-//    @SendTo("/global")
-//    public Message message(Message message) {
-//
-//        if (new String((byte[]) message.getPayload()).length() > 0) {
-//
-//            HashMap mapper = new HashMap();
-//            //            LinkedHashMap mapper = new LinkedHashMap();
-//            JacksonJsonParser parser = new JacksonJsonParser();
-//            Object test = message.getPayload();
-//            String payload = new String((byte[]) message.getPayload());
-//            mapper = (HashMap) parser.parseMap(payload);
-//            //mapper = (LinkedHashMap) parser.parseMap(new String((byte[]) message.getPayload()));
-//            //User user = users.findByUsername((String) mapper.get("username"));
-//            User user = users.findByUsername("mike");
-//            String text = (String) mapper.get("message");
-//            ChatMessage chatMessage = new ChatMessage(text, user);
-//            cms.save(chatMessage);
-//           // this.messenger.convertAndSend("/global", message);
-//            return message;
-//        }
-//
-//        return message;
-//
-//    }
-
     @MessageMapping("/global")
     @SendTo("/global")
     public ArrayList<String> message (Message message) {
@@ -122,5 +79,25 @@ public class WebSocketController {
         theMessage.add(text);
         theMessage.add(user.getUsername());
         return theMessage;
+    }
+
+    @MessageMapping("chat-room/{urlName}")
+    @SendTo("chat-room/{urlName}")
+    public ArrayList<String> chatMessages (Message message) {
+        ArrayList<String> chatMessage = new ArrayList<>();
+        HashMap mapper;
+        JacksonJsonParser parser = new JacksonJsonParser();
+        String payload = new String((byte[]) message.getPayload());
+        mapper = (HashMap) parser.parseMap(payload);
+        User user = users.findByUsername((String) mapper.get("username"));
+        String text = (String) mapper.get("message");
+        String groupName = (String) mapper.get("urlName");
+        Group group = new Group(groupName, groupName + "chat channel");
+        groups.save(group);
+        ChatMessage myChatMessage = new ChatMessage(text, group, user);
+        cms.save(myChatMessage);
+        chatMessage.add(text);
+        chatMessage.add(user.getUsername());
+        return chatMessage;
     }
 }
