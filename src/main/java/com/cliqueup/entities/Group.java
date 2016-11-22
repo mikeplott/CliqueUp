@@ -24,6 +24,11 @@ public class Group {
     public Group() {
     }
 
+    public Group(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public Group(String name, String description, User adminUser) {
         this.name = name;
         this.description = description;
