@@ -189,6 +189,13 @@ public class CliqueUpController {
         return new ResponseEntity<Token>(token, HttpStatus.OK);
     }
 
+    @RequestMapping(path = "/user", method = RequestMethod.GET)
+    public ResponseEntity<User> getUser(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        User user = users.findByUsername(username);
+        return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+
 
 
 
