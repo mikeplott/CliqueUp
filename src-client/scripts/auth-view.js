@@ -7,8 +7,6 @@ const AuthView = React.createClass({
 
 
 
-
-
   render: function(){
 
 
