@@ -16,9 +16,9 @@ const AuthView = React.createClass({
         <div className="authLogoHolder">
           <img src="./images/CliqueUpLogo.png" className="authScreenImg"/>
         </div>
-          <p className="authScreenText">For this app to work properly, we need you give us access to your MeetUp Account information. Do so by clicking the button below..</p>
+          <p className="authScreenText">For this app to work properly, we need you to give us access to your MeetUp Account information. Do so by clicking the button below..</p>
           <a href="/auth">
-            <button className="btn btn-danger authScreenBtn">Authencate</button>
+            <button className="btn btn-danger authScreenBtn">Authenticate</button>
           </a>
       </div>
     )
