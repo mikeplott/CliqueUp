@@ -13,10 +13,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 /**
  * Created by michaelplott on 11/19/16.
@@ -88,7 +86,7 @@ public class WebSocketController {
 
         if (new String((byte[]) message.getPayload()).length() > 0) {
             ArrayList<String> myMessage = new ArrayList<>();
-            HashMap mapper = new HashMap();
+            HashMap mapper;
             JacksonJsonParser parser = new JacksonJsonParser();
             String payload = new String((byte[]) message.getPayload());
             mapper = (HashMap) parser.parseMap(payload);
@@ -104,5 +102,25 @@ public class WebSocketController {
         }
 
         return null;
+    }
+
+    @MessageMapping("/chat/{groupName}")
+    @SendTo("/chat/{groupName}")
+    public ArrayList<String> groupMessage (Message message) {
+        ArrayList<String> theMessage = new ArrayList<>();
+        HashMap mapper;
+        JacksonJsonParser parser = new JacksonJsonParser();
+        String payload = new String((byte[]) message.getPayload());
+        mapper = (HashMap) parser.parseMap(payload);
+        User user = users.findByUsername((String) mapper.get("username"));
+        String text = (String) mapper.get("message");
+        String groupName = (String) mapper.get("groupName");
+        Group group = new Group(groupName, groupName + "chat channel");
+        groups.save(group);
+        ChatMessage chatMessage = new ChatMessage(text, group, user);
+        cms.save(chatMessage);
+        theMessage.add(text);
+        theMessage.add(user.getUsername());
+        return theMessage;
     }
 }
