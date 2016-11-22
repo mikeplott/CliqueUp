@@ -45,4 +45,5 @@ class SelfView extends React.Component{
    }
 }
 
+
 module.exports = SelfView
