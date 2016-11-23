@@ -45,7 +45,7 @@ class BoxStuff extends React.Component{
       return(
       <div className="homeMeetupBox" ref="homeMeetupBox">
          <nav className="navbar navbar-inverse homeMeetupNav">
-           <div className="">
+           <div className="homeMeetupNavBox">
              <button className={clas2 + " " + clasSelf}  ref="navSelfBtn" onClick={this._handleChange}><span className="fa fa-map-marker" aria-hidden="true"></span></button>
              <button className={clas2 + " " + clasConceierge} ref="navConBtn" onClick={this._handleChange}><span className="fa fa-street-view" aria-hidden="true"></span></button>
              <button className={clas2 + " " + clasMystery} ref="navMysBtn" onClick={this._handleChange}><span className="fa fa-users" aria-hidden="true"></span></button>
