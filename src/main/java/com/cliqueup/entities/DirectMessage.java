@@ -17,10 +17,7 @@ public class DirectMessage {
     String message;
 
     @Column(nullable = false)
-    Timestamp time;
-
-    @Column(nullable = false)
-    int recipientId;
+    String recipientName;
 
     @ManyToOne
     User user;
@@ -28,10 +25,9 @@ public class DirectMessage {
     public DirectMessage() {
     }
 
-    public DirectMessage(String message, Timestamp time, int recipientId, User user) {
+    public DirectMessage(String message, String recipientName, User user) {
         this.message = message;
-        this.time = time;
-        this.recipientId = recipientId;
+        this.recipientName = recipientName;
         this.user = user;
     }
 
@@ -51,20 +47,12 @@ public class DirectMessage {
         this.message = message;
     }
 
-    public Timestamp getTime() {
-        return time;
+    public String getRecipientName() {
+        return recipientName;
     }
 
-    public void setTime(Timestamp time) {
-        this.time = time;
-    }
-
-    public int getRecipientId() {
-        return recipientId;
-    }
-
-    public void setRecipientId(int recipientId) {
-        this.recipientId = recipientId;
+    public void setRecipientName(String recipientName) {
+        this.recipientName = recipientName;
     }
 
     public User getUser() {

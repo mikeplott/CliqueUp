@@ -23,6 +23,8 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by michaelplott on 11/16/16.
@@ -63,6 +65,9 @@ public class CliqueUpController {
 
     @Autowired
     TokenRepo tokens;
+
+    @Autowired
+    FriendRepo friends;
 
     Server h2;
 
@@ -112,7 +117,7 @@ public class CliqueUpController {
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             java.util.Date date = dateFormat.parse("11/16/2016");
             long time = date.getTime();
-            dms.save(new DirectMessage("Hey what time is the event again?", new Timestamp(time), recipient.getId(), user));
+            dms.save(new DirectMessage("Hey what time is the event again?", recipient.getUsername(), user));
         }
 
         if (cms.count() == 0) {
@@ -136,6 +141,7 @@ public class CliqueUpController {
         if (userFromDb == null) {
             user.setPassword(PasswordStorage.createHash(user.getPassword()));
             User userForDb = new User(user.getUsername(), user.getPassword());
+            userForDb.setOnline(true);
             users.save(userForDb);
             session.setAttribute("username", userForDb.getUsername());
             return user;
@@ -144,7 +150,8 @@ public class CliqueUpController {
             throw new Exception("Password invalid");
         }
         session.setAttribute("username", user.getUsername());
-        return user;
+        userFromDb.setOnline(true);
+        return userFromDb;
     }
 
     @RequestMapping(path = "/auth", method = RequestMethod.GET)
@@ -172,6 +179,7 @@ public class CliqueUpController {
         okhttp3.Response response = client.newCall(myRequest).execute();
         Token token = new Token();
         token.setAccess_token(response.body().string());
+        token.setUser(user);
         tokens.save(token);
         user.setToken(token);
         users.save(user);
@@ -184,9 +192,12 @@ public class CliqueUpController {
     @RequestMapping(path = "/gettoken", method = RequestMethod.GET)
     public ResponseEntity<Token> getToken(HttpSession session, HttpServletResponse response) throws IOException {
         String username = (String) session.getAttribute("username");
-        User user = users.findByUsername(username);
-        Token token = user.getToken();
-        return new ResponseEntity<Token>(token, HttpStatus.OK);
+        if (userValidation(session)) {
+            User user = users.findByUsername(username);
+            Token token = user.getToken();
+            return new ResponseEntity<Token>(token, HttpStatus.OK);
+        }
+        return new ResponseEntity<Token>(HttpStatus.FORBIDDEN);
     }
 
     @RequestMapping(path = "/user", method = RequestMethod.GET)
@@ -194,6 +205,65 @@ public class CliqueUpController {
         String username = (String) session.getAttribute("username");
         User user = users.findByUsername(username);
         return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/logout", method = RequestMethod.POST)
+    public void logout(HttpSession session) throws Exception {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            throw new Exception("Not logged in!");
+        }
+        User userFromDb = users.findByUsername(username);
+        if (userFromDb == null) {
+            throw new Exception("User does not exist!");
+        }
+        Token tokenToDelete = tokens.findByUser(userFromDb);
+        tokens.delete(tokenToDelete.getId());
+        userFromDb.setOnline(false);
+        users.save(userFromDb);
+        session.invalidate();
+    }
+
+    @RequestMapping(path = "/friends", method = RequestMethod.GET)
+    public ResponseEntity<ArrayList<String>> getFriends(HttpSession session) throws Exception {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity<ArrayList<String>>(HttpStatus.FORBIDDEN);
+        }
+        User user = users.findByUsername(username);
+        ArrayList<String> friendNames = new ArrayList<>();
+        ArrayList<Friend> userFriends = friends.findAllByUser(user);
+        for (Friend friend : userFriends) {
+            friendNames.add(friend.getFriendName());
+        }
+        return new ResponseEntity<ArrayList<String>>(friendNames, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/friends", method = RequestMethod.POST)
+    public ResponseEntity<ArrayList<String>> addFriends(HttpSession session, @RequestBody Map<String, String> json) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return new ResponseEntity<ArrayList<String>>(HttpStatus.FORBIDDEN);
+        }
+        User user = users.findByUsername(username);
+        User friendOfUser = users.findByUsername(json.get("friendName"));
+        ArrayList<String> friendNames = new ArrayList<>();
+        ArrayList<Friend> userFriends = friends.findAllByUser(user);
+        for (Friend friend : userFriends) {
+            friendNames.add(friend.getFriendName());
+        }
+        Friend friendFromDb = friends.findByUser(user);
+        if (friendFromDb == null) {
+            Friend friend = new Friend(json.get("friendName"), user);
+            friends.save(friend);
+        }
+        Friend otherFriendFromDb = friends.findByUser(friendOfUser);
+        if (otherFriendFromDb == null) {
+            Friend otherFriend = new Friend(user.getUsername(), friendOfUser);
+            friends.save(otherFriend);
+        }
+        friendNames.add(json.get("friendName"));
+        return new ResponseEntity<ArrayList<String>>(friendNames, HttpStatus.OK);
     }
 
 
@@ -259,7 +329,7 @@ public class CliqueUpController {
 //        else {
         User userFromDb = users.findByUsername("mike");
         //Iterable<DirectMessage> directMessages = dms.findByRecipientIdAndUser(recipient.getId(), userFromDb);
-        Iterable<DirectMessage> directMessages = dms.findByRecipientIdAndUser(1, userFromDb);
+        Iterable<DirectMessage> directMessages = dms.findByRecipientNameAndUser(recipient.getUsername(), userFromDb);
         return new ResponseEntity<Iterable<DirectMessage>>(directMessages, HttpStatus.OK);
         //}
     }
@@ -277,7 +347,7 @@ public class CliqueUpController {
 //        else {
 //            dms.save(new DirectMessage(dm.getMessage(), dm.getTime(), dm.getRecipientId(), userFromDb));
         User user = users.findByUsername("mike");
-        dms.save(new DirectMessage(dm.getMessage(), dm.getTime(), dm.getRecipientId(), user));
+        dms.save(new DirectMessage(dm.getMessage(), dm.getRecipientName(), user));
         return new ResponseEntity<DirectMessage>(dm, HttpStatus.OK);
 //        }
     }
@@ -361,45 +431,15 @@ public class CliqueUpController {
         return new ResponseEntity<Venue>(venue, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/redirect", method = RequestMethod.GET)
-    public ResponseEntity<String> getRedirecturl(HttpSession session) {
-//        String username = (String) session.getAttribute("username");
-//        if (username == null) {
-//            return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
-//        }
-//        User userFromDb = users.findByUsername(username);
-//        if (userFromDb == null) {
-//            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
-//        }
-//        else {
-        return new ResponseEntity<String>(REDIRECTURL, HttpStatus.OK);
-//        }
-    }
-
-    @RequestMapping(path = "/logout", method = RequestMethod.POST)
-    public void logout(HttpSession session) throws Exception {
-//        String username = (String) session.getAttribute("username");
-//        if (username == null) {
-//            throw new Exception("Not logged in!");
-//        }
-//        User userFromDb = users.findByUsername(username);
-//        if (userFromDb == null) {
-//            throw new Exception("User does not exist!");
-//        }
-//        Token tokenToDelete = tokens.findByUser(userFromDb);
-//        tokens.delete(tokenToDelete.getId());
-        session.invalidate();
-    }
-
-    public ResponseEntity userValidation(HttpSession session) {
+    public boolean userValidation(HttpSession session) {
         String username = (String) session.getAttribute("username");
         if (username == null) {
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+            return false;
         }
         User userFromDb = users.findByUsername(username);
         if (userFromDb == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return false;
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return true;
     }
 }

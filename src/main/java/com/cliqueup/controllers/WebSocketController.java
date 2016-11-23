@@ -1,9 +1,11 @@
 package com.cliqueup.controllers;
 
 import com.cliqueup.entities.ChatMessage;
+import com.cliqueup.entities.DirectMessage;
 import com.cliqueup.entities.Group;
 import com.cliqueup.entities.User;
 import com.cliqueup.services.ChatMessageRepo;
+import com.cliqueup.services.DirectMessageRepo;
 import com.cliqueup.services.GroupRepo;
 import com.cliqueup.services.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,29 +39,41 @@ public class WebSocketController {
     @Autowired
     GroupRepo groups;
 
-    @MessageMapping("/global")
-    @SendTo("/global")
-    public ArrayList<String> message (Message message) {
+    @Autowired
+    DirectMessageRepo dms;
 
-        if (new String((byte[]) message.getPayload()).length() > 0) {
-            ArrayList<String> myMessage = new ArrayList<>();
-            HashMap mapper;
-            JacksonJsonParser parser = new JacksonJsonParser();
-            String payload = new String((byte[]) message.getPayload());
-            mapper = (HashMap) parser.parseMap(payload);
-            User user = users.findByUsername((String) mapper.get("username"));
-            String text = (String) mapper.get("message");
-            Group group = new Group("global", "General Chat Channel");
-            groups.save(group);
-            ChatMessage chatMessage = new ChatMessage(text, group, user);
-            cms.save(chatMessage);
-            myMessage.add(text);
-            myMessage.add(user.getUsername());
-            return myMessage;
-        }
-
-        return null;
-    }
+//    @MessageMapping("/global")
+//    @SendTo("/global")
+//    public ArrayList<String> message (Message message) {
+//
+//        if (new String((byte[]) message.getPayload()).length() > 0) {
+//            ArrayList<String> myMessage = new ArrayList<>();
+//            HashMap mapper;
+//            JacksonJsonParser parser = new JacksonJsonParser();
+//            String payload = new String((byte[]) message.getPayload());
+//            mapper = (HashMap) parser.parseMap(payload);
+//            User user = users.findByUsername((String) mapper.get("username"));
+//            String text = (String) mapper.get("message");
+//            Group group = groups.findByName("global");
+//            if (group == null) {
+//                Group theGroup = new Group("global", "General Chat Channel");
+//                groups.save(theGroup);
+//                ChatMessage theMessage = new ChatMessage(text, theGroup, user);
+//                cms.save(theMessage);
+//                myMessage.add(text);
+//                myMessage.add(user.getUsername());
+//                return myMessage;
+//            }
+//            ChatMessage chatMessage = new ChatMessage(text, group, user);
+//            cms.save(chatMessage);
+//            myMessage.add(text);
+//            myMessage.add(user.getUsername());
+//            return myMessage;
+    //          array[0] = "mike"
+//        }
+//
+//        return null;
+//    }
 
     @MessageMapping("/chat/{groupName}")
     @SendTo("/chat/{groupName}")
@@ -72,8 +86,16 @@ public class WebSocketController {
         User user = users.findByUsername((String) mapper.get("username"));
         String text = (String) mapper.get("message");
         String groupName = (String) mapper.get("groupName");
-        Group group = new Group(groupName, groupName + "chat channel");
-        groups.save(group);
+        Group group = groups.findByName(groupName);
+        if (group == null) {
+            Group theGroup = new Group(groupName, groupName + "chat channel");
+            groups.save(theGroup);
+            ChatMessage messageForDb = new ChatMessage(text, theGroup, user);
+            cms.save(messageForDb);
+            theMessage.add(text);
+            theMessage.add(user.getUsername());
+            return theMessage;
+        }
         ChatMessage chatMessage = new ChatMessage(text, group, user);
         cms.save(chatMessage);
         theMessage.add(text);
@@ -92,12 +114,75 @@ public class WebSocketController {
         User user = users.findByUsername((String) mapper.get("username"));
         String text = (String) mapper.get("message");
         String groupName = (String) mapper.get("urlName");
-        Group group = new Group(groupName, groupName + "chat channel");
-        groups.save(group);
+        Group group = groups.findByName(groupName);
+        if (group == null) {
+            Group theGroup = new Group(groupName, groupName + "chat channel");
+            groups.save(theGroup);
+            ChatMessage messageForDb = new ChatMessage(text, theGroup, user);
+            cms.save(messageForDb);
+            chatMessage.add(text);
+            chatMessage.add(user.getUsername());
+            return chatMessage;
+        }
         ChatMessage myChatMessage = new ChatMessage(text, group, user);
         cms.save(myChatMessage);
         chatMessage.add(text);
         chatMessage.add(user.getUsername());
         return chatMessage;
+    }
+
+    @MessageMapping("direct-message/{recipientName}")
+    @SendTo("direct-message/{recipientName}")
+    public HashMap<String, String> directMessages (Message message) {
+        HashMap<String, String> directMessage = new HashMap<>();
+        HashMap mapper;
+        JacksonJsonParser parser = new JacksonJsonParser();
+        String payload = new String((byte[]) message.getPayload());
+        mapper = (HashMap) parser.parseMap(payload);
+        User user = users.findByUsername("username");
+        String text = (String) mapper.get("message");
+        String recipientName = (String) mapper.get("recipientName");
+        DirectMessage directMessageForDb = new DirectMessage(text, recipientName, user);
+        dms.save(directMessageForDb);
+        directMessage.put("username", user.getUsername());
+        directMessage.put("message", text);
+        directMessage.put("recipientName", recipientName);
+        return directMessage;
+    }
+
+    @MessageMapping("/global")
+    @SendTo("/global")
+    public HashMap<String, String> message (Message message) {
+
+        if (new String((byte[]) message.getPayload()).length() > 0) {
+            HashMap<String, String> json = new HashMap<>();
+            HashMap mapper;
+            JacksonJsonParser parser = new JacksonJsonParser();
+            String payload = new String((byte[]) message.getPayload());
+            mapper = (HashMap) parser.parseMap(payload);
+            User user = users.findByUsername((String) mapper.get("username"));
+            String text = (String) mapper.get("message");
+            Group group = groups.findByName("global");
+            if (group == null) {
+                Group theGroup = new Group("global", "General Chat Channel");
+                groups.save(theGroup);
+                ChatMessage theMessage = new ChatMessage(text, theGroup, user);
+                cms.save(theMessage);
+                json.put("message", text);
+                json.put("username", user.getUsername());
+                return json;
+            }
+            ChatMessage chatMessage = new ChatMessage(text, group, user);
+            cms.save(chatMessage);
+            json.put("message", text);
+            json.put("username", user.getUsername());
+            json.put("channel", "global");
+            return json;
+            // username:"mike"
+            // message:"oh hello"
+            // channel:"global"
+        }
+
+        return null;
     }
 }

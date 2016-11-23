@@ -20,6 +20,9 @@ public class User {
     @Column(nullable = false)
     String username;
 
+    @Column(nullable = false)
+    boolean isOnline;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     String password;
@@ -38,6 +41,34 @@ public class User {
 
     public User(String username, String password) {
         this.username = username;
+        this.password = password;
+    }
+
+    public User(String username, boolean isOnline, String password, Token token) {
+        this.username = username;
+        this.isOnline = isOnline;
+        this.password = password;
+        this.token = token;
+    }
+
+    public User(String image, String username, boolean isOnline, String password, Token token) {
+        this.image = image;
+        this.username = username;
+        this.isOnline = isOnline;
+        this.password = password;
+        this.token = token;
+    }
+
+    public User(String image, String username, boolean isOnline, String password) {
+        this.image = image;
+        this.username = username;
+        this.isOnline = isOnline;
+        this.password = password;
+    }
+
+    public User(String username, boolean isOnline, String password) {
+        this.username = username;
+        this.isOnline = isOnline;
         this.password = password;
     }
 
@@ -63,6 +94,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 
     public String getPassword() {

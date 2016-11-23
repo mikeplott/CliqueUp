@@ -9,5 +9,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface DirectMessageRepo extends CrudRepository<DirectMessage, Integer> {
     Iterable<DirectMessage> findByUser(User user);
-    Iterable<DirectMessage> findByRecipientIdAndUser(int recipientId, User user);
+    Iterable<DirectMessage> findByRecipientNameAndUser(String recipientName, User user);
 }
