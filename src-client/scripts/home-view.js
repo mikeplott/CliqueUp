@@ -5,6 +5,7 @@ const STORE = require('./store.js')
 const ACTIONS = require('./actions.js')
 const map = document.querySelector("#map")
 const BoxStuff = require('./TopLeftBox.js')
+const ChatView = require('./chat-view.js')
 
 
 
@@ -374,25 +375,8 @@ const HomeView = React.createClass({
           <span className="glyphicon glyphicon-option-vertical navMoreBtn" onClick={this._getToken}></span>
           <img src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg" className="homeNavPic"/>
         </div>
-       <BoxStuff/>
-        <div className="homeChatBox">
-          <div>
-          <ul className="nav nav-tabs homeChatNav">
-            <li className="active"><a data-toggle="tab">Global</a></li>
-            <li><a data-toggle="tab">+</a></li>
-            <li><a data-toggle="tab">V</a></li>
-          </ul>
-            <div id="myTabContent" className="tab-content">
-              <div className="tab-pane fade active in">
-                <div className="chatboxBody"></div>
-                <div className="input-group chatInputBox">
-                  <input type="text" className="chatInput form-control" ref="chatMessage"/>
-                  <button className="btn btn-warning input-group-addon chatSend" onClick={this._sendChatMessage}>Send</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <BoxStuff/>
+        <ChatView/>
       </div>
     )
   }

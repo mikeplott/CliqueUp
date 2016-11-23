@@ -8,7 +8,8 @@ const STORE = {
      homeMenuDisplay: false,
      userEvents: {},
      socket: '',
-     loginData: {}
+     loginData: {},
+     chatGroups: ["Global","+"]
    },
 
    setStore: function(storeProp, Payload){
