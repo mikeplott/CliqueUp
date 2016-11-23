@@ -4,10 +4,6 @@ const Backbone = require('backbone')
 const STORE = require('./store.js')
 const ACTIONS = require('./actions.js')
 const map = document.querySelector("#map")
-
-
-//mikes box stuff
-//const TLBoxViews = require('./TopLeftboxviews.js')
 const BoxStuff = require('./TopLeftBox.js')
 
 
@@ -382,15 +378,17 @@ const HomeView = React.createClass({
         <div className="homeChatBox">
           <div>
           <ul className="nav nav-tabs homeChatNav">
-            <li><a data-toggle="tab">Global</a></li>
+            <li className="active"><a data-toggle="tab">Global</a></li>
             <li><a data-toggle="tab">+</a></li>
             <li><a data-toggle="tab">V</a></li>
-            </ul>
+          </ul>
             <div id="myTabContent" className="tab-content">
-              <div></div>
-              <div className="input-group chatInputBox">
-                <input type="text" className="chatInput form-control" ref="chatMessage"/>
-                <button className="btn btn-warning input-group-addon chatSend" onClick={this._sendChatMessage}>Send</button>
+              <div className="tab-pane fade active in">
+                <div className="chatboxBody"></div>
+                <div className="input-group chatInputBox">
+                  <input type="text" className="chatInput form-control" ref="chatMessage"/>
+                  <button className="btn btn-warning input-group-addon chatSend" onClick={this._sendChatMessage}>Send</button>
+                </div>
               </div>
             </div>
           </div>
@@ -411,8 +409,23 @@ const HomeView = React.createClass({
   // google.maps.event.trigger(map, 'resize');
 
 
-
-
+  //
+  // <div>
+  // <ul className="nav nav-tabs homeChatNav">
+  //   <li><a data-toggle="tab">Global</a></li>
+  //   <li><a data-toggle="tab">+</a></li>
+  //   <li><a data-toggle="tab">V</a></li>
+  // </ul>
+  //   <div id="myTabContent" className="tab-content">
+  //     <div className="tab-pane fade active in">
+  //       <div className="chatboxBody">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+  //       <div className="input-group chatInputBox">
+  //         <input type="text" className="chatInput form-control" ref="chatMessage"/>
+  //         <button className="btn btn-warning input-group-addon chatSend" onClick={this._sendChatMessage}>Send</button>
+  //       </div>
+  //     </div>
+  //   </div>
+  // </div>
 
 
 

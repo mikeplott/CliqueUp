@@ -96,3 +96,23 @@
 
     // <button className="btn btn-warning homeScreenBtn" onClick={this._placeFirstMarker}>Place Marker</button>
     // <button className="btn btn-warning homeScreenBtn" onClick={this._getToken}>Test Token2</button>
+
+
+    // <div className="homeChatBox">
+    //   <div>
+    //   <ul className="nav nav-tabs homeChatNav">
+    //     <li className="active"><a data-toggle="tab">Global</a></li>
+    //     <li><a data-toggle="tab">+</a></li>
+    //     <li><a data-toggle="tab">V</a></li>
+    //   </ul>
+    //     <div id="myTabContent" className="tab-content">
+    //       <div className="tab-pane fade active in">
+    //         <div className="chatboxBody"></div>
+    //         <div className="input-group chatInputBox">
+    //           <input type="text" className="chatInput form-control" ref="chatMessage"/>
+    //           <button className="btn btn-warning input-group-addon chatSend" onClick={this._sendChatMessage}>Send</button>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>

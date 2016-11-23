@@ -92,7 +92,7 @@ const ACTIONS = {
    onChatConnect: function(message){
     //  console.log("hey idk if this will even display cause it didnt last time")
      console.log(message, message.body)
-    //  console.log(JSON.parse(message.body))
+     console.log(JSON.parse(message.body))
    },
 
    onReceivedMessage: function(message){
@@ -101,14 +101,16 @@ const ACTIONS = {
      let textBlock = (
         <div>
           <div>
-            <img src="profile Pic"/>
+            <img src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg"/>
           </div>
           <div>
-            <h4>text message sent</h4>
+            <h4>{data.message}</h4>
           </div>
-          <p>time stamp</p>
+          <p>12:00</p>
         </div>
      )
+
+
    },
 
    sendMessage: function(chtMess){
