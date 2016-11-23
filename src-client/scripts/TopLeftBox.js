@@ -26,6 +26,11 @@ class BoxStuff extends React.Component{
 
    _handleChange(evt){
 
+     let theChecker = evt.target.className.split(' ')
+     
+
+
+
      this.refs.navSelfBtn.className = clas2 + " " + clasSelf
      this.refs.navConBtn.className = clas2 + " " + clasConceierge
      this.refs.navMysBtn.className = clas2 + " " + clasMystery
@@ -33,10 +38,28 @@ class BoxStuff extends React.Component{
 
      evt.target.className = clas1 + " " + evt.target.className
 
+
       let theValue = evt.target.className.split('#')
-      this.setState({
-         topBoxView: theValue[1]
-      })
+
+
+      if(theChecker[0] === 'active'){
+        theChecker.shift()
+        let newValue = theChecker
+        evt.target.className = newValue.join(' ')
+        this.setState({
+          topBoxView: ''
+
+        })
+
+      } else {
+        this.setState({
+          topBoxView: theValue[1]
+
+        })
+      }
+
+
+
 
    }
 
