@@ -23,7 +23,7 @@ const GlobalChatView = React.createClass({
     let self = this
 
     this.connectToSocket()
-    $.getJSON('/chat', function(oldChat){
+    $.post('/chat',{groupname: "global"} ,function(oldChat){
       console.log("hey look here >>>>>>>>>>>>>>>>>>>>>>",oldChat)
       oldChat.map(function(crntMess){
 
