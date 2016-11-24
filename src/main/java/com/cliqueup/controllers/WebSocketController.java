@@ -75,8 +75,8 @@ public class WebSocketController {
 //        return null;
 //    }
 
-    @MessageMapping("/chat/{groupName}")
-    @SendTo("/chat/{groupName}")
+    @MessageMapping("/chat/{groupname}")
+    @SendTo("/chat/{groupname}")
     public ArrayList<String> groupMessage (Message message) {
         ArrayList<String> theMessage = new ArrayList<>();
         HashMap mapper;
@@ -85,7 +85,7 @@ public class WebSocketController {
         mapper = (HashMap) parser.parseMap(payload);
         User user = users.findByUsername((String) mapper.get("username"));
         String text = (String) mapper.get("message");
-        String groupName = (String) mapper.get("groupName");
+        String groupName = (String) mapper.get("groupname");
         Group group = groups.findByName(groupName);
         if (group == null) {
             Group theGroup = new Group(groupName, groupName + "chat channel");
@@ -103,8 +103,8 @@ public class WebSocketController {
         return theMessage;
     }
 
-    @MessageMapping("chat-room/{urlName}")
-    @SendTo("chat-room/{urlName}")
+    @MessageMapping("chat-room/{urlname}")
+    @SendTo("chat-room/{urlname}")
     public ArrayList<String> chatMessages (Message message) {
         ArrayList<String> chatMessage = new ArrayList<>();
         HashMap mapper;
@@ -113,7 +113,7 @@ public class WebSocketController {
         mapper = (HashMap) parser.parseMap(payload);
         User user = users.findByUsername((String) mapper.get("username"));
         String text = (String) mapper.get("message");
-        String groupName = (String) mapper.get("urlName");
+        String groupName = (String) mapper.get("urlname");
         Group group = groups.findByName(groupName);
         if (group == null) {
             Group theGroup = new Group(groupName, groupName + "chat channel");
@@ -131,8 +131,8 @@ public class WebSocketController {
         return chatMessage;
     }
 
-    @MessageMapping("direct-message/{recipientName}")
-    @SendTo("direct-message/{recipientName}")
+    @MessageMapping("direct-message/{recipientname}")
+    @SendTo("direct-message/{recipientname}")
     public HashMap<String, String> directMessages (Message message) {
         HashMap<String, String> directMessage = new HashMap<>();
         HashMap mapper;
@@ -141,12 +141,12 @@ public class WebSocketController {
         mapper = (HashMap) parser.parseMap(payload);
         User user = users.findByUsername("username");
         String text = (String) mapper.get("message");
-        String recipientName = (String) mapper.get("recipientName");
+        String recipientName = (String) mapper.get("recipientname");
         DirectMessage directMessageForDb = new DirectMessage(text, recipientName, user);
         dms.save(directMessageForDb);
         directMessage.put("username", user.getUsername());
         directMessage.put("message", text);
-        directMessage.put("recipientName", recipientName);
+        directMessage.put("recipientname", recipientName);
         return directMessage;
     }
 
@@ -178,9 +178,6 @@ public class WebSocketController {
             json.put("username", user.getUsername());
             json.put("channel", "global");
             return json;
-            // username:"mike"
-            // message:"oh hello"
-            // channel:"global"
         }
 
         return null;
