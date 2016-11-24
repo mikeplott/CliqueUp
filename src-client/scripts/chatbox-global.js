@@ -84,7 +84,7 @@ const GlobalChatView = React.createClass({
     // console.log(this.state.texts)
     if(prevMess === []){
       if(data.message === "undefined"){
-
+        console.log('i got here')
       } else {
         prevMess.push(textBlock)
         this.setState({texts: prevMess})
