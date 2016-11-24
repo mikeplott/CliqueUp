@@ -13,7 +13,7 @@ const ChatController = React.createClass({
         return <GlobalChatView/>
         break;
       case "home":
-        return <HomeView/>
+        return <HomeView selctChat={this.props.selctTab}/>
         break;
       case "auth":
         return <AuthView/>
