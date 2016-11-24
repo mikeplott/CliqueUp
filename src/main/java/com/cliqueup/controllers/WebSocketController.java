@@ -103,8 +103,8 @@ public class WebSocketController {
         return theMessage;
     }
 
-    @MessageMapping("chat-room/{urlname}")
-    @SendTo("chat-room/{urlname}")
+    @MessageMapping("/chat-room/{urlname}")
+    @SendTo("/chat-room/{urlname}")
     public ArrayList<String> chatMessages (Message message) {
         ArrayList<String> chatMessage = new ArrayList<>();
         HashMap mapper;
@@ -174,8 +174,8 @@ public class WebSocketController {
             }
             ChatMessage chatMessage = new ChatMessage(text, group, user);
             cms.save(chatMessage);
-            json.put("message", text);
-            json.put("username", user.getUsername());
+            //json.put("message", text);
+            //json.put("username", user.getUsername());
             json.put("channel", "global");
             return json;
         }

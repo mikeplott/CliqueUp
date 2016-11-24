@@ -276,6 +276,18 @@ public class CliqueUpController {
         return json.get("photo");
     }
 
+    @RequestMapping(path = "/chat", method = RequestMethod.GET)
+    public ArrayList<String> getMessages(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        User user = users.findByUsername(username);
+        ArrayList<String> theMessages = new ArrayList<>();
+        ArrayList<ChatMessage> allMessages = cms.findAll();
+        for (int i = 0; i > cms.count() - 10; i++) {
+            theMessages.add(allMessages.get(i).getMessage());
+        }
+        return theMessages;
+    }
+
 
 
 
