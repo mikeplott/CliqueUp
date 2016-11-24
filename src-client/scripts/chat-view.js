@@ -47,7 +47,7 @@ const ChatView = React.createClass({
 
      let daTabData = STORE.getStoreData()
 
-     let chatTabs = daTabData.chatGroups.forEach(function(name){
+     let chatTabs = daTabData.chatGroups.map(function(name){
        return(
          <li className="" onClick={self._changeTabs}><a data-toggle="tab">{name}</a></li>
        )
