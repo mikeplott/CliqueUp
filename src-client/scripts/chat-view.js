@@ -11,7 +11,7 @@ const ChatView = React.createClass({
 
   getInitialState: function(){
     let theView = {
-      chatTab: ""
+      chatTab: "closed"
     }
     return theView
   },
@@ -28,8 +28,8 @@ const ChatView = React.createClass({
 
     if(this.state.chatTab === evt.target.innerHTML){
       evt.target.parentNode.className = ''
-      self.setState({chatTab: ''})
-      
+      self.setState({chatTab: 'closed'})
+
 
     } else {
       evt.target.parentNode.className = 'active'
@@ -43,11 +43,25 @@ const ChatView = React.createClass({
 
 
    render: function(){
+
+     let daTabData = STORE.getStoreData()
+
+     let chatTabs = daTabData.chatGroups.forEach(function(name){
+       return(
+         <li className="" onClick={this._changeTabs}><a data-toggle="tab">{name}</a></li>
+       )
+     })
+
+
+
+
+
+
      return(
        <div className="homeChatBox">
          <div>
          <ul className="nav nav-tabs homeChatNav">
-           <li className="" onClick={this._changeTabs} ref="global"><a data-toggle="tab">Global</a></li>
+           {chatTabs}
          </ul>
            <div id="myTabContent" className="tab-content">
               <ChatController selctTab={this.state.chatTab}/>

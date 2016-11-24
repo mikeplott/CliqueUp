@@ -3,6 +3,7 @@ const TitleView = require('./title-view.js')
 const HomeView = require('./home-view.js')
 const AuthView = require('./auth-view.js')
 const GlobalChatView = require('./chatbox-global.js')
+const DynamicChatView = require('./chatbox-dynamic.js')
 
 
 
@@ -12,14 +13,11 @@ const ChatController = React.createClass({
       case "Global":
         return <GlobalChatView/>
         break;
-      case "home":
-        return <HomeView selctChat={this.props.selctTab}/>
-        break;
-      case "auth":
-        return <AuthView/>
+      case "closed":
+        return (<div></div>)
         break;
       default:
-        return (<div></div>)
+        return <DynamicChatView theChannel={this.props.selctTab}/>
         break;
     }
   }

@@ -324,7 +324,6 @@ const HomeView = React.createClass({
     setTimeout(function(){
       ACTIONS.fetchUserData()
       ACTIONS.fetchUserEventColl()
-      // ACTIONS.connectToSocket()
     },500)
 
     initMap();
