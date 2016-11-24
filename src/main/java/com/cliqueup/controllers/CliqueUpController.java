@@ -266,6 +266,15 @@ public class CliqueUpController {
         return new ResponseEntity<ArrayList<String>>(friendNames, HttpStatus.OK);
     }
 
+    @RequestMapping(path = "/image", method = RequestMethod.POST)
+    public String saveImage(HttpSession session, @RequestBody Map<String, String> json) {
+        String username = (String) session.getAttribute("username");
+        User user = users.findByUsername(username);
+        user.setImage(json.get("photo"));
+        users.save(user);
+        return json.get("photo");
+    }
+
 
 
 
