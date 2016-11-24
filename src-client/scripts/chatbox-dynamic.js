@@ -23,7 +23,7 @@ const DynamicChatView = React.createClass({
     let self = this
     let leRouteName = this.props.theChannel
     this.connectToSocket()
-    $.post('/chat', {groupname: leRouteName} ,function(oldChat){
+    $.getJSON('/chat', {groupname: leRouteName} ,function(oldChat){
       oldChat.map(function(crntMess){
 
         let theMessgs = self.state.texts
