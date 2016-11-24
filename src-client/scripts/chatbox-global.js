@@ -70,6 +70,7 @@ const GlobalChatView = React.createClass({
      let textBlock = (
         <div className="well">
           <div className="messPic">
+            <p>{data.username}</p>
             <img className="chatPics" src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg"/>
           </div>
           <div className="messBox">
