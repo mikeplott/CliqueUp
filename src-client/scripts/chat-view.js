@@ -43,12 +43,13 @@ const ChatView = React.createClass({
 
 
    render: function(){
+     let self = this
 
      let daTabData = STORE.getStoreData()
 
      let chatTabs = daTabData.chatGroups.forEach(function(name){
        return(
-         <li className="" onClick={this._changeTabs}><a data-toggle="tab">{name}</a></li>
+         <li className="" onClick={self._changeTabs}><a data-toggle="tab">{name}</a></li>
        )
      })
 
