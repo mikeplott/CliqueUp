@@ -167,10 +167,12 @@ html, body {
 
 	li{
 		max-height: 40px;
+		z-index: 1;
 
 		a{
-			background: rgba(150,150,150,0.6);
+			background: RGBA(200, 200, 200, 0.6);
 			border-color: rgba(150,150,150,0.6);
+			z-index: 1;
 		}
 
 	}
@@ -227,7 +229,9 @@ html, body {
 
 
 .homeChatNav{
-	border-bottom: rgba(150,150,150,0.6);
+	border-bottom: rgba(150,150,150,1);
+	z-index: 1;
+	// border-bottom: 1px gray solid;
 }
 
 .chatInputBox{
@@ -258,6 +262,44 @@ html, body {
 .eventDetailHolder{
 	display: inline-block;
 	width: 70%;
+}
+
+
+.chatBoxHolder{
+	// background: white;
+	height: 500px;
+	z-index: 100000;
+
+
+	.chatInputBox{
+		position: fixed;
+		bottom: 0;
+		width: 45%;
+	}
+
+	.chatMessageBox{
+		height: 400px;
+		border-top: 1px gray solid;
+		background: white;
+		overflow-y: scroll;
+		padding: 15px;
+		padding-bottom: 150px;
+
+		.chatPics{
+			border-radius: 100%;
+			width: 8%;
+		}
+		.messBox{
+			display: inline-block;
+		}
+		.messPic{
+			display: inline-block;
+		}
+	}
+}
+
+#myTabContent{
+	margin-top: 6px;
 }
 
 
