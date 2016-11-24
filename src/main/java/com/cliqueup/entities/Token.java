@@ -15,15 +15,11 @@ public class Token {
     @Column()
     String access_token;
 
-    @ManyToOne
-    User user;
-
     public Token() {
     }
 
-    public Token(String access_token, User user) {
+    public Token(String access_token) {
         this.access_token = access_token;
-        this.user = user;
     }
 
     public int getId() {
@@ -42,11 +38,4 @@ public class Token {
         this.access_token = access_token;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

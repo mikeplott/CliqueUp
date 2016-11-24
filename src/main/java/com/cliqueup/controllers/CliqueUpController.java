@@ -140,8 +140,7 @@ public class CliqueUpController {
         User userFromDb = users.findByUsername(user.getUsername());
         if (userFromDb == null) {
             user.setPassword(PasswordStorage.createHash(user.getPassword()));
-            User userForDb = new User(user.getUsername(), user.getPassword());
-            userForDb.setOnline(true);
+            User userForDb = new User(user.getUsername(), true, user.getPassword());
             users.save(userForDb);
             session.setAttribute("username", userForDb.getUsername());
             return user;
@@ -150,7 +149,8 @@ public class CliqueUpController {
             throw new Exception("Password invalid");
         }
         session.setAttribute("username", user.getUsername());
-        userFromDb.setOnline(true);
+        userFromDb.setOnline(!userFromDb.isOnline());
+        users.save(userFromDb);
         return userFromDb;
     }
 
@@ -177,10 +177,9 @@ public class CliqueUpController {
                 .post(formBody)
                 .build();
         okhttp3.Response response = client.newCall(myRequest).execute();
-        Token token = new Token();
-        token.setAccess_token(response.body().string());
-        token.setUser(user);
+        Token token = new Token(response.body().string());
         tokens.save(token);
+        session.setAttribute("token", token.getId());
         user.setToken(token);
         users.save(user);
         session.setAttribute("username", user.getUsername());
@@ -190,14 +189,13 @@ public class CliqueUpController {
     }
 
     @RequestMapping(path = "/gettoken", method = RequestMethod.GET)
-    public ResponseEntity<Token> getToken(HttpSession session, HttpServletResponse response) throws IOException {
+    public Token getToken(HttpSession session) throws Exception {
         String username = (String) session.getAttribute("username");
-        if (userValidation(session)) {
-            User user = users.findByUsername(username);
-            Token token = user.getToken();
-            return new ResponseEntity<Token>(token, HttpStatus.OK);
+        int id = (int) session.getAttribute("token");
+        if (username == null) {
+            throw new Exception("Not logged in");
         }
-        return new ResponseEntity<Token>(HttpStatus.FORBIDDEN);
+        return tokens.findOne(id);
     }
 
     @RequestMapping(path = "/user", method = RequestMethod.GET)
@@ -210,6 +208,7 @@ public class CliqueUpController {
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
     public void logout(HttpSession session) throws Exception {
         String username = (String) session.getAttribute("username");
+        int id = (int) session.getAttribute("token");
         if (username == null) {
             throw new Exception("Not logged in!");
         }
@@ -217,8 +216,8 @@ public class CliqueUpController {
         if (userFromDb == null) {
             throw new Exception("User does not exist!");
         }
-        Token tokenToDelete = tokens.findByUser(userFromDb);
-        tokens.delete(tokenToDelete.getId());
+        userFromDb.setToken(null);
+        tokens.delete(id);
         userFromDb.setOnline(false);
         users.save(userFromDb);
         session.invalidate();
