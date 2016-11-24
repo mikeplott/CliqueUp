@@ -282,10 +282,18 @@ public class CliqueUpController {
         User user = users.findByUsername(username);
         ArrayList<String> theMessages = new ArrayList<>();
         ArrayList<ChatMessage> allMessages = cms.findAll();
-        for (int i = 0; i > cms.count() - 10; i++) {
-            theMessages.add(allMessages.get(i).getMessage());
+        if (cms.count() > 10) {
+            for (int i = 0; i > cms.count() - 10; i++) {
+                theMessages.add(allMessages.get(i).getMessage());
+            }
+            return theMessages;
         }
-        return theMessages;
+        else {
+            for (ChatMessage chatMessage : allMessages) {
+                theMessages.add(chatMessage.getMessage());
+            }
+            return theMessages;
+        }
     }
 
 
