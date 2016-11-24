@@ -113,13 +113,16 @@ const DynamicChatView = React.createClass({
      let user = socket.loginData
      socket = socket.socket
 
+     let leRouteName = this.props.theChannel
+
      let theMess = {
        message: chtMess,
-       username: user
+       username: user,
+       channel: leRouteName
      }
 
 
-     let leRouteName = this.props.theChannel
+
 
      let leRoute = '/chat-room/' + leRouteName
 
