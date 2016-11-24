@@ -83,15 +83,20 @@ const GlobalChatView = React.createClass({
     let prevMess = this.state.texts
     // console.log(this.state.texts)
     if(prevMess === []){
-      if(data.message === "undefined"){
+      if(data.channel === "global"){
         console.log('i got here')
       } else {
         prevMess.push(textBlock)
         this.setState({texts: prevMess})
       }
     } else {
-      prevMess.push(textBlock)
-      this.setState({texts: prevMess})
+      if(data.channel === "global"){
+        console.log('i got here')
+      }else {
+        prevMess.push(textBlock)
+        this.setState({texts: prevMess})
+      }
+
     }
 
 
