@@ -67,6 +67,7 @@ const DynamicChatView = React.createClass({
 
    onReceivedMessage: function(message){
      let data = JSON.parse(message.body)
+     let leRouteName = this.props.theChannel
 
      console.log(data)
     //  console.log(chatMessages)
@@ -88,14 +89,14 @@ const DynamicChatView = React.createClass({
     let prevMess = this.state.texts
     // console.log(this.state.texts)
     if(prevMess === []){
-      if(data.channel === "global"){
+      if(data.channel === leRouteName){
         console.log('i got here')
       } else {
         prevMess.push(textBlock)
         this.setState({texts: prevMess})
       }
     } else {
-      if(data.channel === "global"){
+      if(data.channel === leRouteName){
         console.log('i got here')
       }else {
         prevMess.push(textBlock)
