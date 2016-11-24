@@ -24,6 +24,7 @@ const GlobalChatView = React.createClass({
 
     this.connectToSocket()
     $.getJSON('/chat', function(oldChat){
+      console.log("hey look here >>>>>>>>>>>>>>>>>>>>>>",oldChat)
       oldChat.map(function(crntMess){
 
         let theMessgs = self.state.texts
