@@ -2,6 +2,7 @@ const React = require('react')
 const ReactDOM = require('react-dom')
 const Backbone = require('backbone')
 const STORE = require('./store.js')
+const $ = require ('jquery')
 
 
 // var chatMessages = ''
@@ -19,7 +20,32 @@ const GlobalChatView = React.createClass({
 
 
   componentDidMount: function(){
+    let self = this
+
     this.connectToSocket()
+    $.getJSON('/chat', function(oldChat){
+      oldChat.map(function(crntMess){
+
+        let theMessgs = self.state.texts
+
+        let textBlock = (
+           <div className="well">
+             <div className="messPic">
+               <p>{crntMess.user.username}</p>
+               <img className="chatPics" src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg"/>
+             </div>
+             <div className="messBox">
+               <h4>{crntMess.message}</h4>
+             </div>
+             <p>12:00</p>
+           </div>
+        )
+
+        theMessgs.push(textBlock)
+        self.setState({text: theMessgs})
+
+      })
+    })
   },
 
   componentWillUnmount: function(){
