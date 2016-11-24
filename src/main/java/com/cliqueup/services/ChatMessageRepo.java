@@ -12,6 +12,6 @@ import java.util.ArrayList;
  */
 public interface ChatMessageRepo extends CrudRepository<ChatMessage, Integer> {
     ArrayList<ChatMessage> findAll();
-    Iterable<ChatMessage> findByGroup(Group group);
+    ArrayList<ChatMessage> findByGroup(Group group);
     ArrayList<ChatMessage> findAllByUser(User user);
 }

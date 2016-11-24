@@ -277,23 +277,11 @@ public class CliqueUpController {
     }
 
     @RequestMapping(path = "/chat", method = RequestMethod.GET)
-    public ArrayList<ChatMessage> getMessages(HttpSession session) {
+    public ArrayList<ChatMessage> getSpecificMessges(HttpSession session, String groupname) {
         String username = (String) session.getAttribute("username");
         User user = users.findByUsername(username);
-        ArrayList<ChatMessage> theMessages = new ArrayList<>();
-        ArrayList<ChatMessage> allMessages = cms.findAll();
-        if (cms.count() > 10) {
-            for (int i = 0; i > cms.count() - 10; i++) {
-                theMessages.add(allMessages.get(i));
-            }
-            return theMessages;
-        }
-        else {
-            for (ChatMessage chatMessage : allMessages) {
-                theMessages.add(chatMessage);
-            }
-            return theMessages;
-        }
+        Group group = groups.findByName(groupname);
+        return cms.findByGroup(group);
     }
 
 
