@@ -29,6 +29,7 @@ const ChatView = React.createClass({
 
     if(this.state.chatTab === evt.target.innerHTML){
       evt.target.parentNode.className = ''
+      evt.target.className = ''
       self.setState({chatTab: 'closed'})
 
 
