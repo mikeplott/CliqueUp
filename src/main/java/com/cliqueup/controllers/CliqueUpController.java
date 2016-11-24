@@ -32,9 +32,9 @@ import java.util.Map;
 @RestController
 public class CliqueUpController {
 
-    public static final String REDIRECTURL = "http://10.1.10.44:8080/access";
+    //public static final String REDIRECTURL = "http://10.1.10.44:8080/access";
 
-    //public static final String REDIRECTURL = "http://127.0.0.1:8080/access";
+    public static final String REDIRECTURL = "http://127.0.0.1:8080/access";
 
     public static final String AUTHORIZE_URL = "https://secure.meetup.com/oauth2/authorize";
 
@@ -145,7 +145,7 @@ public class CliqueUpController {
             User userForDb = new User(user.getUsername(), true, user.getPassword());
             users.save(userForDb);
             session.setAttribute("username", userForDb.getUsername());
-            return user;
+            return userFromDb;
         }
         else if (!PasswordStorage.verifyPassword(user.getPassword(), userFromDb.getPassword())) {
             throw new Exception("Password invalid");
@@ -284,26 +284,6 @@ public class CliqueUpController {
         return cms.findByGroup(group);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @RequestMapping(path = "/signup", method = RequestMethod.POST)
     public ResponseEntity<User> userSignUp(HttpSession session, @RequestBody User user) throws PasswordStorage.CannotPerformOperationException {
         if (user.getUsername() == null || user.getPassword() == null) {
@@ -317,6 +297,23 @@ public class CliqueUpController {
         session.setAttribute("username", userForDb.getUsername());
         return new ResponseEntity<User>(userForDb, HttpStatus.OK);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @RequestMapping(path = "/all-direct-messages", method = RequestMethod.GET)
     public ResponseEntity<Iterable<DirectMessage>> getAllDirectMessages(HttpSession session) {
