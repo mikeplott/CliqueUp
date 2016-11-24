@@ -45,7 +45,11 @@ const DynamicChatView = React.createClass({
     let socket = STORE.getStoreData()
     socket = socket.socket
 
-    let unkwnInfo = socket.subscribe("/global", self.onReceivedMessage )
+    let leRouteName = this.props.theChannel
+
+    let leRoute = '/chat-room/' + leRouteName
+
+    let unkwnInfo = socket.subscribe(leRoute, self.onReceivedMessage )
 
     this.setState({socketInfo: unkwnInfo})
 
@@ -109,12 +113,20 @@ const DynamicChatView = React.createClass({
      let user = socket.loginData
      socket = socket.socket
 
+     let leRouteName = this.props.theChannel
+
      let theMess = {
        message: chtMess,
-       username: user
+       username: user,
+       channel: leRouteName
      }
 
-     socket.send('/chat-room/{groupname}', {} ,JSON.stringify(theMess))
+
+
+
+     let leRoute = '/chat-room/' + leRouteName
+
+     socket.send(leRoute, {} ,JSON.stringify(theMess))
 
 
 
