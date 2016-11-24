@@ -32,7 +32,9 @@ import java.util.Map;
 @RestController
 public class CliqueUpController {
 
-    public static final String REDIRECTURL = "http://127.0.0.1:8080/access";
+    public static final String REDIRECTURL = "http://10.1.10.44:8080/access";
+
+    //public static final String REDIRECTURL = "http://127.0.0.1:8080/access";
 
     public static final String AUTHORIZE_URL = "https://secure.meetup.com/oauth2/authorize";
 
