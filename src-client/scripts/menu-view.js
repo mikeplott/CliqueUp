@@ -4,7 +4,20 @@ const Backbone = require('backbone')
 const ACTIONS = require('./actions.js');
 const STORE = require('./store.js');
 
+var photoLink
+
 const MenuView = React.createClass({
+
+  componentWillMount: function(){
+    let thaData = STORE.getStoreData()
+
+    if(thaData.userData.photo === undefined){
+      photoLink = 'http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg'
+    } else {
+      photoLink = thaData.userData.photo.photo_link
+    }
+
+  },
 
   _testLogout: function(){
     $.post( "/logout", function(  ) {
@@ -30,15 +43,6 @@ const MenuView = React.createClass({
   },
 
   render: function(){
-    let thaData = STORE.getStoreData()
-
-    if(!thaData.userData.photo){
-      var photoLink = 'http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg'
-    } else {
-      var photoLink = thaData.userData.photo.photo_link
-    }
-
-
 
     return(
       <div className="nav nav-bar homeNav">

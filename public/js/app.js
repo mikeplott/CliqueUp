@@ -35158,8 +35158,20 @@ var Backbone = require('backbone');
 var ACTIONS = require('./actions.js');
 var STORE = require('./store.js');
 
+var photoLink;
+
 var MenuView = React.createClass({
   displayName: 'MenuView',
+
+  componentWillMount: function componentWillMount() {
+    var thaData = STORE.getStoreData();
+
+    if (thaData.userData.photo === undefined) {
+      photoLink = 'http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg';
+    } else {
+      photoLink = thaData.userData.photo.photo_link;
+    }
+  },
 
   _testLogout: function _testLogout() {
     $.post("/logout", function () {
@@ -35183,13 +35195,6 @@ var MenuView = React.createClass({
   },
 
   render: function render() {
-    var thaData = STORE.getStoreData();
-
-    if (!thaData.userData.photo) {
-      var photoLink = 'http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg';
-    } else {
-      var photoLink = thaData.userData.photo.photo_link;
-    }
 
     return React.createElement('div', { className: 'nav nav-bar homeNav' }, React.createElement('button', { className: 'btn btn-warning', onClick: this._testLogout }, 'Logout'), React.createElement('span', { className: 'glyphicon glyphicon-option-vertical navMoreBtn', onClick: this._getToken }), React.createElement('img', { src: photoLink, className: 'homeNavPic' }));
   }
