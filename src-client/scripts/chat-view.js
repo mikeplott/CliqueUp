@@ -25,7 +25,9 @@ const ChatView = React.createClass({
     let self = this
 
     console.log(evt.target.parentNode)
-    this.refs.tabs.className = ""
+    this.refs.Global.className = ""
+    console.log(this.refs)
+
 
     if(this.state.chatTab === evt.target.innerHTML){
       evt.target.parentNode.className = ''
@@ -51,7 +53,7 @@ const ChatView = React.createClass({
 
      let chatTabs = daTabData.chatGroups.map(function(name){
        return(
-         <li className="" ref="tabs" onClick={self._changeTabs}><a data-toggle="tab">{name}</a></li>
+         <li className="" ref={name} onClick={self._changeTabs}><a data-toggle="tab">{name}</a></li>
        )
      })
 
