@@ -6,6 +6,7 @@ const ACTIONS = require('./actions.js')
 const map = document.querySelector("#map")
 const BoxStuff = require('./TopLeftBox.js')
 const ChatView = require('./chat-view.js')
+const MenuView = require('./menu-view.js')
 const $ = require('jquery')
 
 
@@ -303,7 +304,7 @@ function initMap() {
         map2.setTilt(45);
         marker = new google.maps.Marker({
           animation: google.maps.Animation.DROP,
-          position: {lat: 32.776475, lng: -79.931051}
+          map: map2
         });
 
         google.maps.event.addListenerOnce(map2, 'idle', function(){
@@ -324,6 +325,8 @@ const HomeView = React.createClass({
     setTimeout(function(){
       ACTIONS.fetchUserData()
       ACTIONS.fetchUserEventColl()
+      // STORE.setStore({mapMarker: marker})
+      // STORE.setStore({theMap: map2})
     },500)
 
     initMap();
@@ -357,16 +360,42 @@ const HomeView = React.createClass({
     }
   },
 
-  _placeFirstMarker: function(){
-    marker.setMap(map2);
+  _placeFirstMarker: function(pos){
+    marker.setPosition({lat: 32.776475, lng: -79.931051})
     map2.setZoom(15);
     map2.panTo(marker.getPosition());
+    marker.setAnimation(google.maps.Animation.DROP)
+  },
+  _placeFirstMarker2: function(pos){
+    marker.setPosition({lat: 32.786475, lng: -79.931051})
+    map2.setZoom(15);
+    map2.panTo(marker.getPosition());
+    marker.setAnimation(google.maps.Animation.DROP)
+  },
+  _placeFirstMarker3: function(pos){
+    marker.setPosition({lat: 32.796475, lng: -79.931051})
+    map2.setZoom(15);
+    map2.panTo(marker.getPosition());
+    marker.setAnimation(google.maps.Animation.DROP)
+  },
+  _placeFirstMarker4: function(pos){
+    marker.setPosition({lat: 32.806475, lng: -79.931051})
+    map2.setZoom(15);
+    map2.panTo(marker.getPosition());
+    marker.setAnimation(google.maps.Animation.DROP)
   },
 
 
   _sendChatMessage: function(){
     ACTIONS.sendMessage(this.refs.chatMessage.value)
     this.refs.chatMessage.value = ''
+  },
+  placeMarker: function(index){
+    let locArray = STORE.getStoreData().eventLocs
+    marker.setPosition(locArray[index])
+    map2.setZoom(15);
+    map2.panTo(marker.getPosition());
+    marker.setAnimation(google.maps.Animation.DROP)
   },
 
 
@@ -377,12 +406,8 @@ const HomeView = React.createClass({
 
     return(
       <div className="homeScreenHolder">
-        <div className="nav nav-bar homeNav">
-          <button className="btn btn-warning" onClick={this._testLogout}>Logout</button>
-          <span className="glyphicon glyphicon-option-vertical navMoreBtn" onClick={this._getToken}></span>
-          <img src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg" className="homeNavPic"/>
-        </div>
-        <BoxStuff/>
+        <MenuView/>
+        <BoxStuff theAllMap={this.placeMarker}/>
         <ChatView/>
       </div>
     )
@@ -421,4 +446,16 @@ const HomeView = React.createClass({
 
 
 
-module.exports = HomeView
+const thisOne = {
+  placeMarker: function(index){
+    let locArray = STORE.getStoreData().eventLocs
+    marker.setPosition(locArray[index])
+    map2.setZoom(15);
+    map2.panTo(marker.getPosition());
+    marker.setAnimation(google.maps.Animation.DROP)
+  }
+}
+
+
+
+module.exports = {HomeView, thisOne}
