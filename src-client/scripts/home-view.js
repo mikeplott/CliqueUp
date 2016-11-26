@@ -6,6 +6,7 @@ const ACTIONS = require('./actions.js')
 const map = document.querySelector("#map")
 const BoxStuff = require('./TopLeftBox.js')
 const ChatView = require('./chat-view.js')
+const MenuView = require('./menu-view.js')
 const $ = require('jquery')
 
 
@@ -405,11 +406,7 @@ const HomeView = React.createClass({
 
     return(
       <div className="homeScreenHolder">
-        <div className="nav nav-bar homeNav">
-          <button className="btn btn-warning" onClick={this._testLogout}>Logout</button>
-          <span className="glyphicon glyphicon-option-vertical navMoreBtn" onClick={this._getToken}></span>
-          <img src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg" className="homeNavPic"/>
-        </div>
+        <MenuView/>
         <BoxStuff theAllMap={this.placeMarker}/>
         <ChatView/>
       </div>
