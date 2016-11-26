@@ -4,6 +4,8 @@ const Backbone = require('backbone')
 const ACTIONS = require('./actions.js');
 const STORE = require('./store.js');
 
+var photoLink
+
 const MenuView = React.createClass({
 
   _testLogout: function(){
@@ -32,10 +34,10 @@ const MenuView = React.createClass({
   render: function(){
     let thaData = STORE.getStoreData()
 
-    if(!thaData.userData.photo){
-      var photoLink = 'http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg'
+    if(thaData.userData.photo === undefined){
+      photoLink = 'http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg'
     } else {
-      var photoLink = thaData.userData.photo.photo_link
+      photoLink = thaData.userData.photo.photo_link
     }
 
 
