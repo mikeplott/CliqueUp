@@ -27,7 +27,7 @@ class TLBoxViews extends React.Component{
       switch(this.props.viewType){
 
          case "self":
-            return <SelfView/>
+            return <SelfView daMap={this.props.myMap}/>
             break;
 
          case "conceierge":

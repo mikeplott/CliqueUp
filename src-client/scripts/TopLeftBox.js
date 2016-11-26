@@ -27,7 +27,7 @@ class BoxStuff extends React.Component{
    _handleChange(evt){
 
      let theChecker = evt.target.className.split(' ')
-     
+
 
 
 
@@ -76,7 +76,7 @@ class BoxStuff extends React.Component{
            </div>
          </nav>
          <div className="ClickDisplay">
-            <TLBoxViews viewType={this.state.topBoxView}/>
+            <TLBoxViews viewType={this.state.topBoxView} myMap={this.props.theAllMap}/>
          </div>
       </div>
       )

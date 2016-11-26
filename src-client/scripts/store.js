@@ -9,7 +9,9 @@ const STORE = {
      userEvents: {},
      socket: '',
      loginData: {},
-     chatGroups: ["Global","test"]
+     chatGroups: ["Global","test"],
+     eventLocs: []
+
    },
 
    setStore: function(storeProp, Payload){

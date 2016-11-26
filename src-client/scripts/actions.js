@@ -8,6 +8,7 @@ const $ = require('jquery')
 const STORE = require('./store.js');
 
 
+
 var theCrntUser;
 
 
@@ -62,10 +63,25 @@ const ACTIONS = {
 
     events.fetch().then(function(){
       STORE.setStore('userEvents', events.models[0].attributes)
+      ACTIONS.storeEventLocs
+    })
+
+  },
+
+  storeEventLocs: function(){
+    let theData = STORE.getStoreData()
+    theData = theData.userEvents
+
+    theData.data.map(function(element){
+
+      let pos = {
+        lat: element.venue.lat,
+        lng: element.venue.lon
+      }
     })
   },
 
-  
+
 
   handleUserLogin: function(usrInfo){
     theCrntUser = usrInfo

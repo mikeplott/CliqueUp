@@ -2,6 +2,9 @@ const React = require('react')
 const ReactDOM = require('react-dom')
 const Backbone = require('backbone')
 const STORE = require('./store.js')
+const ACTIONS = require('./actions.js')
+const {HomeView, thisOne} = require('./home-view.js')
+// const theMap = document.querySelector("#map")
 
 
 class SelfView extends React.Component{
@@ -12,49 +15,59 @@ class SelfView extends React.Component{
    }
 
 
-   render(){
 
-      console.log(STORE.getStoreData())
+
+   render(){
+    //  if(!this.props.daMap){
+    //    return(
+    //      <p>waiting</p>
+    //    )
+    //  }
+
+     var self = this
       let nestingBastards = STORE.getStoreData().userEvents.data
       console.log(nestingBastards)
 
-      let UsefulStuff = nestingBastards.map(function(element){
+
+      let UsefulStuff = nestingBastards.map(function(element, i){
+         console.log(i)
          console.log(element.group.name)
+         console.log(element.venue)
+         let daData = STORE.getStoreData()
+         daData = daData.eventLocs
+
+         let pos = {
+           lat: element.venue.lat,
+           lng: element.venue.lon
+         }
+
+         daData.push(pos)
+
+         let markerIndex = (daData.length - 1)
+         console.log("hey did this run 3 times",markerIndex)
+        //  console.log(self.props.daMap)
+
+         STORE.setStore({eventLocs: daData})
+
+
+
+
+        let throwMarker = function(evt){
+          console.log(evt.target.dataset.index)
+          self.props.daMap(evt.target.dataset.index)
+        }
 
          return(
 
 
-
-          //  <a href="#" class="list-group-item">
-          //    <h4 class="list-group-item-heading">List group item heading</h4>
-          //    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-          //  </a>
-          //  <a href="#" class="list-group-item">
-          //    <h4 class="list-group-item-heading">List group item heading</h4>
-          //    <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-          //  </a>
-
-
-
-           <a className="list-group-item">
-              <div className="eventPicHolder"><img src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg" className="eventPics"/></div>
-              <div className="eventDetailHolder">
-                <h4 className="list-group-item-heading">{element.name}</h4>
-                <p className="list-group-item-text">{element.group.name}</p>
+           <a className="list-group-item"  data-index={markerIndex} onClick={throwMarker}>
+              <div className="eventPicHolder" data-index={markerIndex}><img data-index={markerIndex} src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg" className="eventPics"/></div>
+              <div className="eventDetailHolder" data-index={markerIndex}>
+                <h4 className="list-group-item-heading" data-index={markerIndex}>{element.name}</h4>
+                <p className="list-group-item-text" data-index={markerIndex}>{element.group.name}</p>
               </div>
            </a>
 
-
-
-            // <li>
-            //    <div>
-            //       <h2>{element.name}</h2>
-            //       <p>{element.group.name}</p>
-            //    </div>
-            //    <div>
-            //       <h1>{element.yes_rsvp_count}</h1>
-            //    </div>
-            // </li>
          )
 
 
