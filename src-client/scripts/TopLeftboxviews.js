@@ -1,5 +1,6 @@
 const React = require('react')
 const SelfView = require('./Button-self.js')
+const ConciergeView = require('./Button-conc.js')
 const STORE = require('./store.js')
 
 
@@ -31,7 +32,7 @@ class TLBoxViews extends React.Component{
             break;
 
          case "conceierge":
-            return (<div className="h"><h1>get me shit</h1></div>)
+            return <ConciergeView daMap={this.props.myMap}/>
             break;
 
          case "mystery":

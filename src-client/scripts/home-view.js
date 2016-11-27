@@ -325,6 +325,7 @@ const HomeView = React.createClass({
     setTimeout(function(){
       ACTIONS.fetchUserData()
       ACTIONS.fetchUserEventColl()
+      ACTIONS.fetchConciergeInfo()
       // STORE.setStore({mapMarker: marker})
       // STORE.setStore({theMap: map2})
     },500)
