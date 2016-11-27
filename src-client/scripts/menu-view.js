@@ -3,10 +3,18 @@ const ReactDOM = require('react-dom')
 const Backbone = require('backbone')
 const ACTIONS = require('./actions.js');
 const STORE = require('./store.js');
+const MenuBtnView = require('./menubtn-controller.js')
 
 var photoLink
 
 const MenuView = React.createClass({
+
+  getInitialState: function(){
+    let theView = {
+      menuStatus: "closed"
+    }
+    return theView
+  },
 
   componentWillMount: function(){
     let thaData = STORE.getStoreData()
@@ -71,7 +79,7 @@ const MenuView = React.createClass({
             <span className="glyphicon glyphicon-option-vertical navMoreBtn" onClick={this._getToken}></span>
             <img src={photoLink} className="homeNavPic"/>
           </div>
-          
+          <MenuBtnView menuDisplay={this.state.menuStatus}/>
         </div>
       )
     // }
