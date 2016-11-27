@@ -327,6 +327,8 @@ const HomeView = React.createClass({
       ACTIONS.fetchUserData()
       ACTIONS.fetchUserEventColl()
       ACTIONS.fetchConciergeInfo()
+      ACTIONS.fetchTopics()
+      ACTIONS.fetchFindEvents()
       // STORE.setStore({mapMarker: marker})
       // STORE.setStore({theMap: map2})
     },500)

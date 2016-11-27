@@ -11,7 +11,9 @@ const STORE = {
      loginData: {},
      chatGroups: ["Global","test"],
      eventLocs: [],
-     conciergeData:{}
+     conciergeData:{},
+     findEventsData:{},
+     topics:{}
 
    },
 

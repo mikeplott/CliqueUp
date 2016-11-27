@@ -1,6 +1,8 @@
 const React = require('react')
 const SelfView = require('./Button-self.js')
 const ConciergeView = require('./Button-conc.js')
+const Button3View = require('./Button-3.js')
+const Button4View = require('./Button-4.js')
 const STORE = require('./store.js')
 
 
@@ -36,11 +38,11 @@ class TLBoxViews extends React.Component{
             break;
 
          case "mystery":
-            return(<div><h1>mysterious!!!</h1></div>)
+            return <Button3View />
             break;
 
          case "other":
-            return(<div><h1>theOtherButton!!!</h1></div>)
+            return <Button4View />
             break;
 
          default:
