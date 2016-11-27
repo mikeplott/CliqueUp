@@ -310,6 +310,7 @@ function initMap() {
         google.maps.event.addListenerOnce(map2, 'idle', function(){
           let theLoader = document.querySelector('.loader')
           theLoader.style.display = "none";
+          Backbone.Events.trigger('picLoad')
         });
       });
     }
@@ -320,7 +321,7 @@ function initMap() {
 const HomeView = React.createClass({
 
 
-  componentDidMount: function(){
+  componentWillMount: function(){
     ACTIONS.fetchAuthToken()
     setTimeout(function(){
       ACTIONS.fetchUserData()
@@ -329,6 +330,12 @@ const HomeView = React.createClass({
       // STORE.setStore({mapMarker: marker})
       // STORE.setStore({theMap: map2})
     },500)
+
+
+
+  },
+  componentDidMount: function(){
+
 
     initMap();
 
@@ -405,13 +412,15 @@ const HomeView = React.createClass({
     map.innerHTML = ''
 
 
-    return(
-      <div className="homeScreenHolder">
-        <MenuView/>
-        <BoxStuff theAllMap={this.placeMarker}/>
-        <ChatView/>
-      </div>
-    )
+      return(
+        <div className="homeScreenHolder">
+          <MenuView/>
+          <BoxStuff theAllMap={this.placeMarker}/>
+          <ChatView/>
+        </div>
+      )
+
+
   }
 
 })
