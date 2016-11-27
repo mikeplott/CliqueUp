@@ -4,6 +4,7 @@ const {loginModel, loginCollection} = require('./model-login.js')
 const {tokenModel, tokenCollection} = require('./model-gettoken.js')
 const {userModel, userCollection} = require('./model-userInfo.js')
 const {eventModel, eventCollection} = require('./model-events.js')
+const {buttonModel, buttonCollection} = require('./Button-Colls.js')
 const $ = require('jquery')
 const STORE = require('./store.js');
 const MenuView = require('./menu-view.js')
@@ -68,6 +69,18 @@ const ACTIONS = {
       ACTIONS.storeEventLocs
     })
 
+  },
+
+  fetchConciergeInfo: function(){
+  
+      let theData = STORE.getStoreData()
+      let myToken = theData.token[0]
+
+      let thebuttonModel = new buttonCollection(myToken)
+
+      thebuttonModel.fetch().then(function(){
+      STORE.setStore("conciergeData", thebuttonModel.models[0].attributes)
+    })
   },
 
   storeEventLocs: function(){
