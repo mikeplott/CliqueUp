@@ -51,7 +51,7 @@ const MenuView = React.createClass({
     let self = this
 
     if(this.state.menuStatus === "closed"){
-      evt.target.className = "glyphicon glyphicon-chevron-up navMoreBtn"
+      evt.target.className = "glyphicon glyphicon-triangle-top navMoreBtn navMoreBtn2"
       self.setState({menuStatus: ''})
 
     } else {
