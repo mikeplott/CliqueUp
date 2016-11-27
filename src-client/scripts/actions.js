@@ -6,6 +6,7 @@ const {userModel, userCollection} = require('./model-userInfo.js')
 const {eventModel, eventCollection} = require('./model-events.js')
 const $ = require('jquery')
 const STORE = require('./store.js');
+const MenuView = require('./menu-view.js')
 
 
 
@@ -53,6 +54,7 @@ const ACTIONS = {
       console.log('maybe??')
       theUserModel.fetch().then(function(){
       STORE.setStore("userData", theUserModel.models[0].attributes)
+      
     })
   },
 

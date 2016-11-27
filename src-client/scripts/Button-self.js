@@ -60,7 +60,7 @@ class SelfView extends React.Component{
          return(
 
 
-           <a className="list-group-item"  data-index={markerIndex} onClick={throwMarker}>
+           <a className="list-group-item"  key={i} data-index={markerIndex} onClick={throwMarker}>
               <div className="eventPicHolder" data-index={markerIndex}><img data-index={markerIndex} src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg" className="eventPics"/></div>
               <div className="eventDetailHolder" data-index={markerIndex}>
                 <h4 className="list-group-item-heading" data-index={markerIndex}>{element.name}</h4>

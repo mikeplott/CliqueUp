@@ -15468,28 +15468,6 @@ var getDictionaryKey = function (inst) {
   return '.' + inst._rootNodeID;
 };
 
-function isInteractive(tag) {
-  return tag === 'button' || tag === 'input' || tag === 'select' || tag === 'textarea';
-}
-
-function shouldPreventMouseEvent(name, type, props) {
-  switch (name) {
-    case 'onClick':
-    case 'onClickCapture':
-    case 'onDoubleClick':
-    case 'onDoubleClickCapture':
-    case 'onMouseDown':
-    case 'onMouseDownCapture':
-    case 'onMouseMove':
-    case 'onMouseMoveCapture':
-    case 'onMouseUp':
-    case 'onMouseUpCapture':
-      return !!(props.disabled && isInteractive(type));
-    default:
-      return false;
-  }
-}
-
 /**
  * This is a unified interface for event plugins to be installed and configured.
  *
@@ -15558,12 +15536,7 @@ var EventPluginHub = {
    * @return {?function} The stored callback.
    */
   getListener: function (inst, registrationName) {
-    // TODO: shouldPreventMouseEvent is DOM-specific and definitely should not
-    // live here; needs to be moved to a better place soon
     var bankForRegistrationName = listenerBank[registrationName];
-    if (shouldPreventMouseEvent(registrationName, inst._currentElement.type, inst._currentElement.props)) {
-      return null;
-    }
     var key = getDictionaryKey(inst);
     return bankForRegistrationName && bankForRegistrationName[key];
   },
@@ -25056,7 +25029,7 @@ module.exports = ReactUpdates;
 
 'use strict';
 
-module.exports = '15.4.1';
+module.exports = '15.4.0';
 },{}],107:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -25634,6 +25607,18 @@ function isInteractive(tag) {
   return tag === 'button' || tag === 'input' || tag === 'select' || tag === 'textarea';
 }
 
+function shouldPreventMouseEvent(inst) {
+  if (inst) {
+    var disabled = inst._currentElement && inst._currentElement.props.disabled;
+
+    if (disabled) {
+      return isInteractive(inst._tag);
+    }
+  }
+
+  return false;
+}
+
 var SimpleEventPlugin = {
 
   eventTypes: eventTypes,
@@ -25704,7 +25689,10 @@ var SimpleEventPlugin = {
       case 'topMouseDown':
       case 'topMouseMove':
       case 'topMouseUp':
-      // TODO: Disabled elements should not respond to mouse events
+        // Disabled elements should not respond to mouse events
+        if (shouldPreventMouseEvent(targetInst)) {
+          return null;
+        }
       /* falls through */
       case 'topMouseOut':
       case 'topMouseOver':
@@ -30392,38 +30380,30 @@ typeof Set === 'function' && isNative(Set) &&
 // Set.prototype.keys
 Set.prototype != null && typeof Set.prototype.keys === 'function' && isNative(Set.prototype.keys);
 
-var setItem;
-var getItem;
-var removeItem;
-var getItemIDs;
-var addRoot;
-var removeRoot;
-var getRootIDs;
-
 if (canUseCollections) {
   var itemMap = new Map();
   var rootIDSet = new Set();
 
-  setItem = function (id, item) {
+  var setItem = function (id, item) {
     itemMap.set(id, item);
   };
-  getItem = function (id) {
+  var getItem = function (id) {
     return itemMap.get(id);
   };
-  removeItem = function (id) {
+  var removeItem = function (id) {
     itemMap['delete'](id);
   };
-  getItemIDs = function () {
+  var getItemIDs = function () {
     return Array.from(itemMap.keys());
   };
 
-  addRoot = function (id) {
+  var addRoot = function (id) {
     rootIDSet.add(id);
   };
-  removeRoot = function (id) {
+  var removeRoot = function (id) {
     rootIDSet['delete'](id);
   };
-  getRootIDs = function () {
+  var getRootIDs = function () {
     return Array.from(rootIDSet.keys());
   };
 } else {
@@ -30439,31 +30419,31 @@ if (canUseCollections) {
     return parseInt(key.substr(1), 10);
   };
 
-  setItem = function (id, item) {
+  var setItem = function (id, item) {
     var key = getKeyFromID(id);
     itemByKey[key] = item;
   };
-  getItem = function (id) {
+  var getItem = function (id) {
     var key = getKeyFromID(id);
     return itemByKey[key];
   };
-  removeItem = function (id) {
+  var removeItem = function (id) {
     var key = getKeyFromID(id);
     delete itemByKey[key];
   };
-  getItemIDs = function () {
+  var getItemIDs = function () {
     return Object.keys(itemByKey).map(getIDFromKey);
   };
 
-  addRoot = function (id) {
+  var addRoot = function (id) {
     var key = getKeyFromID(id);
     rootByKey[key] = true;
   };
-  removeRoot = function (id) {
+  var removeRoot = function (id) {
     var key = getKeyFromID(id);
     delete rootByKey[key];
   };
-  getRootIDs = function () {
+  var getRootIDs = function () {
     return Object.keys(rootByKey).map(getIDFromKey);
   };
 }
@@ -34056,7 +34036,7 @@ var SelfView = function (_React$Component) {
           self.props.daMap(evt.target.dataset.index);
         };
 
-        return React.createElement('a', { className: 'list-group-item', 'data-index': markerIndex, onClick: throwMarker }, React.createElement('div', { className: 'eventPicHolder', 'data-index': markerIndex }, React.createElement('img', { 'data-index': markerIndex, src: 'http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg', className: 'eventPics' })), React.createElement('div', { className: 'eventDetailHolder', 'data-index': markerIndex }, React.createElement('h4', { className: 'list-group-item-heading', 'data-index': markerIndex }, element.name), React.createElement('p', { className: 'list-group-item-text', 'data-index': markerIndex }, element.group.name)));
+        return React.createElement('a', { className: 'list-group-item', key: i, 'data-index': markerIndex, onClick: throwMarker }, React.createElement('div', { className: 'eventPicHolder', 'data-index': markerIndex }, React.createElement('img', { 'data-index': markerIndex, src: 'http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg', className: 'eventPics' })), React.createElement('div', { className: 'eventDetailHolder', 'data-index': markerIndex }, React.createElement('h4', { className: 'list-group-item-heading', 'data-index': markerIndex }, element.name), React.createElement('p', { className: 'list-group-item-text', 'data-index': markerIndex }, element.group.name)));
       });
 
       return React.createElement('div', { className: 'list-group' }, UsefulStuff);
@@ -34291,6 +34271,7 @@ var _require5 = require('./model-events.js'),
 
 var $ = require('jquery');
 var STORE = require('./store.js');
+var MenuView = require('./menu-view.js');
 
 var theCrntUser;
 
@@ -34382,7 +34363,7 @@ var ACTIONS = {
 
 module.exports = ACTIONS;
 
-},{"./model-coll.js":193,"./model-events.js":194,"./model-gettoken.js":195,"./model-login.js":196,"./model-userInfo.js":197,"./store.js":198,"backbone":1,"jquery":25}],185:[function(require,module,exports){
+},{"./menu-view.js":192,"./model-coll.js":193,"./model-events.js":194,"./model-gettoken.js":195,"./model-login.js":196,"./model-userInfo.js":197,"./store.js":198,"backbone":1,"jquery":25}],185:[function(require,module,exports){
 'use strict';
 
 var ReactDOM = require('react-dom');
@@ -34484,8 +34465,8 @@ var ChatView = React.createClass({
 
     var daTabData = STORE.getStoreData();
 
-    var chatTabs = daTabData.chatGroups.map(function (name) {
-      return React.createElement('li', { className: '', 'data-tab': 'tab', ref: name, onClick: self._changeTabs }, React.createElement('a', { 'data-toggle': 'tab' }, name));
+    var chatTabs = daTabData.chatGroups.map(function (name, i) {
+      return React.createElement('li', { className: '', key: i, 'data-tab': 'tab', ref: name, onClick: self._changeTabs }, React.createElement('a', { 'data-toggle': 'tab' }, name));
     });
 
     return React.createElement('div', { className: 'homeChatBox' }, React.createElement('div', null, React.createElement('ul', { className: 'nav nav-tabs homeChatNav' }, chatTabs), React.createElement('div', { id: 'myTabContent', className: 'tab-content' }, React.createElement(ChatController, { selctTab: this.state.chatTab }))));
@@ -35022,6 +35003,7 @@ function initMap() {
     google.maps.event.addListenerOnce(map2, 'idle', function () {
       var theLoader = document.querySelector('.loader');
       theLoader.style.display = "none";
+      Backbone.Events.trigger('picLoad');
     });
   });
 }
@@ -35029,7 +35011,7 @@ function initMap() {
 var HomeView = React.createClass({
   displayName: 'HomeView',
 
-  componentDidMount: function componentDidMount() {
+  componentWillMount: function componentWillMount() {
     ACTIONS.fetchAuthToken();
     setTimeout(function () {
       ACTIONS.fetchUserData();
@@ -35037,6 +35019,8 @@ var HomeView = React.createClass({
       // STORE.setStore({mapMarker: marker})
       // STORE.setStore({theMap: map2})
     }, 500);
+  },
+  componentDidMount: function componentDidMount() {
 
     initMap();
   },
@@ -35173,6 +35157,13 @@ var MenuView = React.createClass({
     }
   },
 
+  componentDidMount: function componentDidMount() {
+    var self = this;
+    Backbone.Events.on('picLoad', function () {
+      self.forceUpdate();
+    });
+  },
+
   _testLogout: function _testLogout() {
     $.post("/logout", function () {
       console.log("oooh it tickled the server");
@@ -35193,10 +35184,25 @@ var MenuView = React.createClass({
       STORE.setStore('homeMenuDisplay', false);
     }
   },
+  toggleUpdate: function toggleUpdate() {
+    this.forceUpdate();
+  },
 
   render: function render() {
+    var thaData = STORE.getStoreData();
 
-    return React.createElement('div', { className: 'nav nav-bar homeNav' }, React.createElement('button', { className: 'btn btn-warning', onClick: this._testLogout }, 'Logout'), React.createElement('span', { className: 'glyphicon glyphicon-option-vertical navMoreBtn', onClick: this._getToken }), React.createElement('img', { src: photoLink, className: 'homeNavPic' }));
+    if (thaData.userData.photo === undefined) {
+      photoLink = 'http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg';
+    } else {
+      photoLink = thaData.userData.photo.photo_link;
+    }
+
+    if (thaData.userData.photo === undefined) {
+
+      return React.createElement('div', null);
+    } else {
+      return React.createElement('div', { className: 'nav nav-bar homeNav' }, React.createElement('button', { className: 'btn btn-warning', onClick: this._testLogout }, 'Logout'), React.createElement('span', { className: 'glyphicon glyphicon-option-vertical navMoreBtn', onClick: this._getToken }), React.createElement('img', { src: photoLink, className: 'homeNavPic' }));
+    }
   }
 
 });
