@@ -61,18 +61,20 @@ const MenuView = React.createClass({
         photoLink = thaData.userData.photo.photo_link
       }
 
-    if(thaData.userData.photo === undefined){
-
-      return(<div></div>)
-    } else {
+    // if(thaData.userData.photo === undefined){
+    //   // <button className="btn btn-warning" onClick={this._testLogout}>Logout</button>
+    //   return(<div></div>)
+    // } else {
       return(
         <div className="nav nav-bar homeNav">
-          <button className="btn btn-warning" onClick={this._testLogout}>Logout</button>
-          <span className="glyphicon glyphicon-option-vertical navMoreBtn" onClick={this._getToken}></span>
-          <img src={photoLink} className="homeNavPic"/>
+          <div>
+            <span className="glyphicon glyphicon-option-vertical navMoreBtn" onClick={this._getToken}></span>
+            <img src={photoLink} className="homeNavPic"/>
+          </div>
+          
         </div>
       )
-    }
+    // }
 
 
   }

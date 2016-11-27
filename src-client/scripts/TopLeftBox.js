@@ -66,19 +66,22 @@ class BoxStuff extends React.Component{
    render(){
       //const value = this.state.value
       return(
-      <div className="homeMeetupBox" ref="homeMeetupBox">
-         <nav className="navbar navbar-inverse homeMeetupNav">
-           <div className="homeMeetupNavBox">
-             <button className={clas2 + " " + clasSelf}  ref="navSelfBtn" onClick={this._handleChange}><span className="fa fa-map-marker" aria-hidden="true"></span></button>
-             <button className={clas2 + " " + clasConceierge} ref="navConBtn" onClick={this._handleChange}><span className="fa fa-street-view" aria-hidden="true"></span></button>
-             <button className={clas2 + " " + clasMystery} ref="navMysBtn" onClick={this._handleChange}><span className="fa fa-users" aria-hidden="true"></span></button>
-             <button className={clas2 + " " + clasOther} ref="navOthBtn" onClick={this._handleChange}><span className="fa fa-binoculars" aria-hidden="true"></span></button>
-           </div>
-         </nav>
-         <div className="ClickDisplay">
-            <TLBoxViews viewType={this.state.topBoxView} myMap={this.props.theAllMap}/>
-         </div>
-      </div>
+        <div>
+          <div className="homeMeetupBox" ref="homeMeetupBox">
+             <nav className="navbar navbar-inverse homeMeetupNav">
+               <div className="homeMeetupNavBox">
+                 <button className={clas2 + " " + clasSelf}  ref="navSelfBtn" onClick={this._handleChange}><span className="fa fa-map-marker" aria-hidden="true"></span></button>
+                 <button className={clas2 + " " + clasConceierge} ref="navConBtn" onClick={this._handleChange}><span className="fa fa-street-view" aria-hidden="true"></span></button>
+                 <button className={clas2 + " " + clasMystery} ref="navMysBtn" onClick={this._handleChange}><span className="fa fa-users" aria-hidden="true"></span></button>
+                 <button className={clas2 + " " + clasOther} ref="navOthBtn" onClick={this._handleChange}><span className="fa fa-binoculars" aria-hidden="true"></span></button>
+               </div>
+             </nav>
+             <div className="ClickDisplay">
+                <TLBoxViews viewType={this.state.topBoxView} myMap={this.props.theAllMap}/>
+             </div>
+          </div>
+          
+        </div>
       )
    }
 
