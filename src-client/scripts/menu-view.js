@@ -47,6 +47,20 @@ const MenuView = React.createClass({
 
 
   },
+  _toggleMenu: function(evt){
+    let self = this
+
+    if(this.state.menuStatus === "closed"){
+      evt.target.className = "glyphicon glyphicon-chevron-up navMoreBtn"
+      self.setState({menuStatus: ''})
+
+    } else {
+      evt.target.className = 'glyphicon glyphicon-option-vertical navMoreBtn'
+      self.setState({menuStatus: "closed"})
+    }
+
+
+  },
   _toggleMenuDisplay: function(){
     let menuState = STORE.getStoreData()
     console.log(menuState.homeMenuDisplay)
@@ -76,7 +90,7 @@ const MenuView = React.createClass({
       return(
         <div className="nav nav-bar homeNav">
           <div>
-            <span className="glyphicon glyphicon-option-vertical navMoreBtn" onClick={this._getToken}></span>
+            <span className="glyphicon glyphicon-option-vertical navMoreBtn" onClick={this._toggleMenu}></span>
             <img src={photoLink} className="homeNavPic"/>
           </div>
           <MenuBtnView menuDisplay={this.state.menuStatus}/>
