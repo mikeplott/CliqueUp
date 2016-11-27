@@ -14,9 +14,10 @@ const MenuBtnView = React.createClass({
         return (
           <div>
             <div>
-              <span className="fa fa-bell" aria-hidden="true"></span>
-              <span  className="fa fa-address-book" aria-hidden="true"></span>
-              <span className="fa fa-cog" aria-hidden="true"></span>
+              <span className="fa fa-bell menuBtns" aria-hidden="true"></span>
+              <span className="fa fa-user-plus menuBtns" aria-hidden="true"></span>
+              <span className="fa fa-cog menuBtns" aria-hidden="true"></span>
+              <span className="fa fa-sign-out menuBtns" aria-hidden="true"></span>
             </div>
           </div>
 
