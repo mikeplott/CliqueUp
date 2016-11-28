@@ -4,6 +4,7 @@ const Backbone = require('backbone')
 const ACTIONS = require('./actions.js')
 const STORE = require('./store.js')
 const TLBoxViews = require('./TopLeftboxviews.js')
+const MoreInfoView = require('./moreinfo-controller.js')
 
 var clas1 = 'active'
 var clas2 = 'btn btn-warning'
@@ -12,7 +13,7 @@ var clasSelf = "homeNavTabs #self"
 var clasConceierge = "homeNavTabs #conceierge"
 var clasMystery = "homeNavTabs #mystery"
 var clasOther = "homeNavLastTabs #other"
-//const BoxStuff = React.createClass
+
 class BoxStuff extends React.Component{
 
    constructor(props) {
@@ -80,7 +81,7 @@ class BoxStuff extends React.Component{
                 <TLBoxViews viewType={this.state.topBoxView} myMap={this.props.theAllMap}/>
              </div>
           </div>
-          
+          <MoreInfoView/>
         </div>
       )
    }
