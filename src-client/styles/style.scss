@@ -336,6 +336,8 @@ html, body {
 	background: white;
 	z-index: 1000;
 	border-top-right-radius: 5%;
+	overflow-x: hidden;
+	overflow-y: scroll;
 }
 
 

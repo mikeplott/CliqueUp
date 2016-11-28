@@ -32,13 +32,15 @@ const MoreInfoBox = React.createClass({
 
 
   render: function(){
+   let daElemement = this.state.boxData
 
     switch (this.state.boxType){
       case "event":
          return (
             <div className="moreInfoViewBox">
-               <h1>see it its working</h1>
-               <h1>see it its working</h1>
+               <h3>{daElemement.name}</h3>
+               <h5>{daElemement.group.name}</h5>
+               <div dangerouslySetInnerHTML={ {__html: daElemement.description} }></div>
             </div>
          )
          break;
