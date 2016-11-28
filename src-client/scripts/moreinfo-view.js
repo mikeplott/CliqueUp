@@ -10,7 +10,9 @@ const MoreInfoBox = React.createClass({
 
   render: function(){
     return(
-      <div></div>
+      <div>
+        <h1>MORE INFO</h1>
+      </div>
     )
   }
 
