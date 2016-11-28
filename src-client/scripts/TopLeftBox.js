@@ -21,9 +21,30 @@ class BoxStuff extends React.Component{
       super(props);
       this._handleChange = this._handleChange.bind(this)
       this.state = {
-         topBoxView: ''
+         topBoxView: '',
+         infoBoxStatus: 'closed'
      };
+
+     let self = this
+     Backbone.Events.on('openBox', function(data){
+        Backbone.Events.trigger(data.name, data.json)
+        setTimeout(function(){
+           self.setState({infoBoxStatus: ''})
+        },100)
+
+     })
+
    }
+
+
+   // _randoFuncs(){
+   //    let self = this
+   //    Backbone.Events.on('openBox', function(){
+   //       console.log('i am opening!!!!!>>>>><><><!!!!!!!!><><!!!!!!!25')
+   //       self.setState({infoBoxStatus: ''})
+   //
+   //    })
+   // }
 
    _handleChange(evt){
 
@@ -81,7 +102,7 @@ class BoxStuff extends React.Component{
                 <TLBoxViews viewType={this.state.topBoxView} myMap={this.props.theAllMap}/>
              </div>
           </div>
-          <MoreInfoView/>
+          <MoreInfoView boxDisplay={this.state.infoBoxStatus}/>
         </div>
       )
    }
