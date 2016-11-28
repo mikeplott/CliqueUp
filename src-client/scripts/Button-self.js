@@ -55,6 +55,10 @@ class SelfView extends React.Component{
         let throwMarker = function(evt){
           console.log(evt.target.dataset.index)
           self.props.daMap(evt.target.dataset.index)
+          Backbone.Events.trigger('openBox', {
+             name: 'passData',
+             json: {data: element, type: "event"}
+          })
         }
 
          return(

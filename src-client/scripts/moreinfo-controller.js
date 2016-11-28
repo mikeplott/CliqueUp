@@ -4,10 +4,10 @@ const MoreInfoBox = require('./moreinfo-view.js')
 
 const MoreInfoView = React.createClass({
   render: function(){
-    switch(this.props.currentView){
+    switch(this.props.boxDisplay){
       case "closed":
         return (
-          <div></div>
+          <div className="it-is-closed"></div>
         )
         break;
       default:
