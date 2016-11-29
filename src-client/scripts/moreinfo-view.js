@@ -71,8 +71,8 @@ const MoreInfoBox = React.createClass({
         let daPeople = daElemement.map(function(peeps){
           return(
             <div>
-              <h5>{peeps.friendName}</h5>
-              <img src={peeps.friendImage}/>
+              <h5>{peeps.username}</h5>
+              <img src={peeps.image}/>
             </div>
           )
         })
