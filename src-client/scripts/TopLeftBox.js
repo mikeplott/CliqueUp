@@ -30,7 +30,7 @@ class BoxStuff extends React.Component{
         Backbone.Events.trigger(data.name, data.json)
         setTimeout(function(){
            self.setState({infoBoxStatus: ''})
-        },100)
+        },0)
 
      })
 
@@ -69,9 +69,11 @@ class BoxStuff extends React.Component{
         let newValue = theChecker
         evt.target.className = newValue.join(' ')
         this.setState({
-          topBoxView: ''
+          topBoxView: '',
+          infoBoxStatus: 'closed'
 
         })
+
 
       } else {
         this.setState({

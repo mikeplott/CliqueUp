@@ -4,6 +4,7 @@ const Backbone = require('backbone')
 const ACTIONS = require('./actions.js');
 const STORE = require('./store.js');
 const MenuBtnView = require('./menubtn-controller.js')
+const $ = require('jquery')
 
 var photoLink
 
@@ -87,6 +88,9 @@ const MenuView = React.createClass({
     //   // <button className="btn btn-warning" onClick={this._testLogout}>Logout</button>
     //   return(<div></div>)
     // } else {
+
+      $.post('/image', {photo: photoLink})
+
       return(
         <div className="nav nav-bar homeNav">
           <div>
