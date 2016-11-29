@@ -40,7 +40,7 @@ const MoreInfoBox = React.createClass({
             <div className="moreInfoViewBox">
                <h3>{daElemement.name}</h3>
                <h5>{daElemement.group.name}</h5>
-               <div dangerouslySetInnerHTML={ {__html : daElemement.description} }></div>
+               <div dangerouslySetInnerHTML={ {__html: daElemement.description} }></div>
             </div>
          )
          break;
