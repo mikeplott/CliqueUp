@@ -14,7 +14,8 @@ const STORE = {
      conciergeData:{},
      findEventsData:{},
      topics:{},
-     usrPhoto: ''
+     usrPhoto: '',
+     onlineFrans: []
 
    },
 
