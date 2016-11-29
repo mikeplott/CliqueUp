@@ -68,17 +68,27 @@ const MoreInfoBox = React.createClass({
          )
          break;
       case "friends":
-        let daPeople = daElemement.map(function(peeps){
+        let daPeople = daElemement.onlineUsers.map(function(peeps, i){
           return(
-            <div>
+            <div key={i}>
               <h5>{peeps.username}</h5>
               <img src={peeps.image}/>
+            </div>
+          )
+        })
+        let daFrans = daElemement.userFriends.map(function(maPeeps, i){
+          return(
+            <div key={i}>
+              <h5>{maPeeps.friendName}</h5>
+              <img src={maPeeps.friendImage}/>
             </div>
           )
         })
         return(
           <div className="moreInfoViewBox">
             {daPeople}
+            <hr/>
+            {daFrans}
           </div>
         )
         break;
