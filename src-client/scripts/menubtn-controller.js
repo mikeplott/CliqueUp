@@ -3,6 +3,11 @@ const MoreInfoBox = require('./moreinfo-view.js')
 
 
 const MenuBtnView = React.createClass({
+  _testLogout: function(){
+    $.post( "/logout", function(  ) {
+    
+    })
+  },
   render: function(){
     switch(this.props.menuDisplay){
       case "closed":
@@ -17,7 +22,7 @@ const MenuBtnView = React.createClass({
               <span className="fa fa-bell menuBtns" aria-hidden="true"></span>
               <span className="fa fa-user-plus menuBtns" aria-hidden="true"></span>
               <span className="fa fa-cog menuBtns" aria-hidden="true"></span>
-              <span className="fa fa-sign-out menuBtns" aria-hidden="true"></span>
+              <span onClick={this._testLogout} className="fa fa-sign-out menuBtns" aria-hidden="true"></span>
             </div>
           </div>
 
