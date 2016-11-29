@@ -15,14 +15,18 @@ public class Friend {
     @Column
     String friendName;
 
+    @Column
+    String friendImage;
+
     @ManyToOne
     User user;
 
     public Friend() {
     }
 
-    public Friend(String friendName, User user) {
+    public Friend(String friendName, String friendImage, User user) {
         this.friendName = friendName;
+        this.friendImage = friendImage;
         this.user = user;
     }
 
@@ -40,6 +44,14 @@ public class Friend {
 
     public void setFriendName(String friendName) {
         this.friendName = friendName;
+    }
+
+    public String getFriendImage() {
+        return friendImage;
+    }
+
+    public void setFriendImage(String friendImage) {
+        this.friendImage = friendImage;
     }
 
     public User getUser() {

@@ -1,8 +1,14 @@
 const React = require('react')
 const MoreInfoBox = require('./moreinfo-view.js')
+const $ = require('jquery')
 
 
 const MenuBtnView = React.createClass({
+  _testLogout: function(){
+    $.post( "/logout", function(  ) {
+      window.location = 'http://127.0.0.1:8080'
+    })
+  },
   render: function(){
     switch(this.props.menuDisplay){
       case "closed":
@@ -17,7 +23,7 @@ const MenuBtnView = React.createClass({
               <span className="fa fa-bell menuBtns" aria-hidden="true"></span>
               <span className="fa fa-user-plus menuBtns" aria-hidden="true"></span>
               <span className="fa fa-cog menuBtns" aria-hidden="true"></span>
-              <span className="fa fa-sign-out menuBtns" aria-hidden="true"></span>
+              <span onClick={this._testLogout} className="fa fa-sign-out menuBtns" aria-hidden="true"></span>
             </div>
           </div>
 
