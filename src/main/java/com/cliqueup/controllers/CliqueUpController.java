@@ -208,7 +208,7 @@ public class CliqueUpController {
     }
 
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
-    public void logout(HttpSession session) throws Exception {
+    public void logout(HttpSession session, HttpServletResponse response) throws Exception {
         String username = (String) session.getAttribute("username");
         int id = (int) session.getAttribute("token");
         if (username == null) {
@@ -223,6 +223,7 @@ public class CliqueUpController {
         userFromDb.setOnline(false);
         users.save(userFromDb);
         session.invalidate();
+        response.sendRedirect("/");
     }
 
     @RequestMapping(path = "/friends", method = RequestMethod.GET)
@@ -272,9 +273,7 @@ public class CliqueUpController {
         String username = (String) session.getAttribute("username");
         User user = users.findByUsername(username);
         user.setImage(photo);
-        //user.setImage(json.get("photo"));
         users.save(user);
-        //return json.get("photo");
         return user.getImage();
     }
 
@@ -298,83 +297,5 @@ public class CliqueUpController {
         users.save(userForDb);
         session.setAttribute("username", userForDb.getUsername());
         return new ResponseEntity<User>(userForDb, HttpStatus.OK);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @RequestMapping(path = "venues", method = RequestMethod.GET)
-    public ResponseEntity<Iterable<Venue>> getVenues(HttpSession session) {
-//        String username = (String) session.getAttribute("username");
-//        if (username == null) {
-//            return new ResponseEntity<Iterable<Venue>>(HttpStatus.FORBIDDEN);
-//        }
-//        User userFromDb = users.findByUsername(username);
-//        if (userFromDb == null) {
-//            return new ResponseEntity<Iterable<Venue>>(HttpStatus.NOT_FOUND);
-//        }
-//        else {
-        return new ResponseEntity<Iterable<Venue>>(venues.findAll(), HttpStatus.OK);
-//        }
-    }
-
-    @RequestMapping(path = "venue", method = RequestMethod.GET)
-    public ResponseEntity<Venue> getVenue(HttpSession session, @RequestBody Venue venue) {
-//        String username = (String) session.getAttribute("username");
-//        if (username == null) {
-//            return new ResponseEntity<Venue>(HttpStatus.FORBIDDEN);
-//        }
-//        User userFromDb = users.findByUsername(username);
-//        if (userFromDb == null) {
-//            return new ResponseEntity<Venue>(HttpStatus.NOT_FOUND);
-//        }
-//        else {
-        return new ResponseEntity<Venue>(venues.findOne(venue.getId()), HttpStatus.OK);
-//        }
-    }
-
-    @RequestMapping(path = "venue", method = RequestMethod.POST)
-    public ResponseEntity<Venue> postVenue(HttpSession session, @RequestBody Venue venue) {
-//        String username = (String) session.getAttribute("username");
-//        if (username == null) {
-//            return new ResponseEntity<Venue>(HttpStatus.FORBIDDEN);
-//        }
-//        User user = users.findByUsername(username);
-//        if (user == null) {
-//            return new ResponseEntity<Venue>(HttpStatus.NOT_FOUND);
-//        }
-        if (venue.getImage() == null) {
-            venues.save(new Venue(venue.getName(), venue.getAddress()));
-            return new ResponseEntity<Venue>(venue, HttpStatus.OK);
-        }
-        venues.save(new Venue(venue.getName(), venue.getImage(), venue.getAddress()));
-        return new ResponseEntity<Venue>(venue, HttpStatus.OK);
-    }
-
-    public boolean userValidation(HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
-            return false;
-        }
-        User userFromDb = users.findByUsername(username);
-        if (userFromDb == null) {
-            return false;
-        }
-        return true;
     }
 }
