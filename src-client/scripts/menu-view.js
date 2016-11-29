@@ -90,7 +90,7 @@ const MenuView = React.createClass({
     // } else {
 
       $.post('/image', {photo: photoLink}, function(img){
-        console.log(img)
+        STORE.setStore('usrPhoto', img)
       })
 
       return(

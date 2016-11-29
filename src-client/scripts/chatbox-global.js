@@ -24,7 +24,7 @@ const GlobalChatView = React.createClass({
 
     this.connectToSocket()
     $.getJSON('/chat?groupname=global', function(oldChat){
-      console.log("hey look here >>>>>>>>>>>>>>>>>>>>>>",oldChat)
+
       oldChat.map(function(crntMess){
 
         let theMessgs = self.state.texts
@@ -33,7 +33,7 @@ const GlobalChatView = React.createClass({
            <div className="well">
              <div className="messPic">
                <p>{crntMess.user.username}</p>
-               <img className="chatPics" src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg"/>
+               <img className="chatPics" src={crntMess.user.image}/>
              </div>
              <div className="messBox">
                <h4>{crntMess.message}</h4>
@@ -98,7 +98,7 @@ const GlobalChatView = React.createClass({
         <div className="well">
           <div className="messPic">
             <p>{data.username}</p>
-            <img className="chatPics" src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg"/>
+            <img className="chatPics" src={data.photo}/>
           </div>
           <div className="messBox">
             <h4>{data.message}</h4>
@@ -133,12 +133,14 @@ const GlobalChatView = React.createClass({
    sendMessage: function(chtMess){
      let socket = STORE.getStoreData()
     //  console.log(socket)
+    let photoThing = socket.usrPhoto
      let user = socket.loginData
      socket = socket.socket
 
      let theMess = {
        message: chtMess,
-       username: user
+       username: user,
+       photo: photoThing
      }
 
      socket.send('/global', {} ,JSON.stringify(theMess))
