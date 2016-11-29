@@ -18,7 +18,10 @@ const ChatView = React.createClass({
 
 
   componentDidMount: function(){
-
+    let self = this
+    Backbone.Events.on('newChat', function(){
+      self.forceUpdate()
+    })
   },
 
   _changeTabs: function(evt){
