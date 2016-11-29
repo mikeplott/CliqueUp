@@ -80,13 +80,13 @@ public class CliqueUpController {
         if (users.count() == 0) {
             users.save(new User("http://statici.behindthevoiceactors.com/behindthevoiceactors/_img/chars/mikey-blumberg-disneys-recess-9.77.jpg",
                     "mike",
-                    true,
+                    false,
                     PasswordStorage.createHash("123")));
-            users.save(new User("http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg ",
+            users.save(new User("https://staticdelivery.nexusmods.com/mods/1151/images/4867-0-1449451940.jpg",
                     "sam",
                     true,
                     PasswordStorage.createHash("123")));
-            users.save(new User("http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg ",
+            users.save(new User("http://www.quantrol.com/files/products/arnold-mrfreeze-1280jpg-886e14_1280w.jpg",
                     "rob",
                     true,
                     PasswordStorage.createHash("123")));
@@ -139,6 +139,22 @@ public class CliqueUpController {
             java.util.Date date = dateFormat.parse("11/16/2016");
             long time = date.getTime();
             cms.save(new ChatMessage("Hey what time is the meetup? I can't get ahold of Henry", group, user));
+        }
+
+        if (friends.count() == 0) {
+            User user = users.findByUsername("mike");
+            Friend friend = new Friend("Henry",
+                    "http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg",
+                    user);
+            Friend friend1 = new Friend("sam",
+                    "http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg",
+                    user);
+            Friend friend2 = new Friend("rob",
+                    "http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg",
+                    user);
+            friends.save(friend);
+            friends.save(friend1);
+            friends.save(friend2);
         }
     }
 
@@ -234,42 +250,6 @@ public class CliqueUpController {
         users.save(userFromDb);
         session.invalidate();
     }
-
-//    @RequestMapping(path = "/friends", method = RequestMethod.GET)
-//    public ResponseEntity<ArrayList<Friend>> getFriends(HttpSession session) throws Exception {
-//        String username = (String) session.getAttribute("username");
-//        if (username == null) {
-//            return new ResponseEntity<ArrayList<Friend>>(HttpStatus.FORBIDDEN);
-//        }
-//        User user = users.findByUsername(username);
-//        ArrayList<Friend> friendNames = new ArrayList<>();
-//        ArrayList<Friend> userFriends = friends.findAllByUser(user);
-//        for (Friend friend : userFriends) {
-//            User userFriend = users.findByUsername(friend.getFriendName());
-//            if (userFriend.isOnline()) {
-//                friendNames.add(friend);
-//            }
-//        }
-//        return new ResponseEntity<ArrayList<Friend>>(friendNames, HttpStatus.OK);
-//    }
-
-//    @RequestMapping(path = "/friends", method = RequestMethod.GET)
-//    public ResponseEntity<ArrayList<User>> getOnlineUsers(HttpSession session) {
-//        String username = (String) session.getAttribute("username");
-//        if (username == null) {
-//            return new ResponseEntity<ArrayList<User>>(HttpStatus.FORBIDDEN);
-//        }
-//        User user = users.findByUsername(username);
-//        ArrayList<User> onlineUsers = new ArrayList<>();
-//        //ArrayList<Friend> userFriends = friends.findAllByUser(user);
-//        ArrayList<User> allUsers = users.findAll();
-//        for (User user1 : allUsers) {
-//            if (user1.isOnline()) {
-//                onlineUsers.add(user1);
-//            }
-//        }
-//        return new ResponseEntity<ArrayList<User>>(onlineUsers, HttpStatus.OK);
-//    }
 
     @RequestMapping(path = "/friends", method = RequestMethod.GET)
     public ResponseEntity<HashMap<String, ArrayList>> getOnlineUsers(HttpSession session) {
