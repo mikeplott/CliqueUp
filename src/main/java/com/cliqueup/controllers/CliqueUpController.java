@@ -227,46 +227,50 @@ public class CliqueUpController {
     }
 
     @RequestMapping(path = "/friends", method = RequestMethod.GET)
-    public ResponseEntity<ArrayList<String>> getFriends(HttpSession session) throws Exception {
+    public ResponseEntity<ArrayList<Friend>> getFriends(HttpSession session) throws Exception {
         String username = (String) session.getAttribute("username");
         if (username == null) {
-            return new ResponseEntity<ArrayList<String>>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<ArrayList<Friend>>(HttpStatus.FORBIDDEN);
         }
         User user = users.findByUsername(username);
-        ArrayList<String> friendNames = new ArrayList<>();
+        ArrayList<Friend> friendNames = new ArrayList<>();
         ArrayList<Friend> userFriends = friends.findAllByUser(user);
         for (Friend friend : userFriends) {
-            friendNames.add(friend.getFriendName());
+            friendNames.add(friend);
         }
-        return new ResponseEntity<ArrayList<String>>(friendNames, HttpStatus.OK);
+        return new ResponseEntity<ArrayList<Friend>>(friendNames, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/friends", method = RequestMethod.POST)
-    public ResponseEntity<ArrayList<String>> addFriends(HttpSession session, @RequestBody Map<String, String> json) {
+    public ResponseEntity<ArrayList<Friend>> addFriends(HttpSession session, String friendName) {
         String username = (String) session.getAttribute("username");
         if (username == null) {
-            return new ResponseEntity<ArrayList<String>>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<ArrayList<Friend>>(HttpStatus.FORBIDDEN);
         }
         User user = users.findByUsername(username);
-        User friendOfUser = users.findByUsername(json.get("friendName"));
-        ArrayList<String> friendNames = new ArrayList<>();
-        ArrayList<Friend> userFriends = friends.findAllByUser(user);
-        for (Friend friend : userFriends) {
-            friendNames.add(friend.getFriendName());
-        }
-        Friend friendFromDb = friends.findByUser(user);
-        if (friendFromDb == null) {
-            Friend friend = new Friend(json.get("friendName"), user);
-            friends.save(friend);
-        }
-        Friend otherFriendFromDb = friends.findByUser(friendOfUser);
-        if (otherFriendFromDb == null) {
-            Friend otherFriend = new Friend(user.getUsername(), friendOfUser);
-            friends.save(otherFriend);
-        }
-        friendNames.add(json.get("friendName"));
-        return new ResponseEntity<ArrayList<String>>(friendNames, HttpStatus.OK);
+        User userFriend = users.findByUsername(friendName);
+        friends.save(new Friend(friendName, userFriend.getImage(), user));
+        return new ResponseEntity<ArrayList<Friend>>(friends.findAllByUser(user), HttpStatus.OK);
     }
+        //User friendOfUser = users.findByUsername(friendName);
+        //ArrayList<String> friendNames = new ArrayList<>();
+//        ArrayList<Friend> userFriends = friends.findAllByUser(user);
+//        for (Friend friend : userFriends) {
+//            friendNames.add(friend.getFriendName());
+//        }
+//        Friend friendFromDb = friends.findByUser(user);
+//        if (friendFromDb == null) {
+//            Friend friend = new Friend(json.get("friendName"), user);
+//            friends.save(friend);
+//        }
+//        Friend otherFriendFromDb = friends.findByUser(friendOfUser);
+//        if (otherFriendFromDb == null) {
+//            Friend otherFriend = new Friend(user.getUsername(), friendOfUser);
+//            friends.save(otherFriend);
+//        }
+//        friendNames.add(json.get("friendName"));
+//        return new ResponseEntity<ArrayList<String>>(friendNames, HttpStatus.OK);
+//    }
 
     @RequestMapping(path = "/image", method = RequestMethod.POST)
     public String saveImage(HttpSession session, String photo) {
