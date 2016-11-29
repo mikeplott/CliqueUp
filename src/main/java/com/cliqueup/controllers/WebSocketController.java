@@ -62,14 +62,14 @@ public class WebSocketController {
                 cms.save(messageForDb);
                 json.put("message", text);
                 json.put("username", user.getUsername());
-                json.put("image", image);
+                json.put("image", user.getImage());
                 return json;
             }
             ChatMessage chatMessage = new ChatMessage(text, group, user);
             cms.save(chatMessage);
             json.put("message", text);
             json.put("username", user.getUsername());
-            json.put("image", image);
+            json.put("image", user.getImage());
             return json;
         }
         return null;
@@ -114,7 +114,7 @@ public class WebSocketController {
                 cms.save(theMessage);
                 json.put("message", text);
                 json.put("username", user.getUsername());
-                json.put("image", image);
+                json.put("image", user.getImage());
                 return json;
             }
             ChatMessage chatMessage = new ChatMessage(text, group, user);
