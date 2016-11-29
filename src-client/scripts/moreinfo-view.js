@@ -34,19 +34,32 @@ const MoreInfoBox = React.createClass({
   render: function(){
    let daElemement = this.state.boxData
 
+
     switch (this.state.boxType){
       case "event":
+         let time = daElemement.time
+         let fullDate = Date(time)
+         let realTime = fullDate
+
          return (
             <div className="moreInfoViewBox">
                <h3>{daElemement.name}</h3>
                <h5>{daElemement.group.name}</h5>
+               <ul>
+                <li>{daElemement.status} - {daElemement.visibility}</li>
+                <li>{realTime}</li>
+                <li>RSVPS: {daElemement.yes_rsvp_count}</li>
+                <li>Address: {daElemement.venue.address_1} </li>
+               </ul>
                <div dangerouslySetInnerHTML={ {__html: daElemement.description} }></div>
             </div>
          )
          break;
       default :
          return(
-            <div className="nope-try-again"></div>
+            <div className="moreInfoViewBox">
+              <h1>Choose an event..</h1>
+            </div>
          )
          break;
    }
