@@ -1,11 +1,12 @@
 const React = require('react')
 const MoreInfoBox = require('./moreinfo-view.js')
+const $ = require('jquery')
 
 
 const MenuBtnView = React.createClass({
   _testLogout: function(){
     $.post( "/logout", function(  ) {
-    
+
     })
   },
   render: function(){
