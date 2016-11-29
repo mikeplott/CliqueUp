@@ -32,7 +32,7 @@ const DynamicChatView = React.createClass({
            <div className="well">
              <div className="messPic">
                <p>{crntMess.user.username}</p>
-               <img className="chatPics" src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg"/>
+               <img className="chatPics" src={crntMess.user.image}/>
              </div>
              <div className="messBox">
                <h4>{crntMess.message}</h4>
@@ -102,7 +102,7 @@ const DynamicChatView = React.createClass({
         <div className="well">
           <div className="messPic">
             <p>{data.username}</p>
-            <img className="chatPics" src="http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg"/>
+            <img className="chatPics" src={data.photo}/>
           </div>
           <div className="messBox">
             <h4>{data.message}</h4>
@@ -137,6 +137,7 @@ const DynamicChatView = React.createClass({
    sendMessage: function(chtMess){
      let socket = STORE.getStoreData()
     //  console.log(socket)
+    let photoThing = socket.usrPhoto
      let user = socket.loginData
      socket = socket.socket
 
@@ -145,7 +146,8 @@ const DynamicChatView = React.createClass({
      let theMess = {
        message: chtMess,
        username: user,
-       channel: leRouteName
+       channel: leRouteName,
+       photo: photoThing
      }
 
 
