@@ -6,7 +6,7 @@ const $ = require('jquery')
 const MenuBtnView = React.createClass({
   _testLogout: function(){
     $.post( "/logout", function(  ) {
-
+      window.location = 'http://127.0.0.1:8080'
     })
   },
   render: function(){
