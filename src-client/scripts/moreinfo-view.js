@@ -67,6 +67,21 @@ const MoreInfoBox = React.createClass({
             </div>
          )
          break;
+      case "friends":
+        let daPeople = daElemement.map(function(peeps){
+          return(
+            <div>
+              <h5>{peeps.friendName}</h5>
+              <img src={peeps.friendImage}/>
+            </div>
+          )
+        })
+        return(
+          <div className="moreInfoViewBox">
+            {daPeople}
+          </div>
+        )
+        break;
       default :
          return(
             <div className="moreInfoViewBox">

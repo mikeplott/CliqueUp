@@ -9,6 +9,15 @@ const MenuBtnView = React.createClass({
       window.location = 'http://127.0.0.1:8080'
     })
   },
+  _theFriends: function(){
+    $.getJSON("/friends", function(frans){
+      STORE.setStore('onlineFrans', frans)
+      Backbone.Events.trigger('openBox', {
+         name: 'passData',
+         json: {data: frans, type: "friends"}
+      })
+    })
+  },
   render: function(){
     switch(this.props.menuDisplay){
       case "closed":
@@ -21,7 +30,7 @@ const MenuBtnView = React.createClass({
           <div>
             <div>
               <span className="fa fa-bell menuBtns" aria-hidden="true"></span>
-              <span className="fa fa-user-plus menuBtns" aria-hidden="true"></span>
+              <span onClick={this._theFriends} className="fa fa-user-plus menuBtns" aria-hidden="true"></span>
               <span className="fa fa-cog menuBtns" aria-hidden="true"></span>
               <span onClick={this._testLogout} className="fa fa-sign-out menuBtns" aria-hidden="true"></span>
             </div>
