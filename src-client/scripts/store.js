@@ -15,7 +15,7 @@ const STORE = {
      findEventsData:{},
      topics:{},
      usrPhoto: '',
-     onlineFrans: []
+     onlineFrans: {}
 
    },
 
