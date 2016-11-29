@@ -13,7 +13,8 @@ const STORE = {
      eventLocs: [],
      conciergeData:{},
      findEventsData:{},
-     topics:{}
+     topics:{},
+     usrPhoto: ''
 
    },
 

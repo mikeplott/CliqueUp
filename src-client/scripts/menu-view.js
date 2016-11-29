@@ -89,7 +89,9 @@ const MenuView = React.createClass({
     //   return(<div></div>)
     // } else {
 
-      $.post('/image', {photo: photoLink})
+      $.post('/image', {photo: photoLink}, function(img){
+        console.log(img)
+      })
 
       return(
         <div className="nav nav-bar homeNav">
