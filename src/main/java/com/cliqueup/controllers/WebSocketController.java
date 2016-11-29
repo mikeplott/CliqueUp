@@ -53,7 +53,7 @@ public class WebSocketController {
             User user = users.findByUsername((String) mapper.get("username"));
             String text = (String) mapper.get("message");
             String channel = (String) mapper.get("channel");
-            String image = (String) mapper.get("image");
+            String image = (String) mapper.get("photo");
             Group group = groups.findByName(channel);
             if (group == null) {
                 Group theGroup = new Group(channel, channel + " chat channel");
@@ -62,14 +62,14 @@ public class WebSocketController {
                 cms.save(messageForDb);
                 json.put("message", text);
                 json.put("username", user.getUsername());
-                json.put("image", user.getImage());
+                json.put("photo", user.getImage());
                 return json;
             }
             ChatMessage chatMessage = new ChatMessage(text, group, user);
             cms.save(chatMessage);
             json.put("message", text);
             json.put("username", user.getUsername());
-            json.put("image", user.getImage());
+            json.put("photo", user.getImage());
             return json;
         }
         return null;
@@ -103,7 +103,7 @@ public class WebSocketController {
             JacksonJsonParser parser = new JacksonJsonParser();
             String payload = new String((byte[]) message.getPayload());
             mapper = (HashMap) parser.parseMap(payload);
-            String image = (String) mapper.get("image");
+            String image = (String) mapper.get("photo");
             User user = users.findByUsername((String) mapper.get("username"));
             String text = (String) mapper.get("message");
             Group group = groups.findByName("global");
@@ -114,11 +114,14 @@ public class WebSocketController {
                 cms.save(theMessage);
                 json.put("message", text);
                 json.put("username", user.getUsername());
-                json.put("image", user.getImage());
+                json.put("photo", user.getImage());
                 return json;
             }
             ChatMessage chatMessage = new ChatMessage(text, group, user);
             cms.save(chatMessage);
+//            json.put("message", text);
+//            json.put("username", user.getUsername());
+//            json.put("photo", user.getImage());
             json.put("channel", "global");
             return json;
         }
