@@ -1,6 +1,7 @@
 const React = require('react')
 const MoreInfoBox = require('./moreinfo-view.js')
 const STORE = require('./store.js')
+const Backbone = require('backbone')
 const $ = require('jquery')
 
 
