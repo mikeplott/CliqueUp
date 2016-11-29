@@ -24,7 +24,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Created by michaelplott on 11/16/16.
@@ -80,10 +80,20 @@ public class CliqueUpController {
         if (users.count() == 0) {
             users.save(new User("http://statici.behindthevoiceactors.com/behindthevoiceactors/_img/chars/mikey-blumberg-disneys-recess-9.77.jpg",
                     "mike",
+                    true,
                     PasswordStorage.createHash("123")));
-            users.save(new User("sam", PasswordStorage.createHash("123")));
-            users.save(new User("rob", PasswordStorage.createHash("123")));
-            users.save(new User("Henry", PasswordStorage.createHash("123")));
+            users.save(new User("http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg ",
+                    "sam",
+                    true,
+                    PasswordStorage.createHash("123")));
+            users.save(new User("http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg ",
+                    "rob",
+                    true,
+                    PasswordStorage.createHash("123")));
+            users.save(new User("http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg ",
+                    "Henry",
+                    true,
+                    PasswordStorage.createHash("123")));
         }
 
         if (venues.count() == 0) {
@@ -210,7 +220,6 @@ public class CliqueUpController {
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
     public void logout(HttpSession session, HttpServletResponse response) throws Exception {
         String username = (String) session.getAttribute("username");
-        int id = (int) session.getAttribute("token");
         if (username == null) {
             throw new Exception("Not logged in!");
         }
@@ -218,27 +227,69 @@ public class CliqueUpController {
         if (userFromDb == null) {
             throw new Exception("User does not exist!");
         }
+        int id = userFromDb.getToken().getId();
         userFromDb.setToken(null);
         tokens.delete(id);
         userFromDb.setOnline(false);
         users.save(userFromDb);
         session.invalidate();
-        response.sendRedirect("/");
     }
 
+//    @RequestMapping(path = "/friends", method = RequestMethod.GET)
+//    public ResponseEntity<ArrayList<Friend>> getFriends(HttpSession session) throws Exception {
+//        String username = (String) session.getAttribute("username");
+//        if (username == null) {
+//            return new ResponseEntity<ArrayList<Friend>>(HttpStatus.FORBIDDEN);
+//        }
+//        User user = users.findByUsername(username);
+//        ArrayList<Friend> friendNames = new ArrayList<>();
+//        ArrayList<Friend> userFriends = friends.findAllByUser(user);
+//        for (Friend friend : userFriends) {
+//            User userFriend = users.findByUsername(friend.getFriendName());
+//            if (userFriend.isOnline()) {
+//                friendNames.add(friend);
+//            }
+//        }
+//        return new ResponseEntity<ArrayList<Friend>>(friendNames, HttpStatus.OK);
+//    }
+
+//    @RequestMapping(path = "/friends", method = RequestMethod.GET)
+//    public ResponseEntity<ArrayList<User>> getOnlineUsers(HttpSession session) {
+//        String username = (String) session.getAttribute("username");
+//        if (username == null) {
+//            return new ResponseEntity<ArrayList<User>>(HttpStatus.FORBIDDEN);
+//        }
+//        User user = users.findByUsername(username);
+//        ArrayList<User> onlineUsers = new ArrayList<>();
+//        //ArrayList<Friend> userFriends = friends.findAllByUser(user);
+//        ArrayList<User> allUsers = users.findAll();
+//        for (User user1 : allUsers) {
+//            if (user1.isOnline()) {
+//                onlineUsers.add(user1);
+//            }
+//        }
+//        return new ResponseEntity<ArrayList<User>>(onlineUsers, HttpStatus.OK);
+//    }
+
     @RequestMapping(path = "/friends", method = RequestMethod.GET)
-    public ResponseEntity<ArrayList<Friend>> getFriends(HttpSession session) throws Exception {
+    public ResponseEntity<HashMap<String, ArrayList>> getOnlineUsers(HttpSession session) {
         String username = (String) session.getAttribute("username");
         if (username == null) {
-            return new ResponseEntity<ArrayList<Friend>>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<HashMap<String, ArrayList>>(HttpStatus.FORBIDDEN);
         }
+        HashMap<String, ArrayList> json = new HashMap<>();
         User user = users.findByUsername(username);
-        ArrayList<Friend> friendNames = new ArrayList<>();
+        ArrayList<User> onlineUsers = new ArrayList<>();
         ArrayList<Friend> userFriends = friends.findAllByUser(user);
-        for (Friend friend : userFriends) {
-            friendNames.add(friend);
+        ArrayList<User> allUsers = users.findAll();
+        for (User user1 : allUsers) {
+            if (user1.isOnline()) {
+                onlineUsers.add(user1);
+            }
         }
-        return new ResponseEntity<ArrayList<Friend>>(friendNames, HttpStatus.OK);
+        json.put("onlineUsers", onlineUsers);
+        json.put("userFriends", userFriends);
+        return new ResponseEntity<HashMap<String, ArrayList>>(json, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/friends", method = RequestMethod.POST)
