@@ -304,10 +304,11 @@ public class CliqueUpController {
 //    }
 
     @RequestMapping(path = "/image", method = RequestMethod.POST)
-    public String saveImage(HttpSession session, String photo) {
+    public String saveImage(HttpSession session, String photo, int meetupId) {
         String username = (String) session.getAttribute("username");
         User user = users.findByUsername(username);
         user.setImage(photo);
+        user.setMeetupId(meetupId);
         users.save(user);
         return user.getImage();
     }
@@ -326,9 +327,9 @@ public class CliqueUpController {
             return new ResponseEntity<User>(HttpStatus.EXPECTATION_FAILED);
         }
         if (user.getImage() == null) {
-            User userForDb = new User(null, user.getUsername(), PasswordStorage.createHash(user.getPassword()));
+            User userForDb = new User(null, user.getUsername(), true, PasswordStorage.createHash(user.getPassword()));
         }
-        User userForDb = new User(user.getImage(), user.getUsername(), PasswordStorage.createHash(user.getPassword()));
+        User userForDb = new User(user.getImage(), user.getUsername(), true, PasswordStorage.createHash(user.getPassword()));
         users.save(userForDb);
         session.setAttribute("username", userForDb.getUsername());
         return new ResponseEntity<User>(userForDb, HttpStatus.OK);

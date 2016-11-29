@@ -15,6 +15,9 @@ public class User {
     int id;
 
     @Column()
+    int meetupId;
+
+    @Column()
     String image;
 
     @Column(nullable = false)
@@ -33,9 +36,11 @@ public class User {
     public User() {
     }
 
-    public User(String image, String username, String password) {
+    public User(int meetupId, String image, String username, boolean isOnline, String password) {
+        this.meetupId = meetupId;
         this.image = image;
         this.username = username;
+        this.isOnline = isOnline;
         this.password = password;
     }
 
@@ -78,6 +83,14 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getMeetupId() {
+        return meetupId;
+    }
+
+    public void setMeetupId(int meetupId) {
+        this.meetupId = meetupId;
     }
 
     public String getImage() {
