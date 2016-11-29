@@ -29,6 +29,17 @@ const MoreInfoBox = React.createClass({
       })
    },
 
+   _addChat: function(){
+     let everything = STORE.getStoreData().chatGroups
+
+     let myData = this.state.boxData
+
+     everything.push(myData.group.name)
+
+     STORE.setStore('chatGroups', everything)
+     Backbone.Events.trigger('newChat')
+   },
+
 
 
   render: function(){
@@ -50,6 +61,7 @@ const MoreInfoBox = React.createClass({
                 <li>{realTime}</li>
                 <li>RSVPS: {daElemement.yes_rsvp_count}</li>
                 <li>Address: {daElemement.venue.address_1} </li>
+                <button className="btn btn-warning" onClick={this._addChat}>Chat</button>
                </ul>
                <div dangerouslySetInnerHTML={ {__html: daElemement.description} }></div>
             </div>

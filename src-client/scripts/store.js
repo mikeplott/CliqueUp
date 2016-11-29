@@ -9,7 +9,7 @@ const STORE = {
      userEvents: {},
      socket: '',
      loginData: {},
-     chatGroups: ["Global","test"],
+     chatGroups: ["Global"],
      eventLocs: [],
      conciergeData:{},
      findEventsData:{},
