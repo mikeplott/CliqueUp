@@ -19,7 +19,7 @@ public class Friend {
     String friendImage;
 
     @Column()
-    Integer friendMeetupId;
+    long friendMeetupId;
 
     @ManyToOne
     User user;
@@ -33,7 +33,7 @@ public class Friend {
         this.user = user;
     }
 
-    public Friend(String friendName, String friendImage, int friendMeetupId, User user) {
+    public Friend(String friendName, String friendImage, long friendMeetupId, User user) {
         this.friendName = friendName;
         this.friendImage = friendImage;
         this.friendMeetupId = friendMeetupId;
@@ -64,11 +64,11 @@ public class Friend {
         this.friendImage = friendImage;
     }
 
-    public int getFriendMeetupId() {
+    public long getFriendMeetupId() {
         return friendMeetupId;
     }
 
-    public void setFriendMeetupId(int friendMeetupId) {
+    public void setFriendMeetupId(long friendMeetupId) {
         this.friendMeetupId = friendMeetupId;
     }
 

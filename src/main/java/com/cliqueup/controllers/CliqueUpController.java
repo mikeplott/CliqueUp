@@ -78,22 +78,33 @@ public class CliqueUpController {
         h2.createWebServer().start();
 
         if (users.count() == 0) {
-            users.save(new User("http://statici.behindthevoiceactors.com/behindthevoiceactors/_img/chars/mikey-blumberg-disneys-recess-9.77.jpg",
+            users.save(new User(12324143, "http://statici.behindthevoiceactors.com/behindthevoiceactors/_img/chars/mikey-blumberg-disneys-recess-9.77.jpg",
                     "mike",
                     false,
                     PasswordStorage.createHash("123")));
-            users.save(new User("profilepics/sloth.jpg",
+            users.save(new User(123412,
+                    "profilepics/sloth.jpg",
                     "sam",
                     true,
                     PasswordStorage.createHash("123")));
-            users.save(new User("profilepics/mrfreeze.jpg",
+            users.save(new User(123412,
+                    "profilepics/mrfreeze.jpg",
                     "rob",
                     true,
                     PasswordStorage.createHash("123")));
-            users.save(new User("http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg ",
+            users.save(new User(12312,
+                    "http://facebookcraze.com/wp-content/uploads/2010/10/fake-facebook-profile-picture-funny-batman-pic.jpg ",
                     "Henry",
                     true,
                     PasswordStorage.createHash("123")));
+            users.save(new User(216728604,
+                    "victor123",
+                    false,
+                    PasswordStorage.createHash("123")));
+            users.save(new User(159325052,
+                    "mikeymike",
+                    false,
+                    PasswordStorage.createHash("mikeymike")));
         }
 
         if (venues.count() == 0) {
