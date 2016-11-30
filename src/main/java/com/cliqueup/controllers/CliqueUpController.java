@@ -82,11 +82,11 @@ public class CliqueUpController {
                     "mike",
                     false,
                     PasswordStorage.createHash("123")));
-            users.save(new User("https://staticdelivery.nexusmods.com/mods/1151/images/4867-0-1449451940.jpg",
+            users.save(new User("profilepics/sloth.jpg",
                     "sam",
                     true,
                     PasswordStorage.createHash("123")));
-            users.save(new User("http://www.quantrol.com/files/products/arnold-mrfreeze-1280jpg-886e14_1280w.jpg",
+            users.save(new User("profilepics/mrfreeze.jpg",
                     "rob",
                     true,
                     PasswordStorage.createHash("123")));
