@@ -304,7 +304,7 @@ public class CliqueUpController {
 //    }
 
     @RequestMapping(path = "/image", method = RequestMethod.POST)
-    public String saveImage(HttpSession session, String photo, int meetupId) {
+    public String saveImage(HttpSession session, String photo, Integer meetupId) {
         String username = (String) session.getAttribute("username");
         User user = users.findByUsername(username);
         user.setImage(photo);

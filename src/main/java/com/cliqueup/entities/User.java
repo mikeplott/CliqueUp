@@ -15,7 +15,7 @@ public class User {
     int id;
 
     @Column()
-    int meetupId;
+    Integer meetupId;
 
     @Column()
     String image;

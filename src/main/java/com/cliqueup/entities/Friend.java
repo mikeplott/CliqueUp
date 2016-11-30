@@ -19,7 +19,7 @@ public class Friend {
     String friendImage;
 
     @Column()
-    int friendMeetupId;
+    Integer friendMeetupId;
 
     @ManyToOne
     User user;
