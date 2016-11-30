@@ -70,9 +70,9 @@ const MoreInfoBox = React.createClass({
       case "friends":
         let daPeople = daElemement.onlineUsers.map(function(peeps, i){
           return(
-            <div key={i}>
-              <h5>{peeps.username}</h5>
-              <img src={peeps.image}/>
+            <div className="friendHolder" key={i}>
+              <h5 className="friendName">{peeps.username}</h5>
+              <img className="friendPic" src={peeps.image}/>
             </div>
           )
         })
@@ -86,7 +86,15 @@ const MoreInfoBox = React.createClass({
         })
         return(
           <div className="moreInfoViewBox">
-            {daPeople}
+            <div>
+              <div>
+                <h2>Online</h2>
+              </div>
+              <div>
+                {daPeople}
+              </div>
+
+            </div>
             <hr/>
             {daFrans}
           </div>
@@ -95,7 +103,7 @@ const MoreInfoBox = React.createClass({
       default :
          return(
             <div className="moreInfoViewBox">
-              <h1>Choose an event..</h1>
+              <img className="boxImage" src="../images/CliqueUpLogo.png"/>
             </div>
          )
          break;

@@ -36,10 +36,18 @@ class SelfView extends React.Component{
          let daData = STORE.getStoreData()
          daData = daData.eventLocs
 
-         let pos = {
-           lat: element.venue.lat,
-           lng: element.venue.lon
+         let pos = {}
+
+         if (element.venue.lat === undefined){
+            pos = {lat: 32.776475, lng: -79.931051}
+         } else {
+            pos = {
+             lat: element.venue.lat,
+             lng: element.venue.lon
+           }
          }
+
+
 
          daData.push(pos)
 
