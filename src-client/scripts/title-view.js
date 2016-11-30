@@ -18,7 +18,7 @@ const TitleView = React.createClass({
       username: this.refs.username.value,
       password: this.refs.password.value
     }
-  
+
 
 
      ACTIONS.handleUserLogin(userLogin)
@@ -36,7 +36,7 @@ const TitleView = React.createClass({
         <form>
           <input className="form-control titleScreenUser" ref="username" type="text" placeholder="E-mail"/>
           <br/>
-          <input className="form-control titleScreenPass" ref="password" type="text" placeholder="Password"/>
+          <input className="form-control titleScreenPass" ref="password" type="password" placeholder="Password"/>
           <br/>
           <button className="btn btn-warning titleScreenBtn" onClick={this._handleClick}>Login</button>
         </form>
