@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,16 +47,7 @@ public class CliqueUpController {
     UserRepo users;
 
     @Autowired
-    VenueRepo venues;
-
-    @Autowired
-    MeetUpRepo meetups;
-
-    @Autowired
     GroupRepo groups;
-
-    @Autowired
-    EventRepo events;
 
     @Autowired
     DirectMessageRepo dms;
@@ -107,12 +97,6 @@ public class CliqueUpController {
                     PasswordStorage.createHash("mikeymike")));
         }
 
-        if (venues.count() == 0) {
-            venues.save(new Venue("Closed For Business",
-                    "https://limelightcustomsigns.files.wordpress.com/2009/12/l_1600_1200_4c7d886b-f5cf-490b-ae98-8450332c4c71.jpeg",
-                    "453 King Street"));
-        }
-
         if (groups.count() == 0) {
             User user = users.findByUsername("Henry");
             User coOrganizer = users.findByUsername("mikeymike");
@@ -122,22 +106,6 @@ public class CliqueUpController {
                                   "Group for the CliqueUp Development team",
                                   coOrganizer.getUsername(),
                                   adminUser));
-        }
-
-        if (meetups.count() == 0) {
-            User user = users.findByUsername("Henry");
-            Group group = groups.findOne(1);
-            meetups.save(new MeetUp("Beer-Enthusiasts", MeetUp.Category.BEER, 0, 0, "Meet up for beer lovers!", user, group));
-        }
-
-        if (events.count() == 0) {
-            User user = users.findByUsername("Henry");
-            MeetUp meetUp = meetups.findOne(1);
-            Venue venue = venues.findOne(1);
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            java.util.Date date = dateFormat.parse("11/16/2016");
-            long time = date.getTime();
-            events.save(new Event("Beer-Fest", new Timestamp(time), "453 King Street", venue, user, meetUp));
         }
 
         if (dms.count() == 0) {
@@ -297,28 +265,9 @@ public class CliqueUpController {
         }
         User user = users.findByUsername(username);
         User userFriend = users.findByUsername(friendName);
-        friends.save(new Friend(friendName, userFriend.getImage(), user));
+        friends.save(new Friend(userFriend.getUsername(), userFriend.getImage(), userFriend.getMeetupId(), user));
         return new ResponseEntity<ArrayList<Friend>>(friends.findAllByUser(user), HttpStatus.OK);
     }
-        //User friendOfUser = users.findByUsername(friendName);
-        //ArrayList<String> friendNames = new ArrayList<>();
-//        ArrayList<Friend> userFriends = friends.findAllByUser(user);
-//        for (Friend friend : userFriends) {
-//            friendNames.add(friend.getFriendName());
-//        }
-//        Friend friendFromDb = friends.findByUser(user);
-//        if (friendFromDb == null) {
-//            Friend friend = new Friend(json.get("friendName"), user);
-//            friends.save(friend);
-//        }
-//        Friend otherFriendFromDb = friends.findByUser(friendOfUser);
-//        if (otherFriendFromDb == null) {
-//            Friend otherFriend = new Friend(user.getUsername(), friendOfUser);
-//            friends.save(otherFriend);
-//        }
-//        friendNames.add(json.get("friendName"));
-//        return new ResponseEntity<ArrayList<String>>(friendNames, HttpStatus.OK);
-//    }
 
     @RequestMapping(path = "/image", method = RequestMethod.POST)
     public String saveImage(HttpSession session, String photo, Integer meetupId) {
