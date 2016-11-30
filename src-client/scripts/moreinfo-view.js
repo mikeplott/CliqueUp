@@ -69,8 +69,22 @@ const MoreInfoBox = React.createClass({
          break;
       case "friends":
         let daPeople = daElemement.onlineUsers.map(function(peeps, i){
+
+          console.log(peeps)
+
+          let closerProf = function(){
+            // $.getJSON("/friends", function(frans){
+            //   STORE.setStore('onlineFrans', frans)
+            //   Backbone.Events.trigger('openBox', {
+            //      name: 'passData',
+            //      json: {data: frans, type: "friends"}
+            //   })
+            // })
+          }
+
+
           return(
-            <div className="friendHolder" key={i}>
+            <div onClick={closerProf} className="friendHolder" key={i}>
               <h5 className="friendName">{peeps.username}</h5>
               <img className="friendPic" src={peeps.image}/>
             </div>
@@ -78,9 +92,9 @@ const MoreInfoBox = React.createClass({
         })
         let daFrans = daElemement.userFriends.map(function(maPeeps, i){
           return(
-            <div key={i}>
-              <h5>{maPeeps.friendName}</h5>
-              <img src={maPeeps.friendImage}/>
+            <div className="friendHolder" key={i}>
+              <h5 className="friendName">{maPeeps.friendName}</h5>
+              <img className="friendPic" src={maPeeps.friendImage}/>
             </div>
           )
         })
