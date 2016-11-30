@@ -18,6 +18,9 @@ public class Group {
     @Column(nullable = false)
     String description;
 
+    @Column()
+    String coOrganizer;
+
     @ManyToOne
     User adminUser;
 
@@ -32,6 +35,13 @@ public class Group {
     public Group(String name, String description, User adminUser) {
         this.name = name;
         this.description = description;
+        this.adminUser = adminUser;
+    }
+
+    public Group(String name, String description, String coOrganizer, User adminUser) {
+        this.name = name;
+        this.description = description;
+        this.coOrganizer = coOrganizer;
         this.adminUser = adminUser;
     }
 
@@ -57,6 +67,14 @@ public class Group {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCoOrganizer() {
+        return coOrganizer;
+    }
+
+    public void setCoOrganizer(String coOrganizer) {
+        this.coOrganizer = coOrganizer;
     }
 
     public User getAdminUser() {

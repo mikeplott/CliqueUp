@@ -115,7 +115,13 @@ public class CliqueUpController {
 
         if (groups.count() == 0) {
             User user = users.findByUsername("Henry");
+            User coOrganizer = users.findByUsername("mikeymike");
+            User adminUser = users.findByUsername("victor123");
             groups.save(new Group("Beer-Enthusiasts", "Beer-Enthusiasts Group", user));
+            groups.save(new Group("CliqueUp Dev Team",
+                                  "Group for the CliqueUp Development team",
+                                  coOrganizer.getUsername(),
+                                  adminUser));
         }
 
         if (meetups.count() == 0) {
