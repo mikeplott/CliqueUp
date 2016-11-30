@@ -333,9 +333,9 @@ const HomeView = React.createClass({
       // STORE.setStore({theMap: map2})
     },500)
 
-    setTimeout(function(){
-      Backbone.Events.trigger('picLoad')
-    },1500)
+    // setTimeout(function(){
+    //   Backbone.Events.trigger('picLoad')
+    // },1500)
 
 
 
