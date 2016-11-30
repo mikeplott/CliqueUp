@@ -16,25 +16,57 @@ class ConciergeView extends React.Component{
      var self = this
 
        let nestingBastards = STORE.getStoreData().conciergeData.results
-      // console.log(nestingBastards)
-      console.log( STORE.getStoreData().conciergeData)
 
-      let UsefulStuff = nestingBastards.map(function(element, i){
+             let UsefulStuff = nestingBastards.map(function(element, i){
+                console.log(i)
+                console.log(element.group.name)
+                console.log(element.venue, "look here please little one")
+                let daData = STORE.getStoreData()
+                daData = daData.eventLocs
+
+                let pos = {}
+
+                if (element.venue === undefined){
+                   pos = {lat: 32.776475, lng: -79.931051}
+                } else {
+                   pos = {
+                    lat: element.venue.lat,
+                    lng: element.venue.lon
+                  }
+                }
+
+                daData.push(pos)
+
+                let markerIndex = (daData.length - 1)
+                console.log("hey did this run 3 times",markerIndex)
+               //  console.log(self.props.daMap)
+
+                STORE.setStore({eventLocs: daData})
 
 
 
-         return(
+
+               let throwMarker = function(evt){
+                 console.log(evt.target.dataset.index)
+                 self.props.daMap(evt.target.dataset.index)
+                 Backbone.Events.trigger('openBox', {
+                    name: 'passData',
+                    json: {data: element, type: "event"}
+                 })
+               }
+
+                return(
 
 
-           <a className="list-group-item" >
+                  <a className="list-group-item"  key={i} data-index={markerIndex} onClick={throwMarker}>
 
-              <div className="eventDetailHolder" >
-                <h4 className="list-group-item-heading" >{element.name}</h4>
-                <p className="list-group-item-text" >{element.group.name}</p>
-              </div>
-           </a>
+                     <div className="eventDetailHolder" data-index={markerIndex}>
+                       <h4 className="list-group-item-heading" data-index={markerIndex}>{element.name}</h4>
+                       <p className="list-group-item-text" data-index={markerIndex}>{element.group.name}</p>
+                     </div>
+                  </a>
 
-         )
+                )
 
 
       })
