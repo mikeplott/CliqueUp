@@ -3,6 +3,8 @@ const ReactDOM = require('react-dom')
 const Backbone = require('backbone')
 const ACTIONS = require('./actions.js');
 const STORE = require('./store.js');
+const {selfModel, selfCollection} = require('./model-profs.js')
+const $ = require('jquery')
 
 const MoreInfoBox = React.createClass({
 
@@ -73,13 +75,10 @@ const MoreInfoBox = React.createClass({
           console.log(peeps)
 
           let closerProf = function(){
-            // $.getJSON("/friends", function(frans){
-            //   STORE.setStore('onlineFrans', frans)
-            //   Backbone.Events.trigger('openBox', {
-            //      name: 'passData',
-            //      json: {data: frans, type: "friends"}
-            //   })
-            // })
+            Backbone.Events.trigger('openBox', {
+               name: 'passData',
+               json: {data: peeps, type: "prof"}
+            })
           }
 
 
@@ -111,6 +110,37 @@ const MoreInfoBox = React.createClass({
             </div>
             <hr/>
             {daFrans}
+          </div>
+        )
+        break;
+      case "prof":
+        console.log(daElemement)
+        let theData = STORE.getStoreData()
+        let myToken = theData.token[0]
+        let self = new selfModel(myToken, daElemement.meetupId)
+
+        let everythingData = {}
+
+        self.fetch().then(function(){
+          // console.log(self)
+          everythingData = self.attributes.data
+
+        })
+
+        let addFran = function(){
+          $.post('/friends', {friendName: daElemement.username})
+        }
+        // console.log(self.attributes.data.name)
+        return(
+          <div className="moreInfoViewBox">
+            <div>
+              <img src={daElemement.image}/>
+              <h3>{daElemement.username}</h3>
+            </div>
+            <div>
+              <button onClick={addFran} className="btn btn-warning">Add</button>
+              <p>They are online</p>
+            </div>
           </div>
         )
         break;
