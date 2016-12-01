@@ -22,7 +22,7 @@ class Button4View extends React.Component{
       let UsefulStuff = nestingBastards.map(function(element, i){
 
 
-        console.log(element)
+        // console.log(element)
          return(
 
 

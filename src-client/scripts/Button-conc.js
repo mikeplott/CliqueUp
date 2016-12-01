@@ -18,9 +18,9 @@ class ConciergeView extends React.Component{
        let nestingBastards = STORE.getStoreData().conciergeData.results
 
              let UsefulStuff = nestingBastards.map(function(element, i){
-                console.log(i)
-                console.log(element.group.name)
-                console.log(element.venue, "look here please little one")
+                // console.log(i)
+                // console.log(element.group.name)
+                // console.log(element.venue, "look here please little one")
                 let daData = STORE.getStoreData()
                 daData = daData.eventLocs
 
@@ -38,7 +38,7 @@ class ConciergeView extends React.Component{
                 daData.push(pos)
 
                 let markerIndex = (daData.length - 1)
-                console.log("hey did this run 3 times",markerIndex)
+                // console.log("hey did this run 3 times",markerIndex)
                //  console.log(self.props.daMap)
 
                 STORE.setStore({eventLocs: daData})
@@ -47,7 +47,7 @@ class ConciergeView extends React.Component{
 
 
                let throwMarker = function(evt){
-                 console.log(evt.target.dataset.index)
+                //  console.log(evt.target.dataset.index)
                  self.props.daMap(evt.target.dataset.index)
                  Backbone.Events.trigger('openBox', {
                     name: 'passData',

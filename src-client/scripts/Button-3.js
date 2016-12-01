@@ -22,11 +22,19 @@ class Button3View extends React.Component{
       let UsefulStuff = nestingBastards.map(function(element, i){
 
 
+        console.log(element)
+
+        let theFunc = function(){
+
+          window.open("http://www." + element.shortname + ".meetup.com")
+
+        }
+
 
          return(
 
 
-           <a className="list-group-item" >
+           <a className="list-group-item" onClick={theFunc} >
 
               <div className="eventDetailHolder" >
                 <h4 className="list-group-item-heading" >{element.name}</h4>

@@ -19,7 +19,7 @@ const selfModel = Backbone.Model.extend({
 
 const selfCollection = Backbone.Collection.extend({
 
-   model: eventModel,
+   model: selfModel,
 
    url: "",
 
@@ -27,12 +27,6 @@ const selfCollection = Backbone.Collection.extend({
    initialize: function(){
 
    },
-
-  sync : function(method, collection, options) {
-
-    options.dataType = "jsonp";
-    return Backbone.sync(method, collection, options);
-}
 
 
 })
