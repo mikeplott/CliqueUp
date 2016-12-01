@@ -132,13 +132,14 @@ const MoreInfoBox = React.createClass({
         }
         // console.log(self.attributes.data.name)
         return(
-          <div className="moreInfoViewBox">
+          <div className="moreInfoViewBox profBox">
             <div>
-              <img src={daElemement.image}/>
+              <img className="profPic" src={daElemement.image}/>
               <h3>{daElemement.username}</h3>
             </div>
             <div>
               <button onClick={addFran} className="btn btn-warning">Add</button>
+              <button className="btn btn-success">Chat</button>
               <p>They are online</p>
             </div>
           </div>
